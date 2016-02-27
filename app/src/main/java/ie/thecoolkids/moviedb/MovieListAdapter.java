@@ -1,6 +1,7 @@
 package ie.thecoolkids.moviedb;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -62,7 +64,9 @@ public class MovieListAdapter extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(v.getContext(), ViewMovie.class);
+                intent.putExtra("passedMovie", new Gson().toJson(movies.get(position)));
+                v.getContext().startActivity(intent);
             }
         });
         return rowView;
