@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -261,8 +262,15 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     JSONObject obj = new JSONObject(json);
-                    JSONArray movieArray = obj.getJSONObject("data").getJSONArray("movies");
                     movieCount = obj.getJSONObject("data").getInt("movie_count");
+
+                    if(movieCount == 0)
+                    {
+                        Toast.makeText(getBaseContext(), "No Movies Found!", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    JSONArray movieArray = obj.getJSONObject("data").getJSONArray("movies");
                     Log.d(DEBUG, "Movie Count - " + Integer.toString(movieCount));
 
                     for(int i = 0; i < movieArray.length(); i++)
