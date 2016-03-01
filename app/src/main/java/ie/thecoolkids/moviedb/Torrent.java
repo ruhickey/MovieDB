@@ -1,6 +1,8 @@
 package ie.thecoolkids.moviedb;
 
-public class Torrent {
+import java.io.Serializable;
+
+public class Torrent implements Serializable {
     private String url;
     private String hash;
     private String quality;

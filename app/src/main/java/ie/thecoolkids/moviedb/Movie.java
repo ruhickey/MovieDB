@@ -1,8 +1,9 @@
 package ie.thecoolkids.moviedb;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Serializable {
     private int id;
     private String url;
     private String imdb_code;
@@ -11,7 +12,7 @@ public class Movie {
     private String title_long;
     private String slug;
     private int year;
-    private double rating;
+    private float rating;
     private int runtime;
     private List<String> genres;
     private String summary;
@@ -29,8 +30,6 @@ public class Movie {
     private List<Torrent> torrents;
     private String date_uploaded;
     private int date_uploaded_unix;
-
-
 
     public int getId() {
         return id;
@@ -64,7 +63,7 @@ public class Movie {
         return year;
     }
 
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
@@ -87,7 +86,6 @@ public class Movie {
     public String getSynopsis() {
         return synopsis;
     }
-
 
     public String getYt_trailer() {
         return yt_trailer_code;
@@ -124,8 +122,6 @@ public class Movie {
     public String getStatus() {
         return state;
     }
-
-
 
     public List<Torrent> getTorrents() {
         return torrents;

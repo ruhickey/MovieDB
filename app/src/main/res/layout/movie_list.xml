@@ -19,10 +19,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="25dp"
-        android:text="Text View"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/imgPoster" />
+        android:text="Movie Name"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/imgPoster"
+        android:layout_above="@+id/linearLayout"
+        android:gravity="center_vertical|center_horizontal" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imgPoster"
+            android:layout_toEndOf="@+id/imgPoster"
+            android:gravity="center_vertical|center_horizontal"
+            android:id="@+id/linearLayout">
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratBar"
+                android:numStars="5"
+                android:rating="3"
+                android:isIndicator="true"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 </LinearLayout>

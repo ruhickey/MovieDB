@@ -17,7 +17,48 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/etQuery"
+                android:hint="Enter Search Term"
+                android:singleLine="true"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/btnSearch" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/magnifier"
+                    android:background="@null"
+                    android:id="@+id/btnSearch"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:clickable="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toStartOf="@+id/btnSort" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/sort"
+                    android:background="@null"
+                    android:id="@+id/btnSort"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:clickable="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 

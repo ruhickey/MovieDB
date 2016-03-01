@@ -7,25 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieListAdapter extends BaseAdapter {
 
-    List<Movie> movies;
+    private List<Movie> movies = null;
     private static LayoutInflater inflater = null;
-    MainActivity main;
+    private MainActivity main;
 
-    public MovieListAdapter(MainActivity _main, List<Movie> _movies)
+    public MovieListAdapter(MainActivity _main)
     {
         main = _main;
-        movies = _movies;
         inflater = (LayoutInflater) main.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void setMovies(List<Movie> _movies)
+    {
+        movies = _movies;
     }
 
     @Override
@@ -47,6 +53,7 @@ public class MovieListAdapter extends BaseAdapter {
     {
         ImageView imgPoster;
         TextView tvTitle;
+        RatingBar ratBar;
     }
 
     @Override
@@ -57,7 +64,10 @@ public class MovieListAdapter extends BaseAdapter {
 
         holder.imgPoster = (ImageView) rowView.findViewById(R.id.imgPoster);
         holder.tvTitle = (TextView) rowView.findViewById(R.id.tvTitle);
+        holder.ratBar = (RatingBar) rowView.findViewById(R.id.ratBar);
+
         holder.tvTitle.setText(movies.get(position).getTitle());
+        holder.ratBar.setRating((movies.get(position).getRating() / 2));
 
         Picasso.with(main).load(movies.get(position).getPosterURL()).into(holder.imgPoster);
 
@@ -69,6 +79,7 @@ public class MovieListAdapter extends BaseAdapter {
                 v.getContext().startActivity(intent);
             }
         });
+
         return rowView;
     }
 }

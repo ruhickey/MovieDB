@@ -1,17 +1,19 @@
 package ie.thecoolkids.moviedb;
 
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -21,10 +23,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
-import java.util.ListIterator;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,11 +32,44 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnSearch;
+    ImageButton btnSearch;
+    ImageButton btnSort;
     EditText etQuery;
     List<Movie> movies;
+    MovieListAdapter movieListAdapter;
 
     private final String DEBUG = "DEBUG";
+
+    private enum SortBy {
+        asc,
+        desc,
+        rating,
+        year
+    }
+
+    private enum State {
+        SEARCH,
+        UPDATE
+    }
+
+    private SortBy sortBy = SortBy.rating;
+    private State state;
+    private int page;
+    ListView lvMovies;
+    private int movieCount;
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable("movies", movies.toArray());
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        movies = new ArrayList<Movie>(Arrays.asList((Movie[])savedInstanceState.getSerializable("movies")));
+        SetMovieList(movies);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,49 +78,150 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnSearch = (Button) findViewById(R.id.btnSearch);
+        btnSearch = (ImageButton) toolbar.findViewById(R.id.btnSearch);
+        btnSort = (ImageButton) toolbar.findViewById(R.id.btnSort);
+
         etQuery = (EditText) findViewById(R.id.etQuery);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(DEBUG, "Button Clicked");
-                try {
-                    Uri.Builder builder = new Uri.Builder();
-                    String query = etQuery.getText().toString();
+                SearchForMovie();
+            }
+        });
 
-                    builder.scheme("https")
-                            .authority("yts.ag")
-                            .appendPath("api")
-                            .appendPath("v2")
-                            .appendPath("list_movies.json")
-                            .appendQueryParameter("query_term", query);
+        btnSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowSortDialog();
+            }
+        });
 
-                    Log.d(DEBUG, builder.build().toString());
-                    new ApiHelper().execute(builder.build().toString());
-                } catch (Exception ex) {
-                    Log.d(DEBUG, ex.getMessage());
+        SetUpMovieListView();
+        GetBestMovies();
+    }
+
+    private void ShowSortDialog(){
+        final CharSequence[] items = { "Rating", "Year", "Title (Desc)", "Title (Asc)" };
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Sort By");
+        builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                switch (item) {
+                    case 0:
+                        sortBy = SortBy.rating;
+                        break;
+                    case 1:
+                        sortBy = SortBy.year;
+                        break;
+                    case 2:
+                        sortBy = SortBy.desc;
+                        break;
+                    case 3:
+                        sortBy = SortBy.asc;
+                }
+
+                dialog.dismiss();
+                SearchForMovie();
+            }
+        });
+
+        AlertDialog sortByDialog = builder.create();
+        sortByDialog.show();
+    }
+
+    private void SearchForMovie()
+    {
+        page = 1;
+        state = State.SEARCH;
+        try {
+            new ApiHelper().execute(GetURL(page));
+        } catch (Exception ex) {
+            Log.d(DEBUG, ex.getMessage());
+        }
+    }
+
+    public String GetURL(int page)
+    {
+        Uri.Builder builder = new Uri.Builder();
+        String query = etQuery.getText().toString();
+
+        builder.scheme("https")
+                .authority("yts.ag")
+                .appendPath("api")
+                .appendPath("v2")
+                .appendPath("list_movies.json")
+                .appendQueryParameter("query_term", query)
+                .appendQueryParameter("page", Integer.toString(page));
+
+        if(sortBy == SortBy.rating || sortBy == SortBy.year) {
+            builder.appendQueryParameter("sort_by", sortBy.toString());
+        } else {
+            builder.appendQueryParameter("sort_by", "title")
+                    .appendQueryParameter("order_by", sortBy.toString());
+        }
+
+        return builder.build().toString();
+    }
+
+    private void SetUpMovieListView() {
+        /* Create the Movie List View Once */
+        movies = new ArrayList<>();
+        lvMovies = (ListView) findViewById(R.id.lvMovies);
+        movieListAdapter = new MovieListAdapter(this);
+        movieListAdapter.setMovies(movies);
+        lvMovies.setAdapter(movieListAdapter);
+
+        lvMovies.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int currentVisibleItemCount;
+            private int currentScrollState;
+            private int currentFirstVisibleItem;
+            private int totalItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                this.currentScrollState = scrollState;
+                this.isScrollCompleted();
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                this.currentFirstVisibleItem = firstVisibleItem;
+                this.currentVisibleItemCount = visibleItemCount;
+                this.totalItem = totalItemCount;
+            }
+
+            private void isScrollCompleted() {
+                if (((totalItem - currentFirstVisibleItem) == currentVisibleItemCount)
+                        && (this.currentScrollState == SCROLL_STATE_IDLE)) {
+                    if (movies.size() < movieCount) {
+                        page++;
+                        state = State.UPDATE;
+                        try {
+                            new ApiHelper().execute(GetURL(page));
+                        } catch (Exception ex) {
+                            Log.d(DEBUG, ex.getMessage());
+                        }
+                    }
                 }
             }
         });
     }
 
+    private void GetBestMovies() {
+        page = 1;
+        state = State.SEARCH;
+        try {
+            new ApiHelper().execute(GetURL(page));
+        } catch (Exception ex) {
+            Log.d(DEBUG, ex.getMessage());
+        }
+    }
+
     public void SetMovieList(List<Movie> _movies){
-        ListView lvMovies = (ListView) findViewById(R.id.lvMovies);
-        lvMovies.setAdapter(new MovieListAdapter(this, _movies));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        movieListAdapter.setMovies(_movies);
+        movieListAdapter.notifyDataSetChanged();
     }
 
     private class ApiHelper extends AsyncTask<String, Void, String>{
@@ -120,11 +254,17 @@ public class MainActivity extends AppCompatActivity {
             Log.d(DEBUG, "Post Execute Entered");
             if(json != null) {
                 Gson gson = new Gson();
-                movies = new ArrayList<>();
+
+                if(state == State.SEARCH) {
+                    movies = new ArrayList<>();
+                }
 
                 try {
                     JSONObject obj = new JSONObject(json);
                     JSONArray movieArray = obj.getJSONObject("data").getJSONArray("movies");
+                    movieCount = obj.getJSONObject("data").getInt("movie_count");
+                    Log.d(DEBUG, "Movie Count - " + Integer.toString(movieCount));
+
                     for(int i = 0; i < movieArray.length(); i++)
                     {
                         movies.add(gson.fromJson(movieArray.get(i).toString(), Movie.class));
@@ -133,13 +273,10 @@ public class MainActivity extends AppCompatActivity {
                     if(movies != null) {
                         SetMovieList(movies);
                     }
+
                 }catch(Exception ex){
                     Log.d(DEBUG, ex.getMessage());
                 }
-            }
-
-            for(int i = 0; i < movies.size(); i++) {
-                Log.d(DEBUG, movies.get(i).getTitle());
             }
         }
     }
