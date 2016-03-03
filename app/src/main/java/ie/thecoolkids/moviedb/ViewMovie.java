@@ -1,22 +1,32 @@
 package ie.thecoolkids.moviedb;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class ViewMovie extends AppCompatActivity {
+
+    Movie movie;
+    RelativeLayout mainPage;
+    ImageView poster;
+    TextView title, year, genres, rating, mpaaRating, runtime, synopsis;
+    Bitmap bitmap1;
+    URL url1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,48 +37,66 @@ public class ViewMovie extends AppCompatActivity {
         if (extras != null) {
             jsonMyObject = extras.getString("passedMovie");
         }
-        Movie movie = new Gson().fromJson(jsonMyObject, Movie.class);
+        movie = new Gson().fromJson(jsonMyObject, Movie.class);
         init(movie);
     }
 
     private void init(Movie movie){
-        Bitmap bitmap;
 
-        TextView title = (TextView) findViewById(R.id.title);
-        TextView year = (TextView) findViewById(R.id.year);
-        TextView genres = (TextView) findViewById(R.id.genres);
-        TextView rating = (TextView) findViewById(R.id.rating);
-        TextView mpaaRating = (TextView) findViewById(R.id.mpaarating);
-        TextView runtime = (TextView) findViewById(R.id.runtime);
-        TextView synopsis = (TextView) findViewById(R.id.synopsis);
-        ImageView poster = (ImageView) findViewById(R.id.poster);
+        title = (TextView) findViewById(R.id.title);
+        year = (TextView) findViewById(R.id.year);
+        genres = (TextView) findViewById(R.id.genres);
+        rating = (TextView) findViewById(R.id.rating);
+        mpaaRating = (TextView) findViewById(R.id.mpaarating);
+        runtime = (TextView) findViewById(R.id.runtime);
+        synopsis = (TextView) findViewById(R.id.synopsis);
+        poster = (ImageView) findViewById(R.id.poster);
+        mainPage = (RelativeLayout) findViewById(R.id.mainpage);
 
 
         title.setText(movie.getTitle());
         year.setText("" + movie.getYear());
-        rating.setText("\t\t" + movie.getRating());
-        mpaaRating.setText("MMPA Rating:\t\t\t\t" + movie.getMpa_rating());
-        runtime.setText("Runtime:\t\t\t\t" + movie.getRuntime());
+        rating.setText("" + movie.getRating());
+        mpaaRating.setText("" + movie.getMpaRating());
+        runtime.setText(createRuntimeString(movie.getRuntime()));
         synopsis.setText(movie.getSynopsis());
+        genres.setText(createGenreString(movie.getGenres()));
+        setImages();
+    }
 
+    private void setImages() {
+       Picasso.with(this).load(movie.getMediumCoverImage()).into(poster);
         try {
-            URL newurl = new URL(movie.getPosterURL());
-            bitmap = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
-            poster.setImageBitmap(bitmap);
+            url1 = new URL(movie.getMediumCoverImage());
+            bitmap1 = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
+            Drawable dr = new BitmapDrawable(getResources(), bitmap1);
+            mainPage.setBackground(dr);
         }
-        catch(Exception e){
+        catch (IOException e) {
+            e.printStackTrace();
+            Log.w("ViewMovie", "Exception creating image");
         }
+    }
 
+    private String createGenreString(List<String> genres) {
         String genreString="";
-        if(movie.getGenres().size()>1) {
-            for (int i = 0; i < movie.getGenres().size(); i++) {
-                genreString += movie.getGenres().get(i) + " / ";
+        if(genres.size()>1) {
+            for (int i = 0; i < genres.size(); i++) {
+                genreString += genres.get(i) + " / ";
             }
             genreString=genreString.substring(0,genreString.length()-2);
         }
         else{
-            genreString = movie.getGenres().get(0);
+            genreString = genres.get(0);
         }
-        genres.setText(genreString);
+        return genreString;
     }
+
+    private String createRuntimeString(int rt) {
+        int hrs, mins;
+        hrs = rt / 60;
+        mins = rt % 60;
+        return "" + hrs + "Hrs  " + mins + "Mins";
+    }
+
 }

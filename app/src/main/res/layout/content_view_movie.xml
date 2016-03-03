@@ -2,159 +2,306 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/moviereel"
+    android:id="@+id/mainpage"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="ie.thecoolkids.moviedb.ViewMovie"
     tools:showIn="@layout/activity_view_movie">
 
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView" >
 
         <LinearLayout
-            android:orientation="horizontal"
+
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:background="#9C000000"
+            android:id="@+id/wholePage"
+            android:fillViewport="true"
+            android:padding="20dp">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/topSection"
+                android:measureWithLargestChild="true"
                 android:layout_weight="1">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/poster"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:src="@drawable/movies"
-                    android:layout_weight="2" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/topLeft">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/poster"
+                        android:src="@drawable/movies" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/topRight">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:id="@+id/titleAndYear"
+                        android:padding="15dp"
+                        android:background="#9C000000"
+                        android:layout_marginLeft="10dp">
+
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Title"
+                            android:id="@+id/title"
+                            android:textAlignment="center"
+                            android:textIsSelectable="true"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#e4e1e1" />
+
+                        <Space
+                            android:layout_width="fill_parent"
+                            android:layout_height="20px"
+                            android:background="#730f0c0c" />
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="year"
+                            android:id="@+id/year"
+                            android:paddingStart="20dp"
+                            android:textAlignment="center"
+                            android:textColor="#e4e1e1" />
+
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_height="wrap_content"
+                android:id="@+id/bottomSection">
+
+                <Space
+                    android:layout_width="20px"
+                    android:layout_height="20px" />
 
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Title"
-                        android:id="@+id/title"
-                        android:textSize="70px"
-                        android:textAlignment="center" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="year"
-                        android:id="@+id/year"
-                        android:paddingStart="20dp"
-                        android:textAlignment="center" />
-
-                    <Space
-                        android:layout_width="fill_parent"
-                        android:layout_height="80px" />
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detailsBox"
+                    android:background="#9C000000"
+                    android:padding="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="genres"
-                        android:id="@+id/genres" />
+                        android:text="DETAILS"
+                        android:id="@+id/detailsHeading"
+                        android:singleLine="true"
+                        android:textColor="#d4d0d0" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="30dp"
+                        android:id="@+id/genresLine"
+                        android:longClickable="false">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="Genre(s):"
+                            android:id="@+id/genreHeading"
+                            android:singleLine="true"
+                            android:textColor="#e4e1e1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="Action / Comedy"
+                            android:id="@+id/genres"
+                            android:textColor="#e4e1e1"
+                            android:paddingLeft="10dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/imbdRatingLine"
+                        android:paddingLeft="30dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="IMDb Rating:"
+                            android:id="@+id/imbdRatingHeader"
+                            android:textColor="#e4e1e1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="7.9"
+                            android:id="@+id/rating"
+                            android:textColor="#e4e1e1"
+                            android:paddingLeft="10dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/mpaaRatingLine"
+                        android:paddingLeft="30dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="MPAA Rating:"
+                            android:id="@+id/mpaaRatingHeader"
+                            android:textColor="#e4e1e1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/mpaarating"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="PG 13"
+                            android:textIsSelectable="true"
+                            android:textColor="#e4e1e1"
+                            android:paddingLeft="10dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/RuntimeLine"
+                        android:paddingLeft="30dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="Runtime:"
+                            android:id="@+id/runtimeHeader"
+                            android:textColor="#e4e1e1" />
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Runtime:   126"
+                            android:id="@+id/runtime"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="#e4e1e1"
+                            android:textIsSelectable="false" />
+                    </LinearLayout>
 
                 </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+                <Space
+                    android:layout_width="fill_parent"
+                    android:layout_height="50px" />
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="75px"
-                    android:id="@+id/imageButton"
-                    android:src="@drawable/logoimdb" />
-
-                <TextView
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="75px"
-                    android:text="rating"
-                    android:id="@+id/rating"
-                    android:textIsSelectable="true"
-                    android:textSize="35px"
-                    android:paddingStart="20px"
-                    android:paddingTop="15px"
-                    android:paddingLeft="20px" />
+                    android:layout_height="wrap_content"
+                    android:id="@+id/synopsisBox"
+                    android:background="#9C000000"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="SYNOPSIS"
+                        android:id="@+id/synopsisHeading"
+                        android:textColor="#d4d0d0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="synopsis"
+                        android:id="@+id/synopsis"
+                        android:textColor="#e4e1e1"
+                        android:paddingLeft="30dp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="50px" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/buttonRow"
+                    android:background="#9C000000"
+                    android:padding="10dp">
+
+                    <Space
+                        android:layout_width="20px"
+                        android:layout_height="20px"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/youtubeButton"
+                        android:src="@drawable/youtube"
+                        android:padding="0dp" />
+
+                    <Space
+                        android:layout_width="20px"
+                        android:layout_height="20px"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/addFavButton"
+                        android:src="@drawable/favbutton"
+                        android:padding="0dp" />
+
+                    <Space
+                        android:layout_width="20px"
+                        android:layout_height="20px"
+                        android:layout_weight="1" />
+                </LinearLayout>
 
             </LinearLayout>
 
-            <Space
-                android:layout_width="fill_parent"
-                android:layout_height="30px" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:id="@+id/mpaarating"
-                android:textSize="30px" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:id="@+id/runtime"
-                android:textSize="30px" />
-
-            <Space
-                android:layout_width="fill_parent"
-                android:layout_height="60px" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Synopsis"
-                android:id="@+id/SysnopsisHeading" />
-
-            <Space
-                android:layout_width="20px"
-                android:layout_height="20px" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="synopsis"
-                android:id="@+id/synopsis" />
-
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
