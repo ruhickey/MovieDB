@@ -33,11 +33,18 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageButton btnSearch;
-    ImageButton btnSort;
-    EditText etQuery;
-    List<Movie> movies;
-    MovieListAdapter movieListAdapter;
+    private ImageButton btnSearch;
+    private ImageButton btnSort;
+    private EditText etQuery;
+    private List<Movie> movies;
+    private MovieListAdapter movieListAdapter;
+    private NetworkHelper netHelper;
+    private MainActivity context;
+    private SortBy sortBy = SortBy.rating;
+    private State state;
+    private int page = 1;
+    private ListView lvMovies;
+    private int movieCount;
 
     private final String DEBUG = "DEBUG";
 
@@ -53,12 +60,6 @@ public class MainActivity extends AppCompatActivity {
         UPDATE
     }
 
-    private SortBy sortBy = SortBy.rating;
-    private State state;
-    private int page;
-    ListView lvMovies;
-    private int movieCount;
-
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        movies = new ArrayList<Movie>(Arrays.asList((Movie[])savedInstanceState.getSerializable("movies")));
+        movies = new ArrayList<Movie>(Arrays.asList((Movie[]) savedInstanceState.getSerializable("movies")));
         SetMovieList(movies);
     }
 
@@ -79,10 +80,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        context = this;
+
+        /* Set up UI Controls */
         btnSearch = (ImageButton) toolbar.findViewById(R.id.btnSearch);
         btnSort = (ImageButton) toolbar.findViewById(R.id.btnSort);
-
         etQuery = (EditText) findViewById(R.id.etQuery);
+
+        /* Set up movie list shell */
+        SetUpMovieListView();
+        GetPopularMovies();
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,20 +98,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShowSortDialog();
             }
         });
-
-        SetUpMovieListView();
-        GetBestMovies();
+        */
     }
 
-    private void ShowSortDialog(){
-        final CharSequence[] items = { "Rating", "Year", "Title (Desc)", "Title (Asc)" };
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    private void GetPopularMovies() {
+        new ApiHelper(this).SetPopularQuery(page).execute();
+    }
+
+    private void ShowNetworkError() {
+        Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG);
+    }
+
+    private void ShowSortDialog() {
+        final CharSequence[] items = {"Rating", "Year", "Title (Desc)", "Title (Asc)"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setTitle("Sort By");
         builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
@@ -132,45 +146,21 @@ public class MainActivity extends AppCompatActivity {
         sortByDialog.show();
     }
 
-    private void SearchForMovie()
-    {
+    private void SearchForMovie() {
         page = 1;
         state = State.SEARCH;
         try {
-            new ApiHelper().execute(GetURL(page));
+            SetMovieQuery();
         } catch (Exception ex) {
-            Log.d(DEBUG, ex.getMessage());
+            Logger.Debug(ex.getMessage());
         }
-    }
-
-    public String GetURL(int page)
-    {
-        Uri.Builder builder = new Uri.Builder();
-        String query = etQuery.getText().toString();
-
-        builder.scheme("https")
-                .authority("yts.ag")
-                .appendPath("api")
-                .appendPath("v2")
-                .appendPath("list_movies.json")
-                .appendQueryParameter("query_term", query)
-                .appendQueryParameter("page", Integer.toString(page));
-
-        if(sortBy == SortBy.rating || sortBy == SortBy.year) {
-            builder.appendQueryParameter("sort_by", sortBy.toString());
-        } else {
-            builder.appendQueryParameter("sort_by", "title")
-                    .appendQueryParameter("order_by", sortBy.toString());
-        }
-
-        return builder.build().toString();
     }
 
     private void SetUpMovieListView() {
         /* Create the Movie List View Once */
         movies = new ArrayList<>();
         lvMovies = (ListView) findViewById(R.id.lvMovies);
-        movieListAdapter = new MovieListAdapter(this);
+        movieListAdapter = new MovieListAdapter(context);
         movieListAdapter.setMovies(movies);
         lvMovies.setAdapter(movieListAdapter);
 
@@ -200,9 +190,9 @@ public class MainActivity extends AppCompatActivity {
                         page++;
                         state = State.UPDATE;
                         try {
-                            new ApiHelper().execute(GetURL(page));
+                            SetMovieQuery();
                         } catch (Exception ex) {
-                            Log.d(DEBUG, ex.getMessage());
+                            Logger.Debug(ex.getMessage());
                         }
                     }
                 }
@@ -210,80 +200,75 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void SetMovieQuery() {
+        String query = etQuery.getText().toString();
+        if(query.isEmpty()){
+            new ApiHelper(context).SetPopularQuery(page).execute();
+        } else {
+            new ApiHelper(context).SetMovieQuery(query, page).execute();
+        }
+    }
+
     private void GetBestMovies() {
         page = 1;
         state = State.SEARCH;
         try {
-            new ApiHelper().execute(GetURL(page));
+            SetMovieQuery();
         } catch (Exception ex) {
-            Log.d(DEBUG, ex.getMessage());
+            Logger.Debug(ex.getMessage());
         }
     }
 
-    public void SetMovieList(List<Movie> _movies){
+    public ArrayList<Movie> search(String term) {
+        ArrayList<Movie> newData = new ArrayList<>();
+        for(int i = 0; i < movies.size(); i++){
+            if(movies.get(i).getTitle().contains(term))
+                newData.add(movies.get(i));
+        }
+        return newData;
+    }
+
+    public void UpdateList(String term) {
+        movieListAdapter.setMovies(search(term));
+        movieListAdapter.notifyDataSetChanged();
+    }
+
+    public void SetMovieList(List<Movie> _movies) {
         movieListAdapter.setMovies(_movies);
         movieListAdapter.notifyDataSetChanged();
     }
 
-    private class ApiHelper extends AsyncTask<String, Void, String>{
-        OkHttpClient client = new OkHttpClient();
-
-        protected String doInBackground(String... urls){
-            String retval = null;
-
+    public void ParseJson(String json) {
+        if(json != null) {
             try {
-                retval = run(urls[0]);
-            } catch (IOException ex){
-                Log.d(DEBUG, ex.getMessage());
-            }
-
-            Log.d(DEBUG, retval);
-            return retval;
-        }
-
-        String run (String url) throws IOException {
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            Response response = client.newCall(request).execute();
-            return response.body().string();
-        }
-
-        protected void onPostExecute(String json)
-        {
-            Log.d(DEBUG, "Post Execute Entered");
-            if(json != null) {
                 Gson gson = new Gson();
+                JSONObject obj = new JSONObject(json);
+
+                movieCount = obj.getInt("total_results");
+
+                JSONArray movieArray = obj.getJSONArray("results");
 
                 if(state == State.SEARCH) {
-                    movies = new ArrayList<>();
+                    movies.clear();
                 }
 
-                try {
-                    JSONObject obj = new JSONObject(json);
-                    movieCount = obj.getJSONObject("data").getInt("movie_count");
-
-                    if(movieCount == 0)
-                    {
-                        Toast.makeText(getBaseContext(), "No Movies Found!", Toast.LENGTH_LONG).show();
-                        return;
+                for (int i = 0; i < movieArray.length(); i++) {
+                    Movie x = gson.fromJson(movieArray.get(i).toString(), Movie.class);
+                    if(!x.getMediumCoverImage().endsWith("null")) {
+                        movies.add(x);
                     }
+                }
 
-                    JSONArray movieArray = obj.getJSONObject("data").getJSONArray("movies");
-                    Log.d(DEBUG, "Movie Count - " + Integer.toString(movieCount));
-
-                    for(int i = 0; i < movieArray.length(); i++)
-                    {
-                        movies.add(gson.fromJson(movieArray.get(i).toString(), Movie.class));
-                    }
-
-                    if(movies != null) {
-                        SetMovieList(movies);
-                    }
-
-                }catch(Exception ex){
-                    Log.d(DEBUG, ex.getMessage());
+                if(movies != null) {
+                    SetMovieList(movies);
+                }
+            } catch(Exception ex) {
+                if(ex == null) {
+                    Log.d("EXCEPTION", "NULL");
+                } else if (ex.getMessage() == null){
+                    ex.printStackTrace();
+                } else {
+                    Log.d("EXCEPTION", ex.getMessage());
                 }
             }
         }

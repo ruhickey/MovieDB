@@ -67,7 +67,7 @@ public class MovieListAdapter extends BaseAdapter {
         holder.tvTitle.setText(movies.get(position).getTitle());
         holder.ratBar.setRating((movies.get(position).getRating() / 2));
 
-        Picasso.with(main).load(movies.get(position).getMediumCoverImage()).into(holder.imgPoster);
+        Picasso.with(main).load(movies.get(position).getMediumCoverImage()).placeholder(R.drawable.movies).fit().into(holder.imgPoster);
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
