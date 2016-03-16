@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Movie implements Serializable {
 
+    /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
 
     static Map<Integer, String> genres = new HashMap<>();

@@ -57,8 +57,11 @@ public class ViewMovie extends AppCompatActivity {
         title.setText(movie.getTitle());
         year.setText("" + movie.getYear());
         rating.setText("" + movie.getRating());
+        // TODO: Commented out to fix build.
+        /*
         mpaaRating.setText("" + movie.getMpaRating());
         runtime.setText(createRuntimeString(movie.getRuntime()));
+        */
         synopsis.setText(movie.getSynopsis());
         genres.setText(createGenreString(movie.getGenres()));
         setImages();
@@ -80,6 +83,17 @@ public class ViewMovie extends AppCompatActivity {
 
     private String createGenreString(List<String> genres) {
         String genreString="";
+
+        /*
+         * Idea for how to make this more efficient.
+         * Check that genres size > 0.
+         * Set genreString to genres[0].
+         * Do a for loop starting at i = 1
+         *   Add ' / ' then the genre[i]
+         * This makes sure there's something in genres
+         * And it removes the use of Substring.
+         */
+
         if(genres.size()>1) {
             for (int i = 0; i < genres.size(); i++) {
                 genreString += genres.get(i) + " / ";
@@ -89,6 +103,7 @@ public class ViewMovie extends AppCompatActivity {
         else{
             genreString = genres.get(0);
         }
+
         return genreString;
     }
 

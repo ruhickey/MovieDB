@@ -4,9 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * Created by rhick on 07/03/2016.
- */
 public class NetworkHelper {
 
     Context context = null;
@@ -15,6 +12,11 @@ public class NetworkHelper {
         context = _context;
     }
 
+    /*
+     * This checks if the network is up.
+     * TODO: It hasn't been tested yet.
+     * It should be one of the next things to implement.
+     */
     public boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

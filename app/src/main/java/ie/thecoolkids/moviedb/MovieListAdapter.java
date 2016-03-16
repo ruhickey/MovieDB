@@ -54,21 +54,45 @@ public class MovieListAdapter extends BaseAdapter {
         RatingBar ratBar;
     }
 
+    /*
+     * This method gets called for every item in movies.
+     * It gathers the information from Movie and creates a ListItem out of it.
+     * It then returns the List item.
+     * We don't call this function, it automatically gets called.
+     */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.movie_list, null);
 
+        /*
+         * TODO: I took this whole Holder stuff from an online tutorial,
+         * but it seems a bit redundant, so I might remove it soon.
+         * It does, show us exactly what we can use in the UI though,
+         * so I'm not sure yet.
+         * The following connects the Holder to the UI controls.
+         */
         holder.imgPoster = (ImageView) rowView.findViewById(R.id.imgPoster);
         holder.tvTitle = (TextView) rowView.findViewById(R.id.tvTitle);
         holder.ratBar = (RatingBar) rowView.findViewById(R.id.ratBar);
 
+        /*
+         * This is where we give information to the UI.
+         */
         holder.tvTitle.setText(movies.get(position).getTitle());
         holder.ratBar.setRating((movies.get(position).getRating() / 2));
 
+        /*
+         * This is where we load in the image.
+         * Use Picasso's Placeholder to put a Stock image in the Movie Poster first.
+         */
         Picasso.with(main).load(movies.get(position).getMediumCoverImage()).placeholder(R.drawable.movies).fit().into(holder.imgPoster);
 
+        /*
+         * This sets up the List Items OnClickListener Event.
+         * When a List Item gets clicked, it brings us to the Movie's Info Activity.
+         */
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +102,7 @@ public class MovieListAdapter extends BaseAdapter {
             }
         });
 
+        /* Return the List Item */
         return rowView;
     }
 }
