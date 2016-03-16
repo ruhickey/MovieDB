@@ -57,11 +57,16 @@ public class ViewMovie extends AppCompatActivity {
         title.setText(movie.getTitle());
         year.setText("" + movie.getYear());
         rating.setText("" + movie.getRating());
+<<<<<<< HEAD
         // TODO: Commented out to fix build.
         /*
         mpaaRating.setText("" + movie.getMpaRating());
         runtime.setText(createRuntimeString(movie.getRuntime()));
         */
+=======
+        //mpaaRating.setText("" + movie.getMpaRating());
+        //runtime.setText(createRuntimeString(movie.getRuntime()));
+>>>>>>> e74ab2f82c897523fd538e06cdd86903c74884d0
         synopsis.setText(movie.getSynopsis());
         genres.setText(createGenreString(movie.getGenres()));
         setImages();
