@@ -1,13 +1,14 @@
 package ie.thecoolkids.moviedb;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class People implements Serializable {
 
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
 
-    private String[] also_known_as;
+    private List<String> also_known_as;
     private String biography;
     private String birthday;
     private String deathday;
@@ -18,7 +19,7 @@ public class People implements Serializable {
     private String profile_path;
 
 
-    public String[] getOtherNames() {
+    public List<String> getOtherNames() {
         return also_known_as;
     }
 
@@ -50,7 +51,7 @@ public class People implements Serializable {
         return place_of_birth;
     }
 
-    public String getMediumCoverImage(){
+    public String getPersonPicture(){
         return String.format("%s%s", BASE_URL, profile_path);
     }
 
