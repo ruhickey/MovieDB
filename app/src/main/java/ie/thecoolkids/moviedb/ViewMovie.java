@@ -23,7 +23,7 @@ public class ViewMovie extends AppCompatActivity {
     Movie movie;
     RelativeLayout mainPage;
     ImageView poster;
-    TextView title, year, genres, rating, mpaaRating, runtime, synopsis;
+    TextView title, year, genres, rating, synopsis, genreHeading;
     Bitmap bitmap1;
     URL url1;
 
@@ -46,25 +46,24 @@ public class ViewMovie extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title);
         year = (TextView) findViewById(R.id.year);
         genres = (TextView) findViewById(R.id.genres);
+        genreHeading = (TextView) findViewById(R.id.genreHeading);
         rating = (TextView) findViewById(R.id.rating);
-        mpaaRating = (TextView) findViewById(R.id.mpaarating);
-        runtime = (TextView) findViewById(R.id.runtime);
         synopsis = (TextView) findViewById(R.id.synopsis);
         poster = (ImageView) findViewById(R.id.poster);
         mainPage = (RelativeLayout) findViewById(R.id.mainpage);
 
-
         title.setText(movie.getTitle());
         year.setText("" + movie.getYear());
         rating.setText("" + movie.getRating());
-        // TODO: Commented out to fix build.
-        /*
-        mpaaRating.setText("" + movie.getMpaRating());
-        runtime.setText(createRuntimeString(movie.getRuntime()));
-        */
         synopsis.setText(movie.getSynopsis());
-        genres.setText(createGenreString(movie.getGenres()));
-        setImages();
+
+        if(movie.getGenres().size()>0) {
+            genreHeading.setText("Genre(s):");
+            genres.setText(createGenreString(movie.getGenres()));
+        }
+        if(!movie.getMediumCoverImage().equals(null)) {
+            setImages();
+        }
     }
 
     private void setImages() {
@@ -83,35 +82,12 @@ public class ViewMovie extends AppCompatActivity {
 
     private String createGenreString(List<String> genres) {
         String genreString="";
-
-        /*
-         * Idea for how to make this more efficient.
-         * Check that genres size > 0.
-         * Set genreString to genres[0].
-         * Do a for loop starting at i = 1
-         *   Add ' / ' then the genre[i]
-         * This makes sure there's something in genres
-         * And it removes the use of Substring.
-         */
-
-        if(genres.size()>1) {
-            for (int i = 0; i < genres.size(); i++) {
-                genreString += genres.get(i) + " / ";
-            }
-            genreString=genreString.substring(0,genreString.length()-2);
+        genreString = genres.get(0);
+        for (int i = 1; i < genres.size(); i++) {
+            genreString += " / " +  genres.get(i);
         }
-        else{
-            genreString = genres.get(0);
-        }
-
         return genreString;
     }
 
-    private String createRuntimeString(int rt) {
-        int hrs, mins;
-        hrs = rt / 60;
-        mins = rt % 60;
-        return "" + hrs + "Hrs  " + mins + "Mins";
-    }
 
 }

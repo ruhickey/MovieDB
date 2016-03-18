@@ -125,7 +125,7 @@
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:paddingLeft="30dp"
                         android:id="@+id/genresLine"
                         android:longClickable="false">
@@ -153,57 +153,6 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/imbdRatingLine"
-                        android:paddingLeft="30dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="IMDb Rating:"
-                            android:id="@+id/imbdRatingHeader"
-                            android:textColor="#e4e1e1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="7.9"
-                            android:id="@+id/rating"
-                            android:textColor="#e4e1e1"
-                            android:paddingLeft="10dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/mpaaRatingLine"
-                        android:paddingLeft="30dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="MPAA Rating:"
-                            android:id="@+id/mpaaRatingHeader"
-                            android:textColor="#e4e1e1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/mpaarating"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="PG 13"
-                            android:textIsSelectable="true"
-                            android:textColor="#e4e1e1"
-                            android:paddingLeft="10dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/RuntimeLine"
                         android:paddingLeft="30dp">
 
@@ -211,18 +160,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="Runtime:"
-                            android:id="@+id/runtimeHeader"
+                            android:text="Rating:"
+                            android:id="@+id/ratingHeader"
                             android:textColor="#e4e1e1" />
 
                         <TextView
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="Runtime:   126"
-                            android:id="@+id/runtime"
+                            android:text="7.5"
+                            android:id="@+id/rating"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="#e4e1e1"
-                            android:textIsSelectable="false" />
+                            android:textIsSelectable="false"
+                            android:singleLine="false" />
                     </LinearLayout>
 
                 </LinearLayout>
