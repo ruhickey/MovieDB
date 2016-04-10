@@ -87,7 +87,7 @@ public class MovieListAdapter extends BaseAdapter {
          * This is where we load in the image.
          * Use Picasso's Placeholder to put a Stock image in the Movie Poster first.
          */
-        Picasso.with(main).load(movies.get(position).getMediumCoverImage()).placeholder(R.drawable.movies).fit().into(holder.imgPoster);
+        Picasso.with(main).load(movies.get(position).getPoster()).placeholder(R.drawable.movies).fit().into(holder.imgPoster);
 
         /*
          * This sets up the List Items OnClickListener Event.

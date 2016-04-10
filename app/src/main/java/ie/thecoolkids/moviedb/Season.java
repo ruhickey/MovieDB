@@ -11,8 +11,8 @@ public class Season implements Serializable {
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
 
-
-    //TODO : add array of epiosde info including crew, guest stars etc.
+    private String air_date;
+    private Episode[] episodes;
     private String name;
     private String overview;
     private int id;
@@ -20,7 +20,14 @@ public class Season implements Serializable {
     private int season_number;
 
 
+    public String getAirDate(){
+        return air_date;
+    }
 
+    public Episode[] getEpisodes(){
+        return episodes;
+    }
+    
     public String getSeasonName() {
         return name;
     }
@@ -33,8 +40,7 @@ public class Season implements Serializable {
         return id;
     }
 
-
-    public String getPosterImage(){
+    public String getPoster(){
         return String.format("%s%s", BASE_URL, poster_path);
     }
 

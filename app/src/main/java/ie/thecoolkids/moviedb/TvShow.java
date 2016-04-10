@@ -11,74 +11,148 @@ public class TvShow implements Serializable {
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
 
-    static Map<Integer, String> genres = new HashMap<>();
-    static
-    {
-        genres = new HashMap<Integer, String>();
-        genres.put(28, "Action");
-        genres.put(12, "Adventure");
-        genres.put(16, "Animation");
-        genres.put(35, "Comedy");
-        genres.put(80, "Crime");
-        genres.put(99, "Documentary");
-        genres.put(18, "Drama");
-        genres.put(10751, "Family");
-        genres.put(14, "Fantasy");
-        genres.put(10769, "Foreign");
-        genres.put(36, "History");
-        genres.put(27, "Horror");
-        genres.put(10402, "Music");
-        genres.put(9648, "Mystery");
-        genres.put(10749, "Romance");
-        genres.put(878, "Sci-Fi");
-        genres.put(10770, "TV Movie");
-        genres.put(53, "Thriller");
-        genres.put(10752, "War");
-        genres.put(37, "Western");
-    }
 
     private String backdrop_path;
+    private CreatedBy[] createdBy;
+    private int[] episode_run_times;
     private String first_air_date;
-    private int[] genre_ids;
+    private Genres[] genres;
+    private String homepage;
     private int id;
-    private String overview;
-    private String[] origin_country;
+    private boolean in_production;
+    private String[] languages;
+    private String last_air_date;
     private String name;
+    private Network[] networks;
+    private int number_of_episodes;
+    private int number_of_seasons;
+    private String[] origin_country;
+    private String original_language;
+    private String overview;
+    private float popularity;
     private String poster_path;
+    private ProductionCompany[] production_companies;
+    private Season[] seasons;
+    private String status;
+    private String type;
     private float vote_average;
+    private float vote_count;
 
 
 
 
-    public int getId() {
-        return id;
+    public String getBackdropPath() {
+        return backdrop_path;
     }
 
-    public String getName() {
-        return name;
+    public List<String> getCreatedBy(){
+        List<String> created_list = new ArrayList<>();
+        for(int i=0; i<createdBy.length ; i++){
+            created_list.add(createdBy[i].getName());
+        }
+        return created_list;
+    }
+
+    public int[] getRuntimes(){
+        return episode_run_times;
     }
 
     public String getFirstAirDate() {
         return first_air_date;
     }
 
-    public float getRating() {
-        return vote_average;
-    }
-
-    public List<String> getGenres() {
+    public List<String> getGenres(){
         List<String> genre_list = new ArrayList<>();
-        for(int i = 0; i < genre_ids.length; i++) {
-            genre_list.add(genres.get(genre_ids[i]));
+        for(int i=0; i<genres.length ; i++){
+            genre_list.add(genres[i].getName());
         }
         return genre_list;
+    }
+
+    public String getHomepage() {
+        return homepage;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean getInProduction(){
+        return in_production;
+    }
+    public String[] getLanguages(){
+        return languages;
+    }
+    public String getLastAirDate(){
+        return last_air_date;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Network[] getNetworks(){
+        return networks;
+    }
+
+    public int getNumberOfEpisodes(){
+        return number_of_episodes;
+    }
+
+    public int getNumberOfSeasons(){
+        return number_of_seasons;
+    }
+
+    public String[] getOriginCountry(){
+        return origin_country;
+    }
+
+    public String getOriginalLanguage(){
+        return original_language;
     }
 
     public String getSynopsis() {
         return overview;
     }
 
+    public float getPopularity(){
+        return popularity;
+    }
+
     public String getPosterPath(){
         return String.format("%s%s", BASE_URL, poster_path);
     }
+
+    public ProductionCompany[] getProductionCompanies(){
+        return production_companies;
+    }
+
+    public Season[] getSeasons(){
+        return seasons;
+    }
+
+    public String getStatus(){
+        return status;
+    }
+
+    public String getType(){
+        return type;
+    }
+
+
+    public float getRating() {
+        return vote_average;
+    }
+
+    public float getVoteCount() {
+        return vote_count;
+    }
+
+
+
+
+
+
+
 }
+

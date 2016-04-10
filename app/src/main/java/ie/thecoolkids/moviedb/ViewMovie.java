@@ -61,15 +61,15 @@ public class ViewMovie extends AppCompatActivity {
             genreHeading.setText("Genre(s):");
             genres.setText(createGenreString(movie.getGenres()));
         }
-        if(!movie.getMediumCoverImage().equals(null)) {
+        if(!movie.getPoster().equals(null)) {
             setImages();
         }
     }
 
     private void setImages() {
-       Picasso.with(this).load(movie.getMediumCoverImage()).into(poster);
+       Picasso.with(this).load(movie.getPoster()).into(poster);
         try {
-            url1 = new URL(movie.getMediumCoverImage());
+            url1 = new URL(movie.getPoster());
             bitmap1 = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
             Drawable dr = new BitmapDrawable(getResources(), bitmap1);
             mainPage.setBackground(dr);

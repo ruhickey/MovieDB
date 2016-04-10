@@ -15,10 +15,16 @@ public class Episode implements Serializable {
     private String name;
     private String overview;
     private int id;
-    private String production_code;
     private int season_number;
     private String still_path;
     private float vote_average;
+    private float vote_count;
+
+    //only got if searching for season number by id
+    private CrewMember[] crew;
+    private GuestStar[] guest_stars;
+
+
 
     private String getAirDate(){
         return air_date;
@@ -40,10 +46,6 @@ public class Episode implements Serializable {
         return id;
     }
 
-    private String getProductionCode(){
-        return production_code;
-    }
-
     private int getSeasonNumber(){
         return season_number;
     }
@@ -54,6 +56,14 @@ public class Episode implements Serializable {
 
     public float getVoteAverage(){
         return vote_average;
+    }
+
+    public float getVoteCount(){
+        return vote_count;
+    }
+
+    public CrewMember[] getCrew(){
+        return crew;
     }
 }
 

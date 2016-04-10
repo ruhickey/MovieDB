@@ -8,6 +8,7 @@ public class People implements Serializable {
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
 
+    private boolean adult;
     private List<String> also_known_as;
     private String biography;
     private String birthday;
@@ -18,6 +19,11 @@ public class People implements Serializable {
     private String place_of_birth;
     private String profile_path;
 
+
+
+    public boolean isAdult(){
+        return adult;
+    }
 
     public List<String> getOtherNames() {
         return also_known_as;
@@ -52,7 +58,8 @@ public class People implements Serializable {
     }
 
     public String getPersonPicture(){
-        return String.format("%s%s", BASE_URL, profile_path);
+        if(profile_path != null)    return String.format("%s%s", BASE_URL, profile_path);
+        else                        return null;
     }
 
 
