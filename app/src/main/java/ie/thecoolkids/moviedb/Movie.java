@@ -24,6 +24,7 @@ public class Movie implements Serializable {
     private float popularity;
     private String poster_path;
     private ProductionCompany[] production_companies;
+    private ProductionCountry[] production_countries;
     private String release_date;
     private int revenue;
     private int runtime;
@@ -131,14 +132,18 @@ public class Movie implements Serializable {
         return runtime;
     }
 
-    public SpokenLanguage[] getSpokenLanguages() {
-        return spoken_languages;
+    public List<String> getSpokenLanguages(){
+        List<String> languages_list = new ArrayList<>();
+        for(int i=0; i< spoken_languages.length ; i++){
+            languages_list.add(spoken_languages[i].getName());
+        }
+        return languages_list;
     }
 
-    public List<String> getSpokenLanguagesCountries(){
+    public List<String> getProductionCountries(){
         List<String> countries_list = new ArrayList<>();
-        for(int i=0; i< spoken_languages.length ; i++){
-            countries_list.add(spoken_languages[i].getName());
+        for(int i=0; i< production_countries.length ; i++){
+            countries_list.add(production_countries[i].getName());
         }
         return countries_list;
     }

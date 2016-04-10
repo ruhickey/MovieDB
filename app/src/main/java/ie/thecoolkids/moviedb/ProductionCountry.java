@@ -3,14 +3,14 @@ package ie.thecoolkids.moviedb;
 
 import java.io.Serializable;
 
-public class SpokenLanguage implements Serializable{
+public class ProductionCountry implements Serializable{
 
-    private String iso_639_1;
+    private String iso_3166_1;
     private String name;
 
 
-    public String getLanguageCode() {
-        return iso_639_1;
+    public String getCode() {
+        return iso_3166_1;
     }
 
     public String getName() {
@@ -18,3 +18,4 @@ public class SpokenLanguage implements Serializable{
     }
 
 }
+
