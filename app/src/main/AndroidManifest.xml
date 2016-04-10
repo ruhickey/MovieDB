@@ -34,6 +34,14 @@
         <activity
             android:name=".ViewPerson"
             android:label="@string/title_activity_view_person"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ViewTVShow"
+            android:label="@string/title_activity_view_tvshow"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ViewSeasons"
+            android:label="@string/title_activity_view_seasons"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ViewPerson extends AppCompatActivity {
 
-    People person;
+    Person person;
     RelativeLayout mainPage;
     ImageView poster;
     TextView name, homepage, placeOfBirth, otherNames, otherNamesHeading, birthday, deathday, deathdayHeader, biography;
@@ -37,11 +37,11 @@ public class ViewPerson extends AppCompatActivity {
         if (extras != null) {
             jsonMyObject = extras.getString("passedPerson");
         }
-        person = new Gson().fromJson(jsonMyObject, People.class);
+        person = new Gson().fromJson(jsonMyObject, Person.class);
         init(person);
     }
 
-    private void init(People person){
+    private void init(Person person){
 
         name = (TextView) findViewById(R.id.name);
         homepage = (TextView) findViewById(R.id.homepage);

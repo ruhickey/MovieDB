@@ -23,8 +23,6 @@ import java.util.List;
 
 public class ViewMovie extends AppCompatActivity implements IParser{
 
-    private MainActivity context;
-    private EditText etQuery;
     private int id;
     private Movie movie;
     private RelativeLayout mainPage;

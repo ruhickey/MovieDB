@@ -2,4 +2,6 @@
     <string name="app_name">MovieDB</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_view_person">ViewPerson</string>
+    <string name="title_activity_view_tvshow">ViewTVShow</string>
+    <string name="title_activity_view_seasons">ViewSeasons</string>
 </resources>

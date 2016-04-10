@@ -1,15 +1,16 @@
 package ie.thecoolkids.moviedb;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class People implements Serializable {
+public class Person implements Serializable {
 
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
 
     private boolean adult;
-    private List<String> also_known_as;
+    private String[] also_known_as;
     private String biography;
     private String birthday;
     private String deathday;
@@ -18,6 +19,7 @@ public class People implements Serializable {
     private String name;
     private String place_of_birth;
     private String profile_path;
+    private Movie[] known_for;
 
 
 
@@ -26,7 +28,11 @@ public class People implements Serializable {
     }
 
     public List<String> getOtherNames() {
-        return also_known_as;
+        List<String> names_list = new ArrayList<>();
+        for(int i=0; i< also_known_as.length ; i++){
+            names_list.add(also_known_as[i]);
+        }
+        return names_list;
     }
 
     public String getBiography() {
@@ -63,4 +69,11 @@ public class People implements Serializable {
     }
 
 
+    public List<Movie> getKnownFor() {
+        List<Movie> movies_list = new ArrayList<>();
+        for(int i=0; i< known_for.length ; i++){
+            movies_list.add(known_for[i]);
+        }
+        return movies_list;
+    }
 }

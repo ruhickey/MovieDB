@@ -26,13 +26,13 @@ public class TvShow implements Serializable {
     private Network[] networks;
     private int number_of_episodes;
     private int number_of_seasons;
-    private String[] origin_country;
+    private String[] origin_countries;
     private String original_language;
     private String overview;
     private float popularity;
     private String poster_path;
-    private ProductionCompany[] production_companies;
-    private Season[] seasons;
+    private ProductionCompany[] production_companies; //P
+    private Season[] seasons; //*****************
     private String status;
     private String type;
     private float vote_average;
@@ -53,8 +53,12 @@ public class TvShow implements Serializable {
         return created_list;
     }
 
-    public int[] getRuntimes(){
-        return episode_run_times;
+    public List<Integer> getRuntimes(){
+        List<Integer> runtimes_list = new ArrayList<>();
+        for(int i=0; i<episode_run_times.length ; i++){
+            runtimes_list.add(episode_run_times[i]);
+        }
+        return runtimes_list;
     }
 
     public String getFirstAirDate() {
@@ -80,8 +84,13 @@ public class TvShow implements Serializable {
     public boolean getInProduction(){
         return in_production;
     }
-    public String[] getLanguages(){
-        return languages;
+
+    public List<String> getLanguages(){
+        List<String> lang_list = new ArrayList<>();
+        for(int i=0; i<languages.length ; i++){
+            lang_list.add(languages[i]);
+        }
+        return lang_list;
     }
     public String getLastAirDate(){
         return last_air_date;
@@ -91,8 +100,12 @@ public class TvShow implements Serializable {
         return name;
     }
 
-    public Network[] getNetworks(){
-        return networks;
+    public List<String> getNetworks(){
+        List<String> net_list = new ArrayList<>();
+        for(int i=0; i<networks.length ; i++){
+            net_list.add(networks[i].getName());
+        }
+        return net_list;
     }
 
     public int getNumberOfEpisodes(){
@@ -103,8 +116,12 @@ public class TvShow implements Serializable {
         return number_of_seasons;
     }
 
-    public String[] getOriginCountry(){
-        return origin_country;
+    public List<String> getOriginCountry(){
+        List<String> coun_list = new ArrayList<>();
+        for(int i=0; i<origin_countries.length ; i++){
+            coun_list.add(origin_countries[i]);
+        }
+        return coun_list;
     }
 
     public String getOriginalLanguage(){
@@ -119,16 +136,24 @@ public class TvShow implements Serializable {
         return popularity;
     }
 
-    public String getPosterPath(){
+    public String getPoster(){
         return String.format("%s%s", BASE_URL, poster_path);
     }
 
-    public ProductionCompany[] getProductionCompanies(){
-        return production_companies;
+    public List<String> getProductionCompanies(){
+        List<String> coun_list = new ArrayList<>();
+        for(int i=0; i<production_companies.length ; i++){
+            coun_list.add(production_companies[i].getName());
+        }
+        return coun_list;
     }
 
-    public Season[] getSeasons(){
-        return seasons;
+    public List<Season> getSeasons(){
+        List<Season> seasons_list = new ArrayList<>();
+        for(int i=0; i<seasons.length ; i++){
+            seasons_list.add(seasons[i]);
+        }
+        return seasons_list;
     }
 
     public String getStatus(){
@@ -138,7 +163,6 @@ public class TvShow implements Serializable {
     public String getType(){
         return type;
     }
-
 
     public float getRating() {
         return vote_average;
