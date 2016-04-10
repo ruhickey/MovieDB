@@ -17,7 +17,7 @@ public class Movie implements Serializable {
     private Genres[] genres;
     private String homepage;
     private int id;
-    private int imdb_id;
+    private String imdb_id;
     private String original_language;
     private String original_title;
     private String overview;
@@ -78,7 +78,7 @@ public class Movie implements Serializable {
         return id;
     }
 
-    public int getImdbId() {
+    public String getImdbId() {
         return imdb_id;
     }
 

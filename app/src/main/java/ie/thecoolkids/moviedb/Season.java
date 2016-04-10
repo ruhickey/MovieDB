@@ -27,7 +27,7 @@ public class Season implements Serializable {
     public Episode[] getEpisodes(){
         return episodes;
     }
-    
+
     public String getSeasonName() {
         return name;
     }

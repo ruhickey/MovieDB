@@ -31,7 +31,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IParser{
 
     private ImageButton btnSearch;
     private ImageButton btnSort;
@@ -339,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
      * TODO: This will need to be modified to deal with Movies/Tv Shows/Actors
      * TODO: We could add another field in the settings to keep track of which it is.
      */
-    public void ParseJson(String json) {
+    public void parseJson(String json) {
         /* Make sure we actually got something back */
         if(json != null) {
             try {
@@ -379,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
                      * TODO: This code should be moved before the Gson.fromJson call because
                      * I think it would make it more efficient.
                      */
-                    if(!x.getMediumCoverImage().endsWith("null")) {
+                    if(!x.getPoster().endsWith("null")) {
                         movies.add(x);
                     }
                 }

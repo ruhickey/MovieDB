@@ -30,10 +30,14 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
     private OkHttpClient client;
 
     /* Constructor doesn't do much, just initiates two vars */
-    public ApiHelper(MainActivity main) {
+    public ApiHelper(Context main) {
         context = main;
         client = new OkHttpClient();
     }
+
+
+
+
 
     /* This sets our API query URL to most popular. */
     public ApiHelper SetPopularQuery(int page) {
@@ -58,6 +62,17 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
 
         this.query = builder.build().toString();
 
+        return this;
+    }
+
+    public ApiHelper SetMovieIDQuery(int id) {
+        Uri.Builder builder = GetBaseMovieIdURL()
+                .appendPath("movie")
+                .appendPath(String.valueOf(id))
+                .appendQueryParameter("api_key", API_KEY);
+        this.query = builder.build().toString();
+
+        Log.d("QUERY", query);
         return this;
     }
 
@@ -100,6 +115,14 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
         return builder;
     }
 
+    public Uri.Builder GetBaseMovieIdURL() {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("api.themoviedb.org")
+                .appendPath("3");
+        return builder;
+    }
+
     /*
      * This is what gets ran in another Thread.
      * It gets called when we call .execute();
@@ -134,7 +157,7 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
      */
     protected void onPostExecute(String json) {
         if(context != null) {
-            ((MainActivity) context).ParseJson(json);
+            ((IParser)context).parseJson(json);
         }
     }
 }

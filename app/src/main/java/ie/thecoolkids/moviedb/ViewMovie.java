@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,31 +15,38 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-public class ViewMovie extends AppCompatActivity {
+public class ViewMovie extends AppCompatActivity implements IParser{
 
-    Movie movie;
-    RelativeLayout mainPage;
-    ImageView poster;
-    TextView title, year, genres, rating, synopsis, genreHeading;
-    Bitmap bitmap1;
-    URL url1;
+    private MainActivity context;
+    private EditText etQuery;
+    private int id;
+    private Movie movie;
+    private RelativeLayout mainPage;
+    private ImageView poster;
+    private TextView title, year, genres, rating, synopsis, genreHeading;
+    private Bitmap bitmap1;
+    private URL url1;
+    private int page=1;
+    private int movieID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_movie);
-        String jsonMyObject="";
+
+        //gets the passed movie id
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            jsonMyObject = extras.getString("passedMovie");
+            movieID = extras.getInt("passedMovieID");
         }
-        movie = new Gson().fromJson(jsonMyObject, Movie.class);
-        init(movie);
+        new ApiHelper(this).SetMovieIDQuery(movieID).execute();
     }
 
     private void init(Movie movie){
@@ -87,6 +95,25 @@ public class ViewMovie extends AppCompatActivity {
             genreString += " / " +  genres.get(i);
         }
         return genreString;
+    }
+
+
+    public void parseJson(String json) {
+       try {
+           Gson gson = new Gson();
+           movie = gson.fromJson(json, Movie.class);
+           init(movie);
+       }
+       catch(Exception ex){
+           if(ex == null) {
+               Log.d("EXCEPTION", "NULL");
+           } else if (ex.getMessage() == null){
+               ex.printStackTrace();
+           } else {
+               Log.d("EXCEPTION", ex.getMessage());
+           }
+        }
+
     }
 
 
