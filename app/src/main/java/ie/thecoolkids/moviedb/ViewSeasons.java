@@ -1,10 +1,13 @@
 package ie.thecoolkids.moviedb;
 
+import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
@@ -21,7 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-public class ViewSeasons extends AppCompatActivity implements IParser{
+public class ViewSeasons extends FragmentActivity implements IParser{
 
     private int id;
     private Season[] seasons;
@@ -30,17 +33,21 @@ public class ViewSeasons extends AppCompatActivity implements IParser{
 
     private TextView addTextViewsHere;
 
-
     private Bitmap bitmap1;
     private URL url1;
     private int tvShowID;
     private int numSeasons;
+    private ViewPager viewPager;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_movie);
+
+//        viewPager = (ViewPager) findViewById(R.id.viewPager);
+
 
         //gets the passed tvshow id
         Bundle extras = getIntent().getExtras();
