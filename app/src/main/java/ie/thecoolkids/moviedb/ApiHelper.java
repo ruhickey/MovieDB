@@ -87,6 +87,29 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
         return this;
     }
 
+    public ApiHelper SetPersonIDQuery(int id) {
+        Uri.Builder builder = GetBaseMovieIdURL()
+                .appendPath("person")
+                .appendPath(String.valueOf(id))
+                .appendQueryParameter("api_key", API_KEY);
+        this.query = builder.build().toString();
+
+        Log.d("QUERY", query);
+        return this;
+    }
+
+    public ApiHelper SetPersonIDCreditsQuery(int id) {
+        Uri.Builder builder = GetBaseMovieIdURL()
+                .appendPath("person")
+                .appendPath(String.valueOf(id))
+                .appendPath("combined_credits")
+                .appendQueryParameter("api_key", API_KEY);
+        this.query = builder.build().toString();
+
+        Log.d("QUERY", query);
+        return this;
+    }
+
     /*
      * This sets up our TV query URL.
      * We pass it the String we want to search for

@@ -278,6 +278,30 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/creditsBox"
+                    android:padding="10dp"
+                    android:background="#9C000000">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ListView
+                            android:id="@+id/lvRoles"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="20px"
+                    android:layout_height="20px" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/buttonRow"
                     android:background="#9C000000"
                     android:padding="10dp">

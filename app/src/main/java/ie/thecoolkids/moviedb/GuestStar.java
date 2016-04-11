@@ -1,7 +1,9 @@
 package ie.thecoolkids.moviedb;
 
 
-public class GuestStar {
+import java.io.Serializable;
+
+public class GuestStar implements Serializable {
 
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
     private int id;

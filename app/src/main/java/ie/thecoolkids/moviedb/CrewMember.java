@@ -1,7 +1,9 @@
 package ie.thecoolkids.moviedb;
 
 
-public class CrewMember {
+import java.io.Serializable;
+
+public class CrewMember implements Serializable {
 
 
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";

@@ -19,6 +19,8 @@ public class Person implements Serializable {
     private String name;
     private String place_of_birth;
     private String profile_path;
+
+
     private Movie[] known_for;
 
 

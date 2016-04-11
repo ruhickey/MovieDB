@@ -7,7 +7,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,31 +22,57 @@ import java.util.List;
 
 public class ViewPerson extends AppCompatActivity {
 
+    public enum StartFin {
+        STATE1, STATE2
+    }
+
+    private enum State {
+        SEARCH,
+        UPDATE
+    }
+
+
+    //todo: UNTESTED!!!!!!!!!!!!. No idea if any of this works at all.
+
+
+
     Person person;
     RelativeLayout mainPage;
     ImageView poster;
-    TextView name, homepage, placeOfBirth, otherNames, otherNamesHeading, birthday, deathday, deathdayHeader, biography;
+    TextView name, homepage, homepageHeading, placeOfBirth, otherNames, otherNamesHeading, birthday, deathday, deathdayHeader, biography;
     Bitmap bitmap1;
+    CombinedCredits personCredits;
     URL url1;
+    int personID;
+    StartFin state;
+    List roles;
+    ListView lvRoles;
+    CreditsListAdapter creditsListAdapter;
+    ViewPerson context;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_person);
-        String jsonMyObject="";
+         context = this;
+        state = StartFin.STATE1;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            jsonMyObject = extras.getString("passedPerson");
+            personID = extras.getInt("passedPersonID");
         }
-        person = new Gson().fromJson(jsonMyObject, Person.class);
-        init(person);
+        new ApiHelper(this).SetPersonIDQuery(personID).execute();
+
+
     }
 
-    private void init(Person person){
+    private void init(){
 
         name = (TextView) findViewById(R.id.name);
         homepage = (TextView) findViewById(R.id.homepage);
+        homepageHeading = (TextView) findViewById(R.id.homepageHeader);
         placeOfBirth = (TextView) findViewById(R.id.placeOfBirth);
         otherNames = (TextView) findViewById(R.id.otherNames);
         otherNamesHeading = (TextView) findViewById(R.id.otherNamesHeading);
@@ -56,10 +84,14 @@ public class ViewPerson extends AppCompatActivity {
         mainPage = (RelativeLayout) findViewById(R.id.mainpage);
 
         name.setText(person.getName());
-        homepage.setText(person.getHomepage());
         placeOfBirth.setText(person.getPlaceOfBirth());
         birthday.setText("" + person.getBirthDay());
         biography.setText(person.getBiography());
+
+        if(!person.getHomepage().equals("")){
+            homepageHeading.setText("Homepage: ");
+            homepage.setText(person.getHomepage());
+        }
 
         if(!person.getDeathDay().equals("")){
             deathdayHeader.setText("Death Day:");
@@ -72,6 +104,11 @@ public class ViewPerson extends AppCompatActivity {
         if(!person.getPersonPicture().equals(null)) {
             setImages();
         }
+
+        state = StartFin.STATE2;
+
+        new ApiHelper(this).SetPersonIDCreditsQuery(personID).execute();
+
     }
 
     private void setImages() {
@@ -95,6 +132,42 @@ public class ViewPerson extends AppCompatActivity {
             otherNamesString += " / " +  otherNames.get(i);
         }
         return otherNamesString;
+    }
+
+    private void initializeCredits(){
+        roles = personCredits.getCastAndCrew();
+        lvRoles = (ListView) findViewById(R.id.lvRoles); //name of id
+        creditsListAdapter = new CreditsListAdapter(context);
+        creditsListAdapter.setRoles(roles);
+        lvRoles.setAdapter(creditsListAdapter);
+        creditsListAdapter.setRoles(roles);
+
+    }
+
+
+    public void parseJson(String json) {
+        try {
+            if(state == StartFin.STATE1) {
+                Gson gson = new Gson();
+                person = gson.fromJson(json, Person.class);
+                init();
+            }
+            else{
+                Gson gson = new Gson();
+                personCredits = gson.fromJson(json, CombinedCredits.class);
+                initializeCredits();
+            }
+        }
+        catch(Exception ex){
+            if(ex == null) {
+                Log.d("EXCEPTION", "NULL");
+            } else if (ex.getMessage() == null){
+                ex.printStackTrace();
+            } else {
+                Log.d("EXCEPTION", ex.getMessage());
+            }
+        }
+
     }
 
 
