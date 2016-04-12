@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +13,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -26,108 +36,49 @@ import java.util.List;
 
 public class ViewSeasons extends FragmentActivity implements IParser{
 
-    private int id;
-    private Season[] seasons;
+
+
     private RelativeLayout mainPage;
     private ImageView poster;
 
-    private TextView addTextViewsHere;
-
-    private Bitmap bitmap1;
-    private URL url1;
     private int tvShowID;
     private int numSeasons;
-    private ViewPager viewPager;
+
+    private List<Season> seasons;
+    private Season season;
+    private static int NUM_PAGES;
+    private ViewPager mPager;
+    private PagerAdapter mPagerAdapter;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_movie);
-
-//        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        setContentView(R.layout.activity_screen_slide_pager);
 
 
-        //gets the passed tvshow id
+        //gets the passed tvshow id & numSeasons
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             tvShowID = extras.getInt("passedTVShowID");
             numSeasons = extras.getInt("passedTVShowNumSeasons");
         }
 
-        //todo : figure out api call
-//        new ApiHelper(this).SetMovieIDQuery(movieID).execute();
-    }
-
-    private void init(Season season){
-
-        mainPage = (RelativeLayout) findViewById(R.id.mainpage);
-        poster = (ImageView) findViewById(R.id.poster);
-
-        //todo attach views
-        //eg  title = (TextView) findViewById(R.id.title);
-
-
-        //todo setText and images etc.
-        // eg  title.setText(movie.getTitle());
-
-
-        //todo: check nulls for arrays and set headings
-        //eg
-//        if(movie.getCollection() != null) {
-//            collectionHeading.setText("Collection :");
-//            collection.setText(movie.getCollection().getName());
-//        }
-
-
-        //todo: set images
-//        if(!movie.getPoster().equals(null)) {
-//            setImages();
-//        }
-
-    }
-
-    private void setImages() {
-//        Picasso.with(this).load(movie.getPoster()).into(poster);
-//        try {
-//            url1 = new URL(movie.getPoster());
-//            bitmap1 = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
-//            Drawable dr = new BitmapDrawable(getResources(), bitmap1);
-//            mainPage.setBackground(dr);
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//            Log.w("ViewMovie", "Exception creating image");
-//        }
-    }
-
-    private String createArrayString(List<String> items) {
-        String genreString="";
-        genreString = items.get(0);
-        for (int i = 1; i < items.size(); i++) {
-            genreString += " / " +  items.get(i);
+        for(int i=0; i<numSeasons; i++){
+            new ApiHelper(this).SetSeasonIDQuery(tvShowID, i+1).execute();
         }
-        return genreString;
+        NUM_PAGES = seasons.size();
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), seasons);
+        mPager.setAdapter(mPagerAdapter);
     }
-
-    private String createArrayDropLineString(List<String> items) {
-        String genreString="";
-        genreString = items.get(0);
-        for (int i = 1; i < items.size(); i++) {
-            genreString += "\n" +  items.get(i);
-        }
-        return genreString;
-    }
-
-
 
     public void parseJson(String json) {
         try {
-            //todo change
-//            Gson gson = new Gson();
-//            movie = gson.fromJson(json, Movie.class);
-//            init(movie);
+            Gson gson = new Gson();
+            season = gson.fromJson(json, Season.class);
+            seasons.add(season);
         }
         catch(Exception ex){
             if(ex == null) {
@@ -140,6 +91,49 @@ public class ViewSeasons extends FragmentActivity implements IParser{
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mPager.getCurrentItem() == 0) {
+            super.onBackPressed();
+        } else {
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
+
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+
+        List<Season> seasons;
+        int currentPage;
+
+        public ScreenSlidePagerAdapter(FragmentManager fm, List<Season> seasons) {
+            super(fm);
+            this.seasons  = seasons;
+        }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+            currentPage = position;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            ScreenSlidePageFragment fragment = new ScreenSlidePageFragment();
+            fragment.setText(seasons.get(position));
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
+
+    }
+
+
+
+
 
 
 }
