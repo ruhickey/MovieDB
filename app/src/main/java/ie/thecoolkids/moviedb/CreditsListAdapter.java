@@ -16,11 +16,11 @@ public class CreditsListAdapter extends BaseAdapter {
 
     private List<Role> roles = null;
     private static LayoutInflater inflater = null;
-    private ViewPerson personview;
+    private ViewRoles rolesview;
 
-    public CreditsListAdapter(ViewPerson _person) {
-        personview = _person;
-        inflater = (LayoutInflater) personview.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public CreditsListAdapter(ViewRoles _roles) {
+        rolesview = _roles;
+        inflater = (LayoutInflater) rolesview.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public void setRoles(List<Role> _roles) {
@@ -57,7 +57,7 @@ public class CreditsListAdapter extends BaseAdapter {
         View rowView;
         rowView = inflater.inflate(R.layout.role_list, null);
 
-        holder.rolePoster = (ImageView) rowView.findViewById(R.id.imgPoster);
+        holder.rolePoster = (ImageView) rowView.findViewById(R.id.imagePoster);
         holder.nameOrTitle = (TextView) rowView.findViewById(R.id.name_or_title);
         holder.mediaType = (TextView) rowView.findViewById(R.id.mediaType);
         holder.characterOrJob = (TextView) rowView.findViewById(R.id.character_or_job);
@@ -67,7 +67,7 @@ public class CreditsListAdapter extends BaseAdapter {
         holder.date = (TextView) rowView.findViewById(R.id.date);
         holder.dateHeading = (TextView) rowView.findViewById(R.id.dateHeading);
 
-        Picasso.with(personview).load(roles.get(position).getPoster()).placeholder(R.drawable.movies).fit().into(holder.rolePoster);
+        Picasso.with(rolesview).load(roles.get(position).getPoster()).placeholder(R.drawable.movies).fit().into(holder.rolePoster);
         holder.mediaType.setText(roles.get(position).getMediaType());
 
         if(roles.get(position).getName() != "" && roles.get(position).getName() != null){

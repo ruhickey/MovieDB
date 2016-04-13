@@ -34,11 +34,11 @@ public class CombinedCredits implements Serializable {
 
     public List<Role> getCastAndCrew(){
         List<Role> cclist = new ArrayList<Role>();
-        for(int i=0; i<crew.length; i++){
-            cclist.add(crew[i]);
-        }
         for(int i=0; i<cast.length; i++){
             cclist.add(cast[i]);
+        }
+        for(int i=0; i<crew.length; i++){
+            cclist.add(crew[i]);
         }
         return cclist;
     }

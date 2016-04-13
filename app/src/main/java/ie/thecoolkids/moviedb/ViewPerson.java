@@ -1,56 +1,29 @@
 package ie.thecoolkids.moviedb;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.AbsListView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
-public class ViewPerson extends AppCompatActivity {
-
-    public enum StartFin {
-        STATE1, STATE2
-    }
-
-    private enum State {
-        SEARCH,
-        UPDATE
-    }
-
-
-    //todo: UNTESTED!!!!!!!!!!!!. No idea if any of this works at all.
-
-
+public class ViewPerson extends AppCompatActivity implements IParser {
 
     Person person;
     RelativeLayout mainPage;
     ImageView poster;
     TextView name, homepage, homepageHeading, placeOfBirth, otherNames, otherNamesHeading, birthday, deathday, deathdayHeader, biography;
-    Bitmap bitmap1;
-    CombinedCredits personCredits;
-    URL url1;
+    Button rolesButton;
     int personID;
-    StartFin state;
-    List roles;
-    ListView lvRoles;
-    CreditsListAdapter creditsListAdapter;
     ViewPerson context;
-
-
 
 
     @Override
@@ -58,17 +31,20 @@ public class ViewPerson extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_person);
          context = this;
-        state = StartFin.STATE1;
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             personID = extras.getInt("passedPersonID");
+            Log.d("Person id", "" + personID);
         }
-        new ApiHelper(this).SetPersonIDQuery(personID).execute();
 
+        new ApiHelper(this).SetPersonIDQuery(personID).execute();
 
     }
 
     private void init(){
+
+        Log.d("INIT", "");
 
         name = (TextView) findViewById(R.id.name);
         homepage = (TextView) findViewById(R.id.homepage);
@@ -82,6 +58,7 @@ public class ViewPerson extends AppCompatActivity {
         biography = (TextView) findViewById(R.id.biography);
         poster = (ImageView) findViewById(R.id.poster);
         mainPage = (RelativeLayout) findViewById(R.id.mainpage);
+        rolesButton = (Button) findViewById(R.id.rolesButton);
 
         name.setText(person.getName());
         placeOfBirth.setText(person.getPlaceOfBirth());
@@ -105,24 +82,23 @@ public class ViewPerson extends AppCompatActivity {
             setImages();
         }
 
-        state = StartFin.STATE2;
 
-        new ApiHelper(this).SetPersonIDCreditsQuery(personID).execute();
+        rolesButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ViewRoles.class);
+                intent.putExtra("passedPersonID", person.getId());
+                intent.putExtra("passedPersonName", person.getName());
+                v.getContext().startActivity(intent);
+
+
+            }
+        });
 
     }
 
     private void setImages() {
         Picasso.with(this).load(person.getPersonPicture()).into(poster);
-        try {
-            url1 = new URL(person.getPersonPicture());
-            bitmap1 = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
-            Drawable dr = new BitmapDrawable(getResources(), bitmap1);
-            mainPage.setBackground(dr);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            Log.w("ViewPerson", "Exception creating image");
-        }
     }
 
     private String createAlsoKnownAs(List<String> otherNames) {
@@ -134,29 +110,13 @@ public class ViewPerson extends AppCompatActivity {
         return otherNamesString;
     }
 
-    private void initializeCredits(){
-        roles = personCredits.getCastAndCrew();
-        lvRoles = (ListView) findViewById(R.id.lvRoles); //name of id
-        creditsListAdapter = new CreditsListAdapter(context);
-        creditsListAdapter.setRoles(roles);
-        lvRoles.setAdapter(creditsListAdapter);
-        creditsListAdapter.setRoles(roles);
-
-    }
 
 
     public void parseJson(String json) {
         try {
-            if(state == StartFin.STATE1) {
-                Gson gson = new Gson();
-                person = gson.fromJson(json, Person.class);
-                init();
-            }
-            else{
-                Gson gson = new Gson();
-                personCredits = gson.fromJson(json, CombinedCredits.class);
-                initializeCredits();
-            }
+            Gson gson = new Gson();
+            person = gson.fromJson(json, Person.class);
+            init();
         }
         catch(Exception ex){
             if(ex == null) {

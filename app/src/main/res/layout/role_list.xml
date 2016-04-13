@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:baselineAligned="false">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,7 +25,7 @@
                 <ImageView
                     android:layout_width="75dp"
                     android:layout_height="100dp"
-                    android:id="@+id/imageView"
+                    android:id="@+id/imagePoster"
                     android:src="@drawable/movies" />
             </LinearLayout>
 
@@ -34,19 +35,21 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/info"
                 android:layout_weight="0.20"
-                android:layout_alignBottom="@+id/imgPoster"
-                android:layout_toEndOf="@+id/imgPoster"
                 android:gravity="center_vertical|center_horizontal"
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="Name/Title"
                     android:id="@+id/name_or_title"
-                    android:padding="5dp"
-                    android:paddingTop="8dp" />
+                    android:textColor="#b3b1b1"
+                    android:textIsSelectable="true"
+                    android:textStyle="bold"
+                    android:paddingBottom="3dp"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="3dp" />
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -59,7 +62,9 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Media Type :"
-                        android:id="@+id/mediaTypeHeading" />
+                        android:id="@+id/mediaTypeHeading"
+                        android:textColor="#b3b1b1"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -67,7 +72,8 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Movie"
                         android:id="@+id/mediaType"
-                        android:paddingLeft="10dp" />
+                        android:paddingLeft="10dp"
+                        android:textColor="#d4d0d0" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -81,7 +87,9 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Character :"
-                        android:id="@+id/character_or_job_heading" />
+                        android:id="@+id/character_or_job_heading"
+                        android:textColor="#b3b1b1"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -90,7 +98,8 @@
                         android:text="Bobby"
                         android:id="@+id/character_or_job"
                         android:singleLine="true"
-                        android:paddingLeft="10dp" />
+                        android:paddingLeft="10dp"
+                        android:textColor="#d4d0d0" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -104,7 +113,9 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Episode Count :"
-                        android:id="@+id/epCount_or_dept_heading" />
+                        android:id="@+id/epCount_or_dept_heading"
+                        android:textColor="#b3b1b1"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -112,7 +123,8 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="6"
                         android:id="@+id/epCount_or_dept"
-                        android:paddingLeft="10dp" />
+                        android:paddingLeft="10dp"
+                        android:textColor="#b3b1b1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -126,7 +138,9 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Date :"
-                        android:id="@+id/dateHeading" />
+                        android:id="@+id/dateHeading"
+                        android:textColor="#b3b1b1"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -134,7 +148,8 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="01/01/2001"
                         android:id="@+id/date"
-                        android:paddingLeft="10dp" />
+                        android:paddingLeft="10dp"
+                        android:textColor="#d4d0d0" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
