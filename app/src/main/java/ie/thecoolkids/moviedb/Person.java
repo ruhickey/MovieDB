@@ -9,6 +9,8 @@ public class Person implements Serializable {
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
 
+
+
     private boolean adult;
     private String[] also_known_as;
     private String biography;
