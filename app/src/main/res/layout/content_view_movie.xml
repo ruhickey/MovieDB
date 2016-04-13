@@ -527,8 +527,9 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@null"
                         android:id="@+id/youtubeButton"
-                        android:src="@drawable/youtube"
+                        android:src="@mipmap/youtube"
                         android:padding="0dp" />
 
                     <Space
@@ -539,8 +540,9 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@null"
                         android:id="@+id/addFavButton"
-                        android:src="@drawable/favbutton"
+                        android:src="@mipmap/fav_no"
                         android:padding="0dp" />
 
                     <Space

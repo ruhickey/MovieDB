@@ -7,10 +7,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -34,6 +37,8 @@ public class ViewMovie extends AppCompatActivity implements IParser{
     private URL url1;
     private int page=1;
     private int movieID;
+    private ImageButton favButton;
+    private DBHelper db;
 
 
     @Override
@@ -47,6 +52,7 @@ public class ViewMovie extends AppCompatActivity implements IParser{
             movieID = extras.getInt("passedMovieID");
         }
         new ApiHelper(this).SetMovieIDQuery(movieID).execute();
+        db = new DBHelper(this);
     }
 
     private void init(Movie movie){
@@ -76,6 +82,12 @@ public class ViewMovie extends AppCompatActivity implements IParser{
         languagesHeading = (TextView) findViewById(R.id.languagesHeading);
         prod_companiesHeading = (TextView) findViewById(R.id.companiesHeading);
         prod_countriesHeading = (TextView) findViewById(R.id.countriesHeading);
+
+        favButton = (ImageButton)findViewById(R.id.addFavButton);
+        if(db.movieExists(movie.getId())){
+            favButton.setImageResource(R.mipmap.fav_yes);
+        }
+        new Thread(new AddMovieToDB()).start();
 
         title.setText(movie.getTitle());
         year.setText("" + movie.getYear());
@@ -167,8 +179,25 @@ public class ViewMovie extends AppCompatActivity implements IParser{
                Log.d("EXCEPTION", ex.getMessage());
            }
         }
-
     }
 
 
+    class AddMovieToDB implements Runnable{
+        @Override
+        public void run() {
+            favButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(db.addRemoveMovie(movie)){
+                        Toast.makeText(ViewMovie.this, "Movie Added To Database", Toast.LENGTH_LONG).show();
+                        favButton.setImageResource(R.mipmap.fav_yes);
+                    }
+                    else{
+                        Toast.makeText(ViewMovie.this, "Movie Removed From Database", Toast.LENGTH_LONG).show();
+                        favButton.setImageResource(R.mipmap.fav_no);
+                    }
+                }
+            });
+        }
+    }
 }
