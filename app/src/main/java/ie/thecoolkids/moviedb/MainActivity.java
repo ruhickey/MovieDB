@@ -31,7 +31,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity implements IParser{
+public class MainActivity extends BaseActivity implements IParser{
 
     private ImageButton btnSearch;
     private ImageButton btnSort;

@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-public class ViewMovie extends AppCompatActivity implements IParser{
+public class ViewMovie extends BaseActivity implements IParser{
 
     private int id;
     private Movie movie;
