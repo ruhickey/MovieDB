@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ViewPerson extends AppCompatActivity implements IParser {
+public class ViewPerson extends BaseActivity implements IParser {
 
     Person person;
     RelativeLayout mainPage;

@@ -3,7 +3,6 @@ package ie.thecoolkids.moviedb;
 import java.io.Serializable;
 
 
-
 public class Episode implements Serializable {
 
     /* This is the URL from where we get the images. */
@@ -18,52 +17,70 @@ public class Episode implements Serializable {
     private int season_number;
     private String still_path;
     private float vote_average;
-    private float vote_count;
 
-    //only got if searching for season number by id
-    private CrewMember[] crew;
-    private GuestStar[] guest_stars;
+//    //only got if searching for season number by id
+//    private CrewMember[] crew;
+//    private GuestStar[] guest_stars;
+
+    Episode(String a, int en, String n, String o, int i, int sn, String path, float v){
+        air_date = a;
+        episode_number = en;
+        name = n;
+        overview = o;
+        id = i;
+        season_number = sn;
+        still_path = path;
+        vote_average = v;
+    }
 
 
 
-    private String getAirDate(){
+    public String getAirDate(){
         return air_date;
     }
 
-    private int getEpisodeNumber(){
+    public String getEpisodeNumberString(){
+        return "Episode " + episode_number;
+    }
+
+    public int getEpisodeNumber(){
         return episode_number;
     }
 
-    private String getEpisodeName(){
+    public String getEpisodeName(){
         return name;
     }
 
-    private String getOverview(){
+    public String getOverview(){
         return overview;
     }
 
-    private int getId(){
+    public int getId(){
         return id;
     }
 
-    private int getSeasonNumber(){
+    public int getSeasonNumber(){
         return season_number;
     }
 
-    public String getStillPath(){
+    public String getPoster(){
         return String.format("%s%s", BASE_URL, still_path);
+    }
+
+    public String episodeToString(){
+        return "Air Date :\t" + air_date + "\nRating :\t" + vote_average + "\nOverview :\t" + overview;
     }
 
     public float getVoteAverage(){
         return vote_average;
     }
 
-    public float getVoteCount(){
-        return vote_count;
-    }
+//    public float getVoteCount(){
+//        return vote_count;
+//    }
 
-    public CrewMember[] getCrew(){
-        return crew;
-    }
+//    public CrewMember[] getCrew(){
+//        return crew;
+//    }
 }
 

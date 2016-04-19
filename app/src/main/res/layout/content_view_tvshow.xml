@@ -84,7 +84,8 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/bottomSection">
+            android:id="@+id/bottomSection"
+            android:layout_weight="1">
 
             <Space
                 android:layout_width="20px"
@@ -126,7 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="1991/01/01"
+                        android:text="date"
                         android:id="@+id/first_air_date"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="10dp" />
@@ -152,10 +153,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="1999/12/12"
+                        android:text="date"
                         android:id="@+id/last_airdate"
                         android:paddingLeft="10dp"
-                        android:textColor="#e4e1e1" />
+                        android:textColor="#e4e1e1"
+                        android:singleLine="true" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -177,7 +179,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Ended"
+                        android:text="status"
                         android:id="@+id/status"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="10dp" />
@@ -204,7 +206,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Action / Comedy"
+                        android:text="genre / genre"
                         android:id="@+id/genres"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="10dp" />
@@ -229,7 +231,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="7.2"
+                        android:text="rating"
                         android:id="@+id/rating"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="10dp" />
@@ -254,7 +256,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="42"
+                        android:text="runtime"
                         android:id="@+id/epRuntime"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="10dp" />
@@ -279,35 +281,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Scripted"
+                        android:text="type"
                         android:id="@+id/type"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="10dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="30dp"
-                    android:id="@+id/languagesLine">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Languages :"
-                        android:id="@+id/languagesHeading"
-                        android:textColor="#e4e1e1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="English"
-                        android:id="@+id/languages"
-                        android:paddingLeft="10dp"
-                        android:textColor="#e4e1e1" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -351,7 +328,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Ryan Adams"
+                        android:text="created by"
                         android:id="@+id/created_by"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="10dp" />
@@ -377,7 +354,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="True"
+                        android:text="in production"
                         android:id="@+id/in_production"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="10dp" />
@@ -402,10 +379,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="England"
+                        android:text="origin country"
                         android:id="@+id/original_country"
-                        android:textColor="#e4e1e1"
-                        android:paddingLeft="30dp" />
+                        android:textColor="#e4e1e1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -427,7 +403,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="HBO / ABC"
+                        android:text="network / network"
                         android:id="@+id/networks"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="30dp" />
@@ -452,7 +428,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Media Entertainments"
+                        android:text="company"
                         android:id="@+id/prod_companies"
                         android:textColor="#e4e1e1"
                         android:paddingLeft="30dp" />
@@ -510,28 +486,66 @@
                     android:id="@+id/seasonsHeading"
                     android:textColor="#d4d0d0" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="No. of Episodes :"
-                    android:id="@+id/num_episodes"
-                    android:textColor="#e4e1e1" />
+                    android:id="@+id/numEpLine"
+                    android:paddingLeft="30dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Number of Episodes :"
+                        android:id="@+id/numepHeading"
+                        android:textColor="#e4e1e1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="num-eps"
+                        android:id="@+id/num_episodes"
+                        android:textColor="#e4e1e1"
+                        android:paddingLeft="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="62"
-                    android:id="@+id/num_of_seasons"
-                    android:textColor="#e4e1e1"
-                    android:paddingLeft="10dp" />
+                    android:id="@+id/numSeasonsLine"
+                    android:paddingLeft="30dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Number of Seasons :"
+                        android:id="@+id/numSeasonsHeading"
+                        android:textColor="#e4e1e1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="num-seasons"
+                        android:id="@+id/num_of_seasons"
+                        android:textColor="#e4e1e1"
+                        android:paddingLeft="10dp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="25px" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="View Seasons Details"
-                    android:id="@+id/seasons_button" />
+                    android:id="@+id/seasons_button"
+                    android:layout_gravity="center_horizontal" />
 
             </LinearLayout>
 

@@ -2,9 +2,7 @@ package ie.thecoolkids.moviedb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TvShow implements Serializable {
 
@@ -13,10 +11,10 @@ public class TvShow implements Serializable {
 
 
     private String backdrop_path;
-    private CreatedBy[] createdBy;
-    private int[] episode_run_times;
+    private CreatedBy[] created_by;
+    private int[] episode_run_time;
     private String first_air_date;
-    private Genres[] genres;
+    private Genre[] genres;
     private String homepage;
     private int id;
     private boolean in_production;
@@ -26,13 +24,13 @@ public class TvShow implements Serializable {
     private Network[] networks;
     private int number_of_episodes;
     private int number_of_seasons;
-    private String[] origin_countries;
+    private String[] origin_country;
     private String original_language;
     private String overview;
     private float popularity;
     private String poster_path;
     private ProductionCompany[] production_companies; //P
-    private Season[] seasons; //*****************
+    private Season[] seasons;
     private String status;
     private String type;
     private float vote_average;
@@ -47,16 +45,16 @@ public class TvShow implements Serializable {
 
     public List<String> getCreatedBy(){
         List<String> created_list = new ArrayList<>();
-        for(int i=0; i<createdBy.length ; i++){
-            created_list.add(createdBy[i].getName());
+        for(int i=0; i<created_by.length ; i++){
+            created_list.add(created_by[i].getName());
         }
         return created_list;
     }
 
     public List<Integer> getRuntimes(){
         List<Integer> runtimes_list = new ArrayList<>();
-        for(int i=0; i<episode_run_times.length ; i++){
-            runtimes_list.add(episode_run_times[i]);
+        for(int i=0; i<episode_run_time.length ; i++){
+            runtimes_list.add(episode_run_time[i]);
         }
         return runtimes_list;
     }
@@ -118,8 +116,8 @@ public class TvShow implements Serializable {
 
     public List<String> getOriginCountry(){
         List<String> coun_list = new ArrayList<>();
-        for(int i=0; i<origin_countries.length ; i++){
-            coun_list.add(origin_countries[i]);
+        for(int i=0; i<origin_country.length ; i++){
+            coun_list.add(origin_country[i]);
         }
         return coun_list;
     }

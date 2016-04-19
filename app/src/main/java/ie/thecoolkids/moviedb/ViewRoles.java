@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 
-public class ViewRoles extends AppCompatActivity implements IParser {
+public class ViewRoles extends BaseActivity implements IParser {
 
     Person person;
     ImageView poster;
@@ -60,7 +60,6 @@ public class ViewRoles extends AppCompatActivity implements IParser {
         creditsListAdapter = new CreditsListAdapter(context);
         creditsListAdapter.setRoles(roles);
         lvRoles.setAdapter(creditsListAdapter);
-        creditsListAdapter.setRoles(roles);
 
     }
 

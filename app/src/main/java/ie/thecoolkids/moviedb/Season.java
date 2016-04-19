@@ -2,9 +2,6 @@ package ie.thecoolkids.moviedb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Season implements Serializable {
 
@@ -19,13 +16,27 @@ public class Season implements Serializable {
     private String poster_path;
     private int season_number;
 
+    public Season(String a, Episode[] x, String n, String o, int i, String pp, int sesnum){
+       air_date = a;
+        episodes = x;
+       name = n;
+       overview = o;
+       id = i;
+       poster_path = pp;
+       season_number = sesnum;
+    }
+
 
     public String getAirDate(){
         return air_date;
     }
 
-    public Episode[] getEpisodes(){
-        return episodes;
+    public ArrayList<Episode> getEpisodes(){
+        ArrayList<Episode> eps = new ArrayList<Episode>();
+        for(int i=0; i< episodes.length; i++){
+            eps.add(episodes[i]);
+        }
+        return eps;
     }
 
     public String getSeasonName() {
