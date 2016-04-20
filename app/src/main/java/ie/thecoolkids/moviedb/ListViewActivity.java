@@ -85,13 +85,14 @@ public class ListViewActivity extends BaseActivity {
         public void run(){
             list = new ArrayList<TheMovieDB>();
             Message msg = new Message();
-            Cursor c = db.getLocalMovies();
+            Cursor c = db.getAllLocalMovies();
             if(c.getCount() > 0){
                 while(c.moveToNext()){
                     Movie movie = new Movie();
                     movie.setId(c.getInt(0));
                     movie.setTitle(c.getString(1));
                     movie.setRating(c.getFloat(3));
+                    movie.setPoster(c.getString(12));
                     list.add((TheMovieDB)movie);
                 }
                 msg.obj = "dbUpdate";

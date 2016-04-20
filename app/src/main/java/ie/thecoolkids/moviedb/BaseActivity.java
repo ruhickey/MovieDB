@@ -96,7 +96,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void run(){
             List<TheMovieDB> list = new ArrayList<TheMovieDB>();
-            Cursor c = db.getLocalMovies();
+            Cursor c = db.getAllLocalMovies();
             if(c.getCount() > 0){
                 while(c.moveToNext()){
                     Movie movie = new Movie();

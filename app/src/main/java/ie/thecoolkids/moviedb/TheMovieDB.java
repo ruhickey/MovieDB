@@ -4,4 +4,5 @@ public interface TheMovieDB {
     int getId();
     String getTitle();
     float getRating();
+    String getPoster();
 }

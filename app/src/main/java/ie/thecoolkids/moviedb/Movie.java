@@ -1,5 +1,8 @@
 package ie.thecoolkids.moviedb;
 
+import android.content.Context;
+import android.database.Cursor;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,32 @@ public class Movie implements Serializable, TheMovieDB {
     private float vote_average;
     private float vote_count;
 
+    Movie(){
+    }
+
+    Movie(Context context, int id){
+        DBHelper db = new DBHelper(context);
+        Cursor c = db.getMovie(id);
+        c.moveToFirst();
+        this.id = c.getInt(0);
+        this.title = c.getString(1);
+        this.release_date = c.getString(2);
+        this.vote_average = c.getFloat(3);
+        this.overview = c.getString(4);
+        this.tagline = c.getString(5);
+        this.status = c.getString(6);
+        this.runtime = c.getInt(7);
+        this.revenue = c.getInt(8);
+        this.budget = c.getInt(9);
+        this.original_title = c.getString(10);
+        setGenres(c.getString(11));
+        this.poster_path = c.getString(12);
+        setCollection(c.getString(13));
+        setSpokenLanguages(c.getString(14));
+        setProductionCompanies(c.getString(15));
+        setProductionCountries(c.getString(16));
+    }
+
 
     public boolean isAdult() {
         return adult;
@@ -56,6 +85,10 @@ public class Movie implements Serializable, TheMovieDB {
         return belongs_to_collection;
     }
 
+    public void setCollection(String s){
+        this.belongs_to_collection = new Collection(s);
+    }
+
     public int getBudget() {
         return budget;
     }
@@ -66,6 +99,15 @@ public class Movie implements Serializable, TheMovieDB {
             genre_list.add(genres[i].getName());
         }
         return genre_list;
+    }
+
+    public void setGenres(String s){
+        String array[] = s.split(";");
+        int n = array.length;
+        genres = new Genres[n];
+        for(int i = 0; i < n; i++){
+            genres[i] = new Genres(array[i]);
+        }
     }
 
     public String getHomepage() {
@@ -101,8 +143,19 @@ public class Movie implements Serializable, TheMovieDB {
     }
 
     public String getPoster(){
-        if(poster_path != null) return String.format("%s%s", BASE_URL, poster_path);
+        if(poster_path != null){
+            if(poster_path.contains(BASE_URL)){
+                return poster_path;
+            }
+            else{
+                return String.format("%s%s", BASE_URL, poster_path);
+            }
+        }
         else                    return null;
+    }
+
+    public void setPoster(String poster_path){
+        this.poster_path = poster_path;
     }
 
     public ProductionCompany[] getProductionCompanies() {
@@ -115,6 +168,15 @@ public class Movie implements Serializable, TheMovieDB {
             production_company_list.add(production_companies[i].getName());
         }
         return production_company_list;
+    }
+
+    public void setProductionCompanies(String s){
+        String array[] = s.split(";");
+        int n = array.length;
+        production_companies = new ProductionCompany[n];
+        for(int i = 0; i < n; i++){
+            production_companies[i] = new ProductionCompany(array[i]);
+        }
     }
 
     public int getYear() {
@@ -141,12 +203,30 @@ public class Movie implements Serializable, TheMovieDB {
         return languages_list;
     }
 
+    public void setSpokenLanguages(String s){
+        String array[] = s.split(";");
+        int n = array.length;
+        spoken_languages = new SpokenLanguage[n];
+        for(int i = 0; i < n; i++){
+            spoken_languages[i] = new SpokenLanguage(array[i]);
+        }
+    }
+
     public List<String> getProductionCountries(){
         List<String> countries_list = new ArrayList<>();
         for(int i=0; i< production_countries.length ; i++){
             countries_list.add(production_countries[i].getName());
         }
         return countries_list;
+    }
+
+    public void setProductionCountries(String s){
+        String array[] = s.split(";");
+        int n = array.length;
+        production_countries = new ProductionCountry[n];
+        for(int i = 0; i < n; i++){
+            production_countries[i] = new ProductionCountry(array[i]);
+        }
     }
 
     public String getStatus() {

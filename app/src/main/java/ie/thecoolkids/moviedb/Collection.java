@@ -10,6 +10,9 @@ public class Collection implements Serializable {
     private String poster_path;
     private String backdrop_path;
 
+    Collection(String name){
+        this.name = name;
+    }
 
     public int getId() {
         return id;

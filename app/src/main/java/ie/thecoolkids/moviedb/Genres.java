@@ -8,6 +8,9 @@ public class Genres implements Serializable {
     private int id;
     private String name;
 
+    Genres(String name){
+        this.name = name;
+    }
 
     public int getId() {
         return id;

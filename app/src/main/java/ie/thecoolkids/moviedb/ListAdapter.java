@@ -58,7 +58,8 @@ public class ListAdapter extends BaseAdapter{
         holder.ratingBar.setRating((list.get(position).getRating() / 2));
 
 
-        Picasso.with(context).load(R.drawable.movies).fit().into(holder.imageView);
+        //Picasso.with(context).load(R.drawable.movies).fit().into(holder.imageView);
+        Picasso.with(context).load(list.get(position).getPoster()).placeholder(R.drawable.movies).fit().into(holder.imageView);
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override

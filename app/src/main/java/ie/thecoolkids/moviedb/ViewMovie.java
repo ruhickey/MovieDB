@@ -45,20 +45,23 @@ public class ViewMovie extends BaseActivity implements IParser{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_movie);
 
+        db = new DBHelper(this);
+
         //gets the passed movie id
         Intent intent = getIntent();
         if(intent != null && intent.hasExtra("passedID")){
             movieID = intent.getIntExtra("passedID", 0);
+            if(db.movieExists(movieID)){
+                movie = new Movie(this, movieID);
+                init(movie, true);
+            }
+            else{
+                new ApiHelper(this).SetMovieIDQuery(movieID).execute();
+            }
         }
-        /*Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            movieID = extras.getInt("passedMovieID");
-        }*/
-        new ApiHelper(this).SetMovieIDQuery(movieID).execute();
-        db = new DBHelper(this);
     }
 
-    private void init(Movie movie){
+    private void init(Movie movie, Boolean local){
 
         mainPage = (RelativeLayout) findViewById(R.id.mainpage);
         poster = (ImageView) findViewById(R.id.poster);
@@ -129,12 +132,17 @@ public class ViewMovie extends BaseActivity implements IParser{
             genres.setText(createArrayString(movie.getGenres()));
         }
         if(!movie.getPoster().equals(null)) {
-            setImages();
+            if(local){
+                Picasso.with(this).load(movie.getPoster()).placeholder(R.drawable.movies).into(poster);
+            }
+            else{
+                setImages();
+            }
         }
     }
 
     private void setImages() {
-       Picasso.with(this).load(movie.getPoster()).into(poster);
+        Picasso.with(this).load(movie.getPoster()).into(poster);
         try {
             url1 = new URL(movie.getPoster());
             bitmap1 = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
@@ -171,7 +179,7 @@ public class ViewMovie extends BaseActivity implements IParser{
        try {
            Gson gson = new Gson();
            movie = gson.fromJson(json, Movie.class);
-           init(movie);
+           init(movie, false);
        }
        catch(Exception ex){
            if(ex == null) {

@@ -5,20 +5,24 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 6;
     private static final String DB_NAME = "favourites.db", TABLE_MOVIES = "movies", TABLE_TVSHOWS = "tvshows";
     private static final String COL0_ID = "id", COL1_TITLE = "title",
-                                COL2_YEAR = "year", COL3_RATING = "rating",
+                                COL2_RELEASE = "year", COL3_RATING = "rating",
                                 COL4_SYNOPSIS = "synopsis", COL5_TAGLINE = "tagline",
-                                COL6_RELEASE = "release", COL7_STATUS = "status",
-                                COL8_RUNTIME = "runtime", COL9_REVENUE = "revenue",
-                                COL10_BUDGET = "budget", COL11_ORIGINAL_TITLE = "originalTitle",
-                                COL12_GENRES = "genres";
+                                COL6_STATUS = "status",COL7_RUNTIME = "runtime",
+                                COL8_REVENUE = "revenue", COL9_BUDGET = "budget",
+                                COL10_ORIGINAL_TITLE = "originalTitle", COL11_GENRES = "genres",
+                                COL12_POSTER = "poster", COL13_COLLECTION = "collection",
+                                COL14_LANGUAGES = "languages", COL15_PRODUCTION_COMPANIES = "productionCompanies",
+                                COL16_PRODUCTION_COUNTRIES = "productionCountries";
 
 
     public DBHelper(Context context){
@@ -30,12 +34,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE " + TABLE_MOVIES + " (" +
                 COL0_ID + " INTEGER PRIMARY KEY," +
-                COL1_TITLE + " TEXT," + COL2_YEAR + " TEXT," +
+                COL1_TITLE + " TEXT," + COL2_RELEASE + " TEXT," +
                 COL3_RATING + " REAL," + COL4_SYNOPSIS + " TEXT," +
-                COL5_TAGLINE + " TEXT," + COL6_RELEASE + " TEXT," +
-                COL7_STATUS + " TEXT," + COL8_RUNTIME + " INTEGER," +
-                COL9_REVENUE + " INTEGER," + COL10_BUDGET + " INTEGER," +
-                COL11_ORIGINAL_TITLE + " TEXT," + COL12_GENRES + " TEXT);"
+                COL5_TAGLINE + " TEXT," + COL6_STATUS + " TEXT," +
+                COL7_RUNTIME + " INTEGER," + COL8_REVENUE + " INTEGER," +
+                COL9_BUDGET + " INTEGER," + COL10_ORIGINAL_TITLE + " TEXT," +
+                COL11_GENRES + " TEXT," + COL12_POSTER + " TEXT," +
+                COL13_COLLECTION + " TEXT," + COL14_LANGUAGES + " TEXT," +
+                COL15_PRODUCTION_COMPANIES + " TEXT," + COL16_PRODUCTION_COUNTRIES + " TEXT);"
         );
     }
 
@@ -56,17 +62,21 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COL0_ID, id);
         values.put(COL1_TITLE, movie.getTitle());
-        values.put(COL2_YEAR, movie.getYear());
+        values.put(COL2_RELEASE, movie.getReleaseDate());
         values.put(COL3_RATING, movie.getRating());
         values.put(COL4_SYNOPSIS, movie.getSynopsis());
         values.put(COL5_TAGLINE, movie.getTagline());
-        values.put(COL6_RELEASE, movie.getReleaseDate());
-        values.put(COL7_STATUS, movie.getStatus());
-        values.put(COL8_RUNTIME, movie.getRuntime());
-        values.put(COL9_REVENUE, movie.getRevenue());
-        values.put(COL10_BUDGET, movie.getBudget());
-        values.put(COL11_ORIGINAL_TITLE, movie.getOriginalTitle());
-        values.put(COL12_GENRES, asString(movie.getGenres()));
+        values.put(COL6_STATUS, movie.getStatus());
+        values.put(COL7_RUNTIME, movie.getRuntime());
+        values.put(COL8_REVENUE, movie.getRevenue());
+        values.put(COL9_BUDGET, movie.getBudget());
+        values.put(COL10_ORIGINAL_TITLE, movie.getOriginalTitle());
+        values.put(COL11_GENRES, asString(movie.getGenres()));
+        values.put(COL12_POSTER, movie.getPoster());
+        values.put(COL13_COLLECTION, (movie.getBelongsToCollection()) ? movie.getCollection().getName() : "");
+        values.put(COL14_LANGUAGES, asString(movie.getSpokenLanguages()));
+        values.put(COL15_PRODUCTION_COMPANIES, asString(movie.getProductionCompanyNames()));
+        values.put(COL16_PRODUCTION_COUNTRIES, asString(movie.getProductionCountries()));
         if(this.getWritableDatabase().insert(TABLE_MOVIES, null, values) == -1){return false;}
         else{return true;}
     }
@@ -88,7 +98,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return s;
     }
 
-    public Cursor getLocalMovies(){
+    public Cursor getAllLocalMovies(){
         return this.getWritableDatabase().rawQuery("SELECT * FROM " + TABLE_MOVIES, null);
+    }
+
+    public Cursor getMovie(int id){
+        return this.getWritableDatabase().rawQuery("SELECT * FROM " + TABLE_MOVIES + " WHERE " + COL0_ID + " = " + id, null);
     }
 }
