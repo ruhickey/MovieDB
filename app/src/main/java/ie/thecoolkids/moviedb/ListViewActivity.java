@@ -39,8 +39,11 @@ public class ListViewActivity extends BaseActivity {
             @Override
             public void handleMessage(Message msg){
                 setupListView();
-                if (msg.obj.toString() == "dbEmpty"){
-                    Toast.makeText(getApplicationContext(), "Favourite Movies List Empty", Toast.LENGTH_LONG).show();
+                if(msg.obj.toString() == "moviesEmpty"){
+                    Toast.makeText(getApplicationContext(), "Favourite Movies Is Empty", Toast.LENGTH_SHORT).show();
+                }
+                else if(msg.obj.toString() == "tvShowsEmpty"){
+                    Toast.makeText(getApplicationContext(), "Favourite Tv Shows Is Empty", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -75,12 +78,15 @@ public class ListViewActivity extends BaseActivity {
         db = new DBHelper(this);
         switch(instanceOf){
             case "Movie":
-                new Thread(new CheckDatabase()).start();
+                new Thread(new CheckLocalMovies()).start();
+                break;
+            case "TvShow":
+                new Thread(new CheckLocalTvShows()).start();
                 break;
         }
     }
 
-    class CheckDatabase implements Runnable{
+    class CheckLocalMovies implements Runnable{
         @Override
         public void run(){
             list = new ArrayList<TheMovieDB>();
@@ -98,7 +104,31 @@ public class ListViewActivity extends BaseActivity {
                 msg.obj = "dbUpdate";
             }
             else{
-                msg.obj = "dbEmpty";
+                msg.obj = "moviesEmpty";
+            }
+            handler.sendMessage(msg);
+        }
+    }
+
+    class CheckLocalTvShows implements Runnable{
+        @Override
+        public void run(){
+            list = new ArrayList<TheMovieDB>();
+            Message msg = new Message();
+            Cursor c = db.getAllLocalMovies();
+            if(c.getCount() > 0){
+                while(c.moveToNext()){
+                    TvShow tvShow = new TvShow();
+                    tvShow.setId(c.getInt(0));
+                    tvShow.setTitle(c.getString(1));
+                    tvShow.setRating(c.getFloat(4));
+                    tvShow.setPoster(c.getString(9));
+                    list.add((TheMovieDB)tvShow);
+                }
+                msg.obj = "dbUpdate";
+            }
+            else{
+                msg.obj = "tvShowsEmpty";
             }
             handler.sendMessage(msg);
         }

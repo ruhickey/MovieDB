@@ -8,6 +8,8 @@ public class SpokenLanguage implements Serializable{
     private String iso_639_1;
     private String name;
 
+    SpokenLanguage(){}
+
     SpokenLanguage(String name){
         this.name = name;
     }

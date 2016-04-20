@@ -14,6 +14,8 @@ public class CrewMember implements Serializable {
     private String job;
     private String profile_path;
 
+    CrewMember(){}
+
 
     public int getId() {
         return id;

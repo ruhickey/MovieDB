@@ -1,5 +1,8 @@
 package ie.thecoolkids.moviedb;
 
+import android.content.Context;
+import android.database.Cursor;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,29 @@ public class TvShow implements Serializable, TheMovieDB {
     private float vote_average;
     private float vote_count;
 
+    TvShow(){}
 
+    TvShow(Context context, int id){
+        DBHelper db = new DBHelper(context);
+        Cursor c = db.getMovie(id);
+        c.moveToFirst();
+        this.id = c.getInt(0);
+        this.name = c.getString(1);
+        this.first_air_date = c.getString(2);
+        this.last_air_date = c.getString(3);
+        this.vote_average = c.getFloat(4);
+        this.overview = c.getString(5);
+        this.status = c.getString(6);
+        setRuntimes(c.getString(7));
+        setGenres(c.getString(8));
+        this.poster_path = c.getString(9);
+        languages = c.getString(10).split(";");
+        setNetworks(c.getString(11));
+        setProductionCompanies(c.getString(12));
+        origin_country = c.getString(13).split(";");
+        number_of_seasons = c.getInt(14);
+        number_of_episodes = c.getInt(15);
+    }
 
 
     public String getBackdropPath() {
@@ -51,12 +76,30 @@ public class TvShow implements Serializable, TheMovieDB {
         return created_list;
     }
 
+    public void setCreatedBy(String s){
+        String array[] = s.split(";");
+        int n = array.length;
+        created_by = new CreatedBy[n];
+        for(int i = 0; i < n; i++){
+            created_by[i] = new CreatedBy(array[i]);
+        }
+    }
+
     public List<Integer> getRuntimes(){
         List<Integer> runtimes_list = new ArrayList<>();
         for(int i=0; i<episode_run_time.length ; i++){
             runtimes_list.add(episode_run_time[i]);
         }
         return runtimes_list;
+    }
+
+    public void setRuntimes(String s){
+        String array[] = s.split(";");
+        int n = array.length;
+        episode_run_time = new int[n];
+        for(int i = 0; i < n; i++){
+            episode_run_time[i] = Integer.parseInt(array[i]);
+        }
     }
 
     public String getFirstAirDate() {
@@ -71,12 +114,25 @@ public class TvShow implements Serializable, TheMovieDB {
         return genre_list;
     }
 
+    public void setGenres(String s){
+        String array[] = s.split(";");
+        int n = array.length;
+        genres = new Genre[n];
+        for(int i = 0; i < n; i++){
+            genres[i] = new Genre(array[i]);
+        }
+    }
+
     public String getHomepage() {
         return homepage;
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     public boolean getInProduction(){
@@ -90,13 +146,17 @@ public class TvShow implements Serializable, TheMovieDB {
         }
         return lang_list;
     }
+
     public String getLastAirDate(){
         return last_air_date;
     }
 
-
     public String getTitle() {
         return name;
+    }
+
+    public void setTitle(String title){
+        this.name = title;
     }
 
     public List<String> getNetworks(){
@@ -105,6 +165,15 @@ public class TvShow implements Serializable, TheMovieDB {
             net_list.add(networks[i].getName());
         }
         return net_list;
+    }
+
+    public void setNetworks(String s){
+        String array[] = s.split(";");
+        int n = array.length;
+        networks = new Network[n];
+        for(int i = 0; i < n; i++){
+            networks[i] = new Network(array[i]);
+        }
     }
 
     public int getNumberOfEpisodes(){
@@ -139,12 +208,25 @@ public class TvShow implements Serializable, TheMovieDB {
         return String.format("%s%s", BASE_URL, poster_path);
     }
 
+    public void setPoster(String poster_path){
+        this.poster_path = poster_path;
+    }
+
     public List<String> getProductionCompanies(){
         List<String> coun_list = new ArrayList<>();
         for(int i=0; i<production_companies.length ; i++){
             coun_list.add(production_companies[i].getName());
         }
         return coun_list;
+    }
+
+    public void setProductionCompanies(String s){
+        String array[] = s.split(";");
+        int n = array.length;
+        production_companies = new ProductionCompany[n];
+        for(int i = 0; i < n; i++){
+            production_companies[i] = new ProductionCompany(array[i]);
+        }
     }
 
     public List<Season> getSeasons(){
@@ -165,6 +247,10 @@ public class TvShow implements Serializable, TheMovieDB {
 
     public float getRating() {
         return vote_average;
+    }
+
+    public void setRating(float rating){
+        this.vote_average = rating;
     }
 
     public float getVoteCount() {

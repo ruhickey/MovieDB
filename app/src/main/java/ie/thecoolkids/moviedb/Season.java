@@ -16,14 +16,16 @@ public class Season implements Serializable {
     private String poster_path;
     private int season_number;
 
+    Season(){}
+
     public Season(String a, Episode[] x, String n, String o, int i, String pp, int sesnum){
-       air_date = a;
+        air_date = a;
         episodes = x;
-       name = n;
-       overview = o;
-       id = i;
-       poster_path = pp;
-       season_number = sesnum;
+        name = n;
+        overview = o;
+        id = i;
+        poster_path = pp;
+        season_number = sesnum;
     }
 
 

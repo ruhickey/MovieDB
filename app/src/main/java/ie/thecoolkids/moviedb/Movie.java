@@ -17,7 +17,7 @@ public class Movie implements Serializable, TheMovieDB {
     private String backdrop_path;
     private Collection belongs_to_collection;
     private int budget;
-    private Genres[] genres;
+    private Genre[] genres;
     private String homepage;
     private int id;
     private String imdb_id;
@@ -104,9 +104,9 @@ public class Movie implements Serializable, TheMovieDB {
     public void setGenres(String s){
         String array[] = s.split(";");
         int n = array.length;
-        genres = new Genres[n];
+        genres = new Genre[n];
         for(int i = 0; i < n; i++){
-            genres[i] = new Genres(array[i]);
+            genres[i] = new Genre(array[i]);
         }
     }
 

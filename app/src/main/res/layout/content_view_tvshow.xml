@@ -551,6 +551,12 @@
 
         </LinearLayout>
 
+        <Space
+            android:layout_width="20px"
+            android:layout_height="20px"
+            android:layout_weight="1" />
+
+        <include layout="@layout/favourites" />
     </LinearLayout>
 </ScrollView>
 

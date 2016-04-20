@@ -12,17 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 6;
+    private static final int DB_VERSION = 9;
     private static final String DB_NAME = "favourites.db", TABLE_MOVIES = "movies", TABLE_TVSHOWS = "tvshows";
-    private static final String COL0_ID = "id", COL1_TITLE = "title",
-                                COL2_RELEASE = "year", COL3_RATING = "rating",
-                                COL4_SYNOPSIS = "synopsis", COL5_TAGLINE = "tagline",
-                                COL6_STATUS = "status",COL7_RUNTIME = "runtime",
-                                COL8_REVENUE = "revenue", COL9_BUDGET = "budget",
-                                COL10_ORIGINAL_TITLE = "originalTitle", COL11_GENRES = "genres",
-                                COL12_POSTER = "poster", COL13_COLLECTION = "collection",
-                                COL14_LANGUAGES = "languages", COL15_PRODUCTION_COMPANIES = "productionCompanies",
-                                COL16_PRODUCTION_COUNTRIES = "productionCountries";
+    private static final String ID = "id", TITLE = "title", RELEASE = "releaseDate",
+                                RATING = "rating", SYNOPSIS = "synopsis", TAGLINE = "tagline",
+                                STATUS = "status", RUNTIME = "runtime", REVENUE = "revenue",
+                                BUDGET = "budget", ORIGINAL_TITLE = "originalTitle", GENRES = "genres",
+                                POSTER = "poster", COLLECTION = "collection", LANGUAGES = "languages",
+                                PRODUCTION_COMPANIES = "productionCompanies", PRODUCTION_COUNTRIES = "productionCountries",
+                                FIRST_AIR = "firstAir", LAST_AIR = "lastAir", NETWORKS = "networks",
+                                SEASONS = "seasons", EPISODES = "episodes";
 
 
     public DBHelper(Context context){
@@ -33,16 +32,27 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL(
                 "CREATE TABLE " + TABLE_MOVIES + " (" +
-                COL0_ID + " INTEGER PRIMARY KEY," +
-                COL1_TITLE + " TEXT," + COL2_RELEASE + " TEXT," +
-                COL3_RATING + " REAL," + COL4_SYNOPSIS + " TEXT," +
-                COL5_TAGLINE + " TEXT," + COL6_STATUS + " TEXT," +
-                COL7_RUNTIME + " INTEGER," + COL8_REVENUE + " INTEGER," +
-                COL9_BUDGET + " INTEGER," + COL10_ORIGINAL_TITLE + " TEXT," +
-                COL11_GENRES + " TEXT," + COL12_POSTER + " TEXT," +
-                COL13_COLLECTION + " TEXT," + COL14_LANGUAGES + " TEXT," +
-                COL15_PRODUCTION_COMPANIES + " TEXT," + COL16_PRODUCTION_COUNTRIES + " TEXT);"
+                        ID + " INTEGER PRIMARY KEY," +
+                        TITLE + " TEXT," + RELEASE + " TEXT," +
+                        RATING + " REAL," + SYNOPSIS + " TEXT," +
+                        TAGLINE + " TEXT," + STATUS + " TEXT," +
+                        RUNTIME + " INTEGER," + REVENUE + " INTEGER," +
+                        BUDGET + " INTEGER," + ORIGINAL_TITLE + " TEXT," +
+                        GENRES + " TEXT," + POSTER + " TEXT," +
+                        COLLECTION + " TEXT," + LANGUAGES + " TEXT," +
+                        PRODUCTION_COMPANIES + " TEXT," + PRODUCTION_COUNTRIES + " TEXT); " +
+                "CREATE TABLE " + TABLE_TVSHOWS + " (" +
+                        ID + " INTEGER PRIMARY KEY," +
+                        TITLE + " TEXT," + FIRST_AIR + " TEXT," +
+                        LAST_AIR + " TEXT," + RATING + " REAL," +
+                        SYNOPSIS + " TEXT," + STATUS + " TEXT," +
+                        RUNTIME + " TEXT," + GENRES + " TEXT," +
+                        POSTER + " TEXT," + LANGUAGES + " TEXT," +
+                        NETWORKS + " TEXT," + PRODUCTION_COMPANIES + " TEXT," +
+                        PRODUCTION_COUNTRIES + " TEXT," + SEASONS + " INTEGER," +
+                        EPISODES + " INTEGER);"
         );
+
     }
 
     @Override
@@ -50,39 +60,77 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "DROP TABLE IF EXISTS " + TABLE_MOVIES + ";"
         );
+        db.execSQL(
+                "DROP TABLE IF EXISTS " + TABLE_TVSHOWS + ";"
+        );
         onCreate(db);
     }
 
     public boolean addRemoveMovie(Movie movie){
         int id = movie.getId();
         if(movieExists(id)){
-            getWritableDatabase().delete(TABLE_MOVIES, COL0_ID + " = " + id, null);
+            getWritableDatabase().delete(TABLE_MOVIES, ID + " = " + id, null);
             return false;
         }
         ContentValues values = new ContentValues();
-        values.put(COL0_ID, id);
-        values.put(COL1_TITLE, movie.getTitle());
-        values.put(COL2_RELEASE, movie.getReleaseDate());
-        values.put(COL3_RATING, movie.getRating());
-        values.put(COL4_SYNOPSIS, movie.getSynopsis());
-        values.put(COL5_TAGLINE, movie.getTagline());
-        values.put(COL6_STATUS, movie.getStatus());
-        values.put(COL7_RUNTIME, movie.getRuntime());
-        values.put(COL8_REVENUE, movie.getRevenue());
-        values.put(COL9_BUDGET, movie.getBudget());
-        values.put(COL10_ORIGINAL_TITLE, movie.getOriginalTitle());
-        values.put(COL11_GENRES, asString(movie.getGenres()));
-        values.put(COL12_POSTER, movie.getPoster());
-        values.put(COL13_COLLECTION, (movie.getBelongsToCollection()) ? movie.getCollection().getName() : "");
-        values.put(COL14_LANGUAGES, asString(movie.getSpokenLanguages()));
-        values.put(COL15_PRODUCTION_COMPANIES, asString(movie.getProductionCompanyNames()));
-        values.put(COL16_PRODUCTION_COUNTRIES, asString(movie.getProductionCountries()));
+        values.put(ID, id);
+        values.put(TITLE, movie.getTitle());
+        values.put(RELEASE, movie.getReleaseDate());
+        values.put(RATING, movie.getRating());
+        values.put(SYNOPSIS, movie.getSynopsis());
+        values.put(TAGLINE, movie.getTagline());
+        values.put(STATUS, movie.getStatus());
+        values.put(RUNTIME, movie.getRuntime());
+        values.put(REVENUE, movie.getRevenue());
+        values.put(BUDGET, movie.getBudget());
+        values.put(ORIGINAL_TITLE, movie.getOriginalTitle());
+        values.put(GENRES, asString(movie.getGenres()));
+        values.put(POSTER, movie.getPoster());
+        values.put(COLLECTION, (movie.getBelongsToCollection()) ? movie.getCollection().getName() : "");
+        values.put(LANGUAGES, asString(movie.getSpokenLanguages()));
+        values.put(PRODUCTION_COMPANIES, asString(movie.getProductionCompanyNames()));
+        values.put(PRODUCTION_COUNTRIES, asString(movie.getProductionCountries()));
+        if(this.getWritableDatabase().insert(TABLE_MOVIES, null, values) == -1){return false;}
+        else{return true;}
+    }
+
+    public boolean addRemoveTvShow(TvShow tvShow){
+        int id = tvShow.getId();
+        if(tvShowExists(id)){
+            getWritableDatabase().delete(TABLE_TVSHOWS, ID + " = " + id, null);
+            return false;
+        }
+        ContentValues values = new ContentValues();
+        values.put(ID, id);
+        values.put(TITLE, tvShow.getTitle());
+        values.put(FIRST_AIR, tvShow.getFirstAirDate());
+        values.put(LAST_AIR, tvShow.getLastAirDate());
+        values.put(RATING, tvShow.getRating());
+        values.put(SYNOPSIS, tvShow.getSynopsis());
+        values.put(STATUS, tvShow.getStatus());
+        values.put(RUNTIME, asString(tvShow.getRuntimes()));
+        values.put(GENRES, asString(tvShow.getGenres()));
+        values.put(POSTER, tvShow.getPoster());
+        values.put(LANGUAGES, asString(tvShow.getLanguages()));
+        values.put(NETWORKS, asString(tvShow.getNetworks()));
+        values.put(PRODUCTION_COMPANIES, asString(tvShow.getProductionCompanies()));
+        values.put(PRODUCTION_COUNTRIES, asString(tvShow.getOriginCountry()));
+        values.put(SEASONS, tvShow.getNumberOfSeasons());
+        values.put(EPISODES, tvShow.getNumberOfEpisodes());
         if(this.getWritableDatabase().insert(TABLE_MOVIES, null, values) == -1){return false;}
         else{return true;}
     }
 
     public boolean movieExists(int id){
-        String sql = "SELECT * FROM " + TABLE_MOVIES + " WHERE " + COL0_ID + " = " + id;
+        String sql = "SELECT * FROM " + TABLE_MOVIES + " WHERE " + ID + " = " + id;
+        if(this.getWritableDatabase().rawQuery(sql, null).getCount() == 0){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean tvShowExists(int id){
+        String sql = "SELECT * FROM " + TABLE_TVSHOWS + " WHERE " + ID + " = " + id;
         if(this.getWritableDatabase().rawQuery(sql, null).getCount() == 0){
             return false;
         }
@@ -102,7 +150,15 @@ public class DBHelper extends SQLiteOpenHelper {
         return this.getWritableDatabase().rawQuery("SELECT * FROM " + TABLE_MOVIES, null);
     }
 
+    public Cursor getAllLocalTvShows(){
+        return this.getWritableDatabase().rawQuery("SELECT * FROM " + TABLE_TVSHOWS, null);
+    }
+
     public Cursor getMovie(int id){
-        return this.getWritableDatabase().rawQuery("SELECT * FROM " + TABLE_MOVIES + " WHERE " + COL0_ID + " = " + id, null);
+        return this.getWritableDatabase().rawQuery("SELECT * FROM " + TABLE_MOVIES + " WHERE " + ID + " = " + id, null);
+    }
+
+    public Cursor getTvShow(int id){
+        return this.getWritableDatabase().rawQuery("SELECT * FROM " + TABLE_TVSHOWS + " WHERE " + ID + " = " + id, null);
     }
 }

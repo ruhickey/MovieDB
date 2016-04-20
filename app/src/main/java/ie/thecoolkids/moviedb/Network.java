@@ -8,6 +8,11 @@ public class Network implements Serializable {
     private int id;
     private String name;
 
+    Network(){}
+
+    Network(String name){
+        this.name = name;
+    }
 
     public int getId() {
         return id;

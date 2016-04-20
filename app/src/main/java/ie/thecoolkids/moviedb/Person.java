@@ -26,6 +26,7 @@ public class Person implements Serializable {
     private Movie[] known_for;
 
 
+    Person(){}
 
     public boolean isAdult(){
         return adult;

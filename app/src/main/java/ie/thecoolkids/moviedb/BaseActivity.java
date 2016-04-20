@@ -85,6 +85,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 new Thread(new GetLocalMovies()).start();
                 return true;
             case R.id.nav_tvshows_local:
+                new Thread(new GetLocalTvShows()).start();
                 return true;
             case R.id.nav_settings:
                 return true;
@@ -112,7 +113,33 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             }
             else{
                 Message msg = new Message();
-                msg.obj = "Favourite Movies List Empty";
+                msg.obj = "Favourite Movies Is Empty";
+                handler.sendMessage(msg);
+            }
+        }
+    }
+
+    class GetLocalTvShows implements Runnable{
+        @Override
+        public void run(){
+            List<TheMovieDB> list = new ArrayList<TheMovieDB>();
+            Cursor c = db.getAllLocalMovies();
+            if(c.getCount() > 0){
+                while(c.moveToNext()){
+                    TvShow tvShow = new TvShow();
+                    tvShow.setId(c.getInt(0));
+                    tvShow.setTitle(c.getString(1));
+                    tvShow.setRating(c.getFloat(4));
+                    list.add((TheMovieDB)tvShow);
+                }
+                Intent intent = new Intent(getApplicationContext(), ListViewActivity.class);
+                intent.putExtra("list", (Serializable) list);
+                intent.putExtra("instanceOf", "TvShow");
+                startActivity(intent);
+            }
+            else{
+                Message msg = new Message();
+                msg.obj = "Favourite Tv Shows Is Empty";
                 handler.sendMessage(msg);
             }
         }

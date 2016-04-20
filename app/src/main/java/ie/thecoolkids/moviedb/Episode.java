@@ -18,6 +18,8 @@ public class Episode implements Serializable {
     private String still_path;
     private float vote_average;
 
+    Episode(){}
+
 //    //only got if searching for season number by id
 //    private CrewMember[] crew;
 //    private GuestStar[] guest_stars;

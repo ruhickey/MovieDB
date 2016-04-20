@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/buttonRow"
+    android:background="#9C000000"
+    android:padding="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<Space
+    android:layout_width="20px"
+    android:layout_height="20px"
+    android:layout_weight="1" />
+
+<ImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@null"
+    android:id="@+id/youtubeButton"
+    android:src="@mipmap/youtube"
+    android:padding="0dp" />
+
+<Space
+    android:layout_width="20px"
+    android:layout_height="20px"
+    android:layout_weight="1" />
+
+<ImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@null"
+    android:id="@+id/addFavButton"
+    android:src="@mipmap/fav_no"
+    android:padding="0dp" />
+
+<Space
+    android:layout_width="20px"
+    android:layout_height="20px"
+    android:layout_weight="1" />
+</LinearLayout>

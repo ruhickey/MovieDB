@@ -12,6 +12,11 @@ public class CreatedBy implements Serializable {
     private String name;
     private String profile_path;
 
+    CreatedBy(){}
+
+    CreatedBy(String name){
+        this.name = name;
+    }
 
     public int getId() {
         return id;

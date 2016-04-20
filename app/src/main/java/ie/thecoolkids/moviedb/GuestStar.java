@@ -13,6 +13,7 @@ public class GuestStar implements Serializable {
     private int order;
     private String profile_path;
 
+    GuestStar(){}
 
     public int getId() {
         return id;

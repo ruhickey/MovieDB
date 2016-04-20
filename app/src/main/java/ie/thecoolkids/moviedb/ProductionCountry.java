@@ -8,6 +8,8 @@ public class ProductionCountry implements Serializable{
     private String iso_3166_1;
     private String name;
 
+    ProductionCountry(){}
+
     ProductionCountry(String name){
         this.name = name;
     }

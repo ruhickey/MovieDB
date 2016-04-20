@@ -8,6 +8,8 @@ public class Genres implements Serializable {
     private int id;
     private String name;
 
+    Genres(){}
+
     Genres(String name){
         this.name = name;
     }

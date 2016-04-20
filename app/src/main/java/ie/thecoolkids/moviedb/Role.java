@@ -26,10 +26,7 @@ public class Role implements Serializable {
     private int id;
     private String poster_path;
 
-
-
-
-
+    Role(){}
 
     public String getCreditId() {
         return credit_id;
