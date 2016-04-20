@@ -96,7 +96,7 @@ public class MovieListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ViewMovie.class);
-                intent.putExtra("passedMovieID", movies.get(position).getId());
+                intent.putExtra("passedID", movies.get(position).getId());
                 v.getContext().startActivity(intent);
             }
         });

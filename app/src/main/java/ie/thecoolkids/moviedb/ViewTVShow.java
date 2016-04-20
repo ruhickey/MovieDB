@@ -89,7 +89,7 @@ public class ViewTVShow extends BaseActivity implements IParser{
 
 
 
-        name.setText(tvShow.getName());
+        name.setText(tvShow.getTitle());
         firstAir.setText(tvShow.getFirstAirDate());
         lastAir.setText(tvShow.getLastAirDate());
         status.setText(tvShow.getStatus());

@@ -1,17 +1,24 @@
 package ie.thecoolkids.moviedb;
 
-import android.content.res.Configuration;
+import android.content.Intent;
+import android.database.Cursor;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private Toolbar toolbar;
@@ -19,6 +26,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navView;
     private ActionBarDrawerToggle drawerToggle;
     private int selectedOption;
+    private DBHelper db;
+    private Handler handler;
+
 
     @Override
     public void setContentView(@LayoutRes int layoutResID){
@@ -32,6 +42,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navView = (NavigationView)findViewById(R.id.navView);
         toolbar.setVisibility(View.GONE);
         setupNavDrawer();
+        db = new DBHelper(this);
+
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg){
+                Toast.makeText(getApplicationContext(), (String)msg.obj, Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 
     private void setupNavDrawer(){
@@ -64,6 +82,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_tvshows:
                 return true;
             case R.id.nav_movies_local:
+                new Thread(new GetLocalMovies()).start();
                 return true;
             case R.id.nav_tvshows_local:
                 return true;
@@ -71,5 +90,37 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    class GetLocalMovies implements Runnable{
+        @Override
+        public void run(){
+            List<TheMovieDB> list = new ArrayList<TheMovieDB>();
+            Cursor c = db.getLocalMovies();
+            if(c.getCount() > 0){
+                while(c.moveToNext()){
+                    Movie movie = new Movie();
+                    movie.setId(c.getInt(0));
+                    movie.setTitle(c.getString(1));
+                    movie.setRating(c.getFloat(3));
+                    list.add((TheMovieDB)movie);
+                }
+                Intent intent = new Intent(getApplicationContext(), ListViewActivity.class);
+                intent.putExtra("list", (Serializable) list);
+                intent.putExtra("instanceOf", "Movie");
+                startActivity(intent);
+            }
+            else{
+                Message msg = new Message();
+                msg.obj = "Favourite Movies List Empty";
+                handler.sendMessage(msg);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db = new DBHelper(this);
     }
 }

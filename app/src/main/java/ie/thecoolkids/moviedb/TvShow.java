@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TvShow implements Serializable {
+public class TvShow implements Serializable, TheMovieDB {
 
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
@@ -94,7 +94,8 @@ public class TvShow implements Serializable {
         return last_air_date;
     }
 
-    public String getName() {
+
+    public String getTitle() {
         return name;
     }
 

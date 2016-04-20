@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movie implements Serializable {
+public class Movie implements Serializable, TheMovieDB {
 
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
@@ -35,9 +35,6 @@ public class Movie implements Serializable {
     private boolean video;
     private float vote_average;
     private float vote_count;
-
-
-
 
 
     public boolean isAdult() {
@@ -77,6 +74,10 @@ public class Movie implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     public String getImdbId() {
@@ -160,12 +161,20 @@ public class Movie implements Serializable {
         return title;
     }
 
+    public void setTitle(String title){
+        this.title = title;
+    }
+
     public boolean getVideo() {
         return video;
     }
 
     public float getRating() {
         return vote_average;
+    }
+
+    public void setRating(float rating){
+        this.vote_average = rating;
     }
 
     public float getVoteCount() {

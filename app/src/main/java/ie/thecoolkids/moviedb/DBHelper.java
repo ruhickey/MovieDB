@@ -87,4 +87,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return s;
     }
+
+    public Cursor getLocalMovies(){
+        return this.getWritableDatabase().rawQuery("SELECT * FROM " + TABLE_MOVIES, null);
+    }
 }

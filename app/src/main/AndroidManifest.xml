@@ -39,7 +39,8 @@
             android:name=".ViewTVShow"
             android:label="@string/title_activity_view_tvshow"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".BaseActivity"></activity>
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".ListViewActivity"></activity>
     </application>
 
 </manifest>

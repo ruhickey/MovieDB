@@ -1,5 +1,6 @@
 package ie.thecoolkids.moviedb;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -45,10 +46,14 @@ public class ViewMovie extends BaseActivity implements IParser{
         setContentView(R.layout.activity_view_movie);
 
         //gets the passed movie id
-        Bundle extras = getIntent().getExtras();
+        Intent intent = getIntent();
+        if(intent != null && intent.hasExtra("passedID")){
+            movieID = intent.getIntExtra("passedID", 0);
+        }
+        /*Bundle extras = getIntent().getExtras();
         if (extras != null) {
             movieID = extras.getInt("passedMovieID");
-        }
+        }*/
         new ApiHelper(this).SetMovieIDQuery(movieID).execute();
         db = new DBHelper(this);
     }
@@ -85,7 +90,7 @@ public class ViewMovie extends BaseActivity implements IParser{
         if(db.movieExists(movie.getId())){
             favButton.setImageResource(R.mipmap.fav_yes);
         }
-        new Thread(new AddMovieToDB()).start();
+        new Thread(new AddRemoveMovie()).start();
 
         title.setText(movie.getTitle());
         year.setText("" + movie.getYear());
@@ -180,18 +185,18 @@ public class ViewMovie extends BaseActivity implements IParser{
     }
 
 
-    class AddMovieToDB implements Runnable{
+    class AddRemoveMovie implements Runnable{
         @Override
         public void run() {
             favButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(db.addRemoveMovie(movie)){
-                        Toast.makeText(ViewMovie.this, "Movie Added To Database", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ViewMovie.this, "Movie Added To Database", Toast.LENGTH_SHORT).show();
                         favButton.setImageResource(R.mipmap.fav_yes);
                     }
                     else{
-                        Toast.makeText(ViewMovie.this, "Movie Removed From Database", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ViewMovie.this, "Movie Removed From Database", Toast.LENGTH_SHORT).show();
                         favButton.setImageResource(R.mipmap.fav_no);
                     }
                 }
