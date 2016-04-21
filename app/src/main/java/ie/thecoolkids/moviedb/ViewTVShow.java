@@ -2,17 +2,22 @@ package ie.thecoolkids.moviedb;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,9 +41,11 @@ public class ViewTVShow extends BaseActivity implements IParser{
             networksHeading, prodCompaniesHeading;
     private Bitmap bitmap1;
     private URL url1;
-    private int tvshowID;
+    private int tvshowID = 44217;
     private ArrayList<Season> seasons;
     State state;
+    private ImageButton favButton;
+    private DBHelper db;
 
 
     @Override
@@ -46,8 +53,27 @@ public class ViewTVShow extends BaseActivity implements IParser{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_tvshow);
 
+        db = new DBHelper(this);
+
         state = State.STATE1;
         Log.d("STATE", "" + state);
+
+        // Working for database or online... Could we maybe keep it as passedID for everything?
+        /*Intent intent = getIntent();
+        if(intent != null && intent.hasExtra("passedID")){
+            tvshowID = intent.getIntExtra("passedID", 0);
+            if(db.tvShowExists(tvshowID)){
+                tvShow = new TvShow(this, tvshowID);
+                init(tvShow);
+            }
+            else{
+                new ApiHelper(this).SetTvIDQuery(tvshowID).execute();
+            }
+        }
+        else{
+            // Delete this when fully up and running
+            new ApiHelper(this).SetTvIDQuery(tvshowID).execute();
+        }*/
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -87,7 +113,11 @@ public class ViewTVShow extends BaseActivity implements IParser{
         prodCompaniesHeading  = (TextView) findViewById(R.id.prodcompHeading);
         synopsis = (TextView) findViewById(R.id.synopsis);
 
-
+        favButton = (ImageButton)findViewById(R.id.addFavButton);
+        if(db.tvShowExists(tvShow.getId())){
+            favButton.setImageResource(R.mipmap.fav_yes);
+        }
+        new Thread(new AddRemoveTvShow()).start();
 
         name.setText(tvShow.getTitle());
         firstAir.setText(tvShow.getFirstAirDate());
@@ -99,7 +129,9 @@ public class ViewTVShow extends BaseActivity implements IParser{
         type.setText(tvShow.getType());
         synopsis.setText(tvShow.getSynopsis());
 
-        if(tvShow.getCreatedBy().size() > 0) {
+
+        // Should this be tvShow.getGenres().size?---------------------------------------------------------------------------------------
+        if(tvShow.getGenres().size() > 0) {
             genreHeading.setText("Genre(s) :");
             genres.setText(createArrayString(tvShow.getGenres()));
         }
@@ -152,8 +184,26 @@ public class ViewTVShow extends BaseActivity implements IParser{
 
     }
 
+    // Other way was causing crash.... see ViewMovie change
     private void setImages() {
-        Picasso.with(this).load(tvShow.getPoster()).into(poster);
+        Picasso.with(this).load(tvShow.getPoster()).placeholder(R.drawable.movies).into(poster);
+        Picasso.with(this).load(tvShow.getPoster()).placeholder(R.drawable.moviereel).into(
+                new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        mainPage.setBackground(new BitmapDrawable(getResources(), bitmap));
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                        Toast.makeText(getApplicationContext(), "Failed To Load Background Image", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    }
+                }
+        );
         //todo: set background image here
 //        try {
 //            url1 = new URL(tvShow.getPoster());
@@ -229,5 +279,23 @@ public class ViewTVShow extends BaseActivity implements IParser{
         });
     }
 
+    class AddRemoveTvShow implements Runnable{
+        @Override
+        public void run() {
+            favButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(db.addRemoveTvShow(tvShow)){
+                        Toast.makeText(ViewTVShow.this, "Tv Show Added To Favourites", Toast.LENGTH_SHORT).show();
+                        favButton.setImageResource(R.mipmap.fav_yes);
+                    }
+                    else{
+                        Toast.makeText(ViewTVShow.this, "Tv Show Removed From Favourites", Toast.LENGTH_SHORT).show();
+                        favButton.setImageResource(R.mipmap.fav_no);
+                    }
+                }
+            });
+        }
+    }
 
 }

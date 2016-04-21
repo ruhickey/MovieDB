@@ -61,6 +61,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 R.string.drawerOpened,
                 R.string.drawerClosed
         );
+        //noinspection deprecation
         baseLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
     }
@@ -73,19 +74,22 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.nav_home:
+                Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.nav_movies:
+                Toast.makeText(getApplicationContext(), "Top Movies", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.nav_tvshows:
+                Toast.makeText(getApplicationContext(), "Top Tv Shows", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.nav_movies_local:
-                new Thread(new GetLocalMovies()).start();
+                new Thread(new CheckForLocalMovies()).start();
                 return true;
             case R.id.nav_tvshows_local:
-                new Thread(new GetLocalTvShows()).start();
+                new Thread(new CheckForLocalTvShows()).start();
                 return true;
             case R.id.nav_settings:
                 return true;
@@ -93,53 +97,35 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    class GetLocalMovies implements Runnable{
+    class CheckForLocalMovies implements Runnable{
         @Override
         public void run(){
-            List<TheMovieDB> list = new ArrayList<TheMovieDB>();
             Cursor c = db.getAllLocalMovies();
             if(c.getCount() > 0){
-                while(c.moveToNext()){
-                    Movie movie = new Movie();
-                    movie.setId(c.getInt(0));
-                    movie.setTitle(c.getString(1));
-                    movie.setRating(c.getFloat(3));
-                    list.add((TheMovieDB)movie);
-                }
                 Intent intent = new Intent(getApplicationContext(), ListViewActivity.class);
-                intent.putExtra("list", (Serializable) list);
                 intent.putExtra("instanceOf", "Movie");
                 startActivity(intent);
             }
             else{
                 Message msg = new Message();
-                msg.obj = "Favourite Movies Is Empty";
+                msg.obj = "No Favourite Movies Saved";
                 handler.sendMessage(msg);
             }
         }
     }
 
-    class GetLocalTvShows implements Runnable{
+    class CheckForLocalTvShows implements Runnable{
         @Override
         public void run(){
-            List<TheMovieDB> list = new ArrayList<TheMovieDB>();
-            Cursor c = db.getAllLocalMovies();
+            Cursor c = db.getAllLocalTvShows();
             if(c.getCount() > 0){
-                while(c.moveToNext()){
-                    TvShow tvShow = new TvShow();
-                    tvShow.setId(c.getInt(0));
-                    tvShow.setTitle(c.getString(1));
-                    tvShow.setRating(c.getFloat(4));
-                    list.add((TheMovieDB)tvShow);
-                }
                 Intent intent = new Intent(getApplicationContext(), ListViewActivity.class);
-                intent.putExtra("list", (Serializable) list);
                 intent.putExtra("instanceOf", "TvShow");
                 startActivity(intent);
             }
             else{
                 Message msg = new Message();
-                msg.obj = "Favourite Tv Shows Is Empty";
+                msg.obj = "No Favourite Tv Shows Saved";
                 handler.sendMessage(msg);
             }
         }

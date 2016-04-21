@@ -43,7 +43,7 @@ public class TvShow implements Serializable, TheMovieDB {
 
     TvShow(Context context, int id){
         DBHelper db = new DBHelper(context);
-        Cursor c = db.getMovie(id);
+        Cursor c = db.getTvShow(id);
         c.moveToFirst();
         this.id = c.getInt(0);
         this.name = c.getString(1);
@@ -61,6 +61,9 @@ public class TvShow implements Serializable, TheMovieDB {
         origin_country = c.getString(13).split(";");
         number_of_seasons = c.getInt(14);
         number_of_episodes = c.getInt(15);
+        in_production =  Boolean.parseBoolean(c.getString(16));
+        setCreatedBy(c.getString(17));
+        type = c.getString(18);
     }
 
 
@@ -137,6 +140,10 @@ public class TvShow implements Serializable, TheMovieDB {
 
     public boolean getInProduction(){
         return in_production;
+    }
+
+    public void setInProduction(boolean inProduction){
+        this.in_production = inProduction;
     }
 
     public List<String> getLanguages(){

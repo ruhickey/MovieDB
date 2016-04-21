@@ -28,22 +28,18 @@ public class ListViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
         Intent intent = getIntent();
-        if(intent != null && intent.hasExtra("list")){
-            list = (List<TheMovieDB>) intent.getSerializableExtra("list");
-            if(intent.hasExtra("instanceOf")){
-                instanceOf = intent.getStringExtra("instanceOf");
-            }
-            setupListView();
+        if(intent != null && intent.hasExtra("instanceOf")){
+            instanceOf = intent.getStringExtra("instanceOf");
         }
         handler = new Handler(){
             @Override
             public void handleMessage(Message msg){
                 setupListView();
                 if(msg.obj.toString() == "moviesEmpty"){
-                    Toast.makeText(getApplicationContext(), "Favourite Movies Is Empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No Favourite Movies Saved", Toast.LENGTH_SHORT).show();
                 }
                 else if(msg.obj.toString() == "tvShowsEmpty"){
-                    Toast.makeText(getApplicationContext(), "Favourite Tv Shows Is Empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No Favourite Tv Shows Saved", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -51,7 +47,7 @@ public class ListViewActivity extends BaseActivity {
 
     private void setupListView(){
         listView = (ListView)findViewById(R.id.lvMovies);
-        listAdapter = new ListAdapter(this);
+        listAdapter = new ListAdapter(this, instanceOf);
         listAdapter.setContent(list);
         listView.setAdapter(listAdapter);
     }
@@ -59,17 +55,13 @@ public class ListViewActivity extends BaseActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putSerializable("list", (Serializable)list);
         savedInstanceState.putString("instanceOf", instanceOf);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        list = (List<TheMovieDB>)savedInstanceState.getSerializable("list");
         instanceOf = savedInstanceState.getString("instanceOf");
-        listAdapter.setContent(list);
-        listAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -115,7 +107,7 @@ public class ListViewActivity extends BaseActivity {
         public void run(){
             list = new ArrayList<TheMovieDB>();
             Message msg = new Message();
-            Cursor c = db.getAllLocalMovies();
+            Cursor c = db.getAllLocalTvShows();
             if(c.getCount() > 0){
                 while(c.moveToNext()){
                     TvShow tvShow = new TvShow();

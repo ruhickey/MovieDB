@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
@@ -53,7 +55,7 @@ public class ViewMovie extends BaseActivity implements IParser{
             movieID = intent.getIntExtra("passedID", 0);
             if(db.movieExists(movieID)){
                 movie = new Movie(this, movieID);
-                init(movie, true);
+                init(movie);
             }
             else{
                 new ApiHelper(this).SetMovieIDQuery(movieID).execute();
@@ -61,7 +63,7 @@ public class ViewMovie extends BaseActivity implements IParser{
         }
     }
 
-    private void init(Movie movie, Boolean local){
+    private void init(Movie movie){
 
         mainPage = (RelativeLayout) findViewById(R.id.mainpage);
         poster = (ImageView) findViewById(R.id.poster);
@@ -132,18 +134,31 @@ public class ViewMovie extends BaseActivity implements IParser{
             genres.setText(createArrayString(movie.getGenres()));
         }
         if(!movie.getPoster().equals(null)) {
-            if(local){
-                Picasso.with(this).load(movie.getPoster()).placeholder(R.drawable.movies).into(poster);
-            }
-            else{
-                setImages();
-            }
+            setImages();
         }
     }
 
+    // Changed this as it was crashing when loading from database with no internet connection
     private void setImages() {
         Picasso.with(this).load(movie.getPoster()).into(poster);
-        try {
+        Picasso.with(this).load(movie.getPoster()).placeholder(R.drawable.moviereel).into(
+                new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        mainPage.setBackground(new BitmapDrawable(getResources(), bitmap));
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                        Toast.makeText(getApplicationContext(), "Failed To Load Background Image", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    }
+                }
+        );
+        /*try {
             url1 = new URL(movie.getPoster());
             bitmap1 = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
             Drawable dr = new BitmapDrawable(getResources(), bitmap1);
@@ -152,7 +167,7 @@ public class ViewMovie extends BaseActivity implements IParser{
         catch (IOException e) {
             e.printStackTrace();
             Log.w("ViewMovie", "Exception creating image");
-        }
+        }*/
     }
 
     private String createArrayString(List<String> items) {
@@ -179,7 +194,7 @@ public class ViewMovie extends BaseActivity implements IParser{
        try {
            Gson gson = new Gson();
            movie = gson.fromJson(json, Movie.class);
-           init(movie, false);
+           init(movie);
        }
        catch(Exception ex){
            if(ex == null) {
@@ -200,11 +215,11 @@ public class ViewMovie extends BaseActivity implements IParser{
                 @Override
                 public void onClick(View v) {
                     if(db.addRemoveMovie(movie)){
-                        Toast.makeText(ViewMovie.this, "Movie Added To Database", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewMovie.this, "Movie Added To Favourites", Toast.LENGTH_SHORT).show();
                         favButton.setImageResource(R.mipmap.fav_yes);
                     }
                     else{
-                        Toast.makeText(ViewMovie.this, "Movie Removed From Database", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewMovie.this, "Movie Removed From Favourites", Toast.LENGTH_SHORT).show();
                         favButton.setImageResource(R.mipmap.fav_no);
                     }
                 }

@@ -15,12 +15,13 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class ListAdapter extends BaseAdapter{
-
+    private String instanceOf;
     private List<TheMovieDB> list = null;
     private static LayoutInflater inflater = null;
     private Context context;
 
-    ListAdapter(Context context){
+    ListAdapter(Context context, String instanceOf){
+        this.instanceOf = instanceOf;
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -57,14 +58,20 @@ public class ListAdapter extends BaseAdapter{
         holder.textView.setText(list.get(position).getTitle());
         holder.ratingBar.setRating((list.get(position).getRating() / 2));
 
-
-        //Picasso.with(context).load(R.drawable.movies).fit().into(holder.imageView);
         Picasso.with(context).load(list.get(position).getPoster()).placeholder(R.drawable.movies).fit().into(holder.imageView);
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ViewMovie.class);
+                Intent intent = null;
+                switch(instanceOf){
+                    case "Movie":
+                        intent = new Intent(v.getContext(), ViewMovie.class);
+                        break;
+                    case "TvShow":
+                        intent = new Intent(v.getContext(), ViewTVShow.class);
+                        break;
+                }
                 intent.putExtra("passedID", (int)list.get(position).getId());
                 v.getContext().startActivity(intent);
             }
