@@ -12,7 +12,6 @@ public class Movie implements Serializable, TheMovieDB {
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
 
-
     private boolean adult;
     private String backdrop_path;
     private Collection belongs_to_collection;

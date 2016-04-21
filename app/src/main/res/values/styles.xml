@@ -17,4 +17,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppTheme.Translucent" parent="AppTheme">
+        <item name="colorPrimary">#872328</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">#F9B0B4</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 </resources>

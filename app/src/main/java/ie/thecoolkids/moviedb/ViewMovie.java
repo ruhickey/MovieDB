@@ -38,7 +38,7 @@ public class ViewMovie extends BaseActivity implements IParser{
     private URL url1;
     private int page=1;
     private int movieID;
-    private ImageButton favButton;
+    private ImageButton favButton, youtubeButton;
     private DBHelper db;
 
 
@@ -96,6 +96,8 @@ public class ViewMovie extends BaseActivity implements IParser{
             favButton.setImageResource(R.mipmap.fav_yes);
         }
         new Thread(new AddRemoveMovie()).start();
+        youtubeButton = (ImageButton)findViewById(R.id.youtubeButton);
+        new Thread(new YoutubeListener()).start();
 
         title.setText(movie.getTitle());
         year.setText("" + movie.getYear());
@@ -207,7 +209,6 @@ public class ViewMovie extends BaseActivity implements IParser{
         }
     }
 
-
     class AddRemoveMovie implements Runnable{
         @Override
         public void run() {
@@ -222,6 +223,20 @@ public class ViewMovie extends BaseActivity implements IParser{
                         Toast.makeText(ViewMovie.this, "Movie Removed From Favourites", Toast.LENGTH_SHORT).show();
                         favButton.setImageResource(R.mipmap.fav_no);
                     }
+                }
+            });
+        }
+    }
+
+    class YoutubeListener implements Runnable{
+        @Override
+        public void run() {
+            youtubeButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), YoutubeActivity.class);
+                    intent.putExtra("passedID", "0WWzgGyAH6Y");
+                    v.getContext().startActivity(intent);
                 }
             });
         }

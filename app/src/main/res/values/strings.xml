@@ -6,4 +6,5 @@
     <string name="title_activity_view_seasons">ViewSeasons</string>
     <string name="drawerClosed">Drawer Closed</string>
     <string name="drawerOpened">Drawer Opened</string>
+    <string name="YOUTUBE_API_KEY">AIzaSyBbjEpaFDCyUblONMjJEp5-ByPWxPMwLFk</string>
 </resources>

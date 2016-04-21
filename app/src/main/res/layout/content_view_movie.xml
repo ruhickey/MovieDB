@@ -26,6 +26,7 @@
             android:fillViewport="true"
             android:padding="20dp">
 
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -512,6 +513,7 @@
                     android:layout_height="50px" />
 
                 <include layout="@layout/favourites" />
+
 
             </LinearLayout>
 
