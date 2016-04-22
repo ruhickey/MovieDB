@@ -39,6 +39,10 @@
             android:name=".ViewTVShow"
             android:label="@string/title_activity_view_tvshow"
             android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".ViewRoles"
+            android:label="ViewRoles"
+            android:theme="@style/AppTheme.NoActionBar" />
 
             <!--
             <intent-filter>

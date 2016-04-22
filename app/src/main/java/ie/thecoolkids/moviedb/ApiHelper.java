@@ -22,6 +22,7 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
     private String query = "";
     private OkHttpClient client;
 
+
     /* Constructor doesn't do much, just initiates two vars */
     public ApiHelper(Context main) {
         context = main;

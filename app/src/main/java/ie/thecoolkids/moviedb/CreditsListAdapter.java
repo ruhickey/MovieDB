@@ -1,6 +1,7 @@
 package ie.thecoolkids.moviedb;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,11 +107,18 @@ public class CreditsListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                //todo: possibly add link to movie/ tv show role was in
+                //NOT SURE IF THIS WORKS! untested
 
-//                Intent intent = new Intent(v.getContext(), ViewMovie.class);
-//                intent.putExtra("passedMovieID", movies.get(position).getId());
-//                v.getContext().startActivity(intent);
+                if(roles.get(position).getMediaType().equals("tv")){
+                    Intent intent = new Intent(v.getContext(), ViewTVShow.class);
+                    intent.putExtra("passedTVShowID", roles.get(position).getId());
+                    v.getContext().startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(v.getContext(), ViewMovie.class);
+                    intent.putExtra("passedMovieID", roles.get(position).getId());
+                    v.getContext().startActivity(intent);
+                }
             }
         });
 
