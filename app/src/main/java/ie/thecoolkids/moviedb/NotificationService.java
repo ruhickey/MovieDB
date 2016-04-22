@@ -18,11 +18,11 @@ public class NotificationService extends IntentService{
     }
 
     public static Intent startNotificationService(Context context){
-        return new Intent(context, NotificationService.class).setAction(ACTION_START);
+        return (new Intent(context, NotificationService.class)).setAction(ACTION_START);
     }
 
     public static Intent deleteNotification(Context context){
-        return new Intent(context, NotificationService.class).setAction(ACTION_DELETE);
+        return (new Intent(context, NotificationService.class)).setAction(ACTION_DELETE);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class NotificationService extends IntentService{
         final Notification.Builder builder = new Notification.Builder(this);
 
         builder.setContentTitle("MovieDB").setAutoCancel(true)
-                .setContentText("Come Back To Us")
+                .setContentText("Come Visit MovieDB")
                 .setSmallIcon(R.mipmap.ic_launcher);
 
         builder.setContentIntent(
