@@ -2,8 +2,10 @@ package ie.thecoolkids.moviedb;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -135,5 +137,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         db = new DBHelper(this);
+        NotificationEventReceiver.cancelAlarm(getApplicationContext());
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        NotificationEventReceiver.setupAlarm(getApplicationContext());
     }
 }
