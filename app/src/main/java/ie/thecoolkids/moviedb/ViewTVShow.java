@@ -289,6 +289,10 @@ public class ViewTVShow extends BaseActivity implements IParser{
 
         seasonButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.swipe);
+                mp.start();
+
                 Intent intent = new Intent(v.getContext(), ViewSeasons.class);
                 intent.putExtra("numSeasons", tvShow.getNumberOfSeasons());
 

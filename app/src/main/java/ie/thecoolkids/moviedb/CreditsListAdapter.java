@@ -77,7 +77,6 @@ public class CreditsListAdapter extends BaseAdapter {
         else{
             holder.mediaType.setText("Movie");
         }
-        holder.mediaType.setText(roles.get(position).getMediaType());
 
         if(roles.get(position).getName() != "" && roles.get(position).getName() != null){
             holder.nameOrTitle.setText(roles.get(position).getName());
