@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.net.*;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +36,7 @@ public class ViewTVShow extends BaseActivity implements IParser{
     private int id;
     private TvShow tvShow;
     private RelativeLayout mainPage;
+    private LinearLayout networksLine, genreLine, createdByLine, runtimeLine, originCountryLine, productionCompLine;
     private ImageView poster;
     private Button seasonButton;
     private TextView name, firstAir, lastAir, status, genres, numEpisodes, numSeasons, rating,
@@ -84,6 +88,7 @@ public class ViewTVShow extends BaseActivity implements IParser{
 
     private void init(final TvShow tvShow){
 
+        Log.d("INISDE INIT", "");
         seasons = new ArrayList<Season>();
 
         mainPage = (RelativeLayout) findViewById(R.id.mainpage);
@@ -112,6 +117,12 @@ public class ViewTVShow extends BaseActivity implements IParser{
         prodCompanies = (TextView) findViewById(R.id.prod_companies);
         prodCompaniesHeading  = (TextView) findViewById(R.id.prodcompHeading);
         synopsis = (TextView) findViewById(R.id.synopsis);
+        networksLine = (LinearLayout) findViewById(R.id.networksLine);
+        genreLine = (LinearLayout) findViewById(R.id.genresLine);
+        createdByLine = (LinearLayout) findViewById(R.id.createdbyLine);
+        runtimeLine  = (LinearLayout) findViewById(R.id.episoderuntimesLine);
+        originCountryLine = (LinearLayout) findViewById(R.id.origcountryLine);
+        productionCompLine = (LinearLayout) findViewById(R.id.prodCompaniesLine);
 
         favButton = (ImageButton)findViewById(R.id.addFavButton);
         if(db.tvShowExists(tvShow.getId())){
@@ -131,42 +142,56 @@ public class ViewTVShow extends BaseActivity implements IParser{
 
 
         // Should this be tvShow.getGenres().size?---------------------------------------------------------------------------------------
+        //Ammm yes. Should it not be?
         if(tvShow.getGenres().size() > 0) {
             genreHeading.setText("Genre(s) :");
             genres.setText(createArrayString(tvShow.getGenres()));
+            genreLine.setVisibility(View.VISIBLE);
         }
 
         if(tvShow.getCreatedBy().size() > 0) {
             createdByHeading.setText("Created by :");
             createdBy.setText(createArrayString(tvShow.getCreatedBy()));
+            createdByLine.setVisibility(View.VISIBLE);
         }
 
         if (tvShow.getRuntimes().size() > 0) {
             epRuntimeHeading.setText("Episode Runtime :");
             epRuntime.setText("" + tvShow.getRuntimes().get(0) + " minutes");
+            runtimeLine.setVisibility(View.VISIBLE);
         }
 
 
-        if(tvShow.getInProduction())    inProd.setText("True");
-        else                            inProd.setText("False");
+
+            if(tvShow.getInProduction())    inProd.setText("True");
+            else                            inProd.setText("False");
+
 
 
         if(tvShow.getOriginCountry().size() >0) {
             origCountryHeading.setText("Origin Country :");
             origCountry.setText(createArrayDropLineString(tvShow.getOriginCountry()));
+            originCountryLine.setVisibility(View.VISIBLE);
         }
 
-        if (tvShow.getNetworks().size() >0) {
-            networksHeading.setText("Networks :");
-            if(tvShow.getNetworks().size() > 1){
+        if (tvShow.getNetworks().size() > 0) {
+            networksLine.setVisibility(View.VISIBLE);
+            if(tvShow.getNetworks().size() == 1){
+                networksHeading.setText("Network :");
+                networksLine.setOrientation(LinearLayout.HORIZONTAL);
+                networks.setPadding(10, 0, 0, 0);
                 networks.setText(createArrayDropLineString(tvShow.getNetworks()));
             }
             else {
+                networksHeading.setText("Networks :");
+                networksLine.setOrientation(LinearLayout.VERTICAL);
+                networks.setPadding(30, 0, 0, 0);
                 networks.setText(createArrayString(tvShow.getNetworks()));
             }
         }
 
         if(tvShow.getProductionCompanies().size() >0) {
+            productionCompLine.setVisibility(View.VISIBLE);
             prodCompaniesHeading.setText("Production Companies :");
             prodCompanies.setText(createArrayDropLineString(tvShow.getProductionCompanies()));
         }
@@ -286,10 +311,14 @@ public class ViewTVShow extends BaseActivity implements IParser{
                 @Override
                 public void onClick(View v) {
                     if(db.addRemoveTvShow(tvShow)){
+                        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success);
+                        mp.start();
                         Toast.makeText(ViewTVShow.this, "Tv Show Added To Favourites", Toast.LENGTH_SHORT).show();
                         favButton.setImageResource(R.mipmap.fav_yes);
                     }
                     else{
+                        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.beep1);
+                        mp.start();
                         Toast.makeText(ViewTVShow.this, "Tv Show Removed From Favourites", Toast.LENGTH_SHORT).show();
                         favButton.setImageResource(R.mipmap.fav_no);
                     }

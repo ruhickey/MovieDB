@@ -36,7 +36,7 @@ public class ViewPerson extends BaseActivity implements IParser {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            personID = extras.getInt("passedPersonID");
+            personID = extras.getInt("passedID");
             Log.d("Person id", "" + personID);
         }
 
@@ -93,7 +93,7 @@ public class ViewPerson extends BaseActivity implements IParser {
 
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ViewRoles.class);
-                intent.putExtra("passedPersonID", person.getId());
+                intent.putExtra("passedID", person.getId());
                 intent.putExtra("passedPersonName", person.getName());
                 v.getContext().startActivity(intent);
 

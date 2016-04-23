@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 15;
+    private static final int DB_VERSION = 16;
     private static final String DB_NAME = "favourites.db", TABLE_MOVIES = "movies", TABLE_TVSHOWS = "tvshows";
     private static final String ID = "id", TITLE = "title", RELEASE = "releaseDate",
                                 RATING = "rating", SYNOPSIS = "synopsis", TAGLINE = "tagline",

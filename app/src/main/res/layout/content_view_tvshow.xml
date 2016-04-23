@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:id="@+id/topLeft"
-                    android:minHeight="700px"
+                    android:minHeight="500px"
                     android:longClickable="false"
                     android:measureWithLargestChild="false">
 
@@ -191,7 +191,8 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="30dp"
                         android:id="@+id/genresLine"
-                        android:longClickable="false">
+                        android:longClickable="false"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -242,7 +243,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/episoderuntimesLine"
-                        android:paddingLeft="30dp" >
+                        android:paddingLeft="30dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -314,7 +316,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="30dp"
-                        android:id="@+id/createdbyLine">
+                        android:id="@+id/createdbyLine"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -340,7 +343,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="30dp"
-                        android:id="@+id/inProdLine">
+                        android:id="@+id/inProdLine"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -365,7 +369,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="30dp"
-                        android:id="@+id/origcountryLine">
+                        android:id="@+id/origcountryLine"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -390,7 +395,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="30dp"
-                        android:id="@+id/networksLine">
+                        android:id="@+id/networksLine"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -406,8 +412,7 @@
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:text="network / network"
                             android:id="@+id/networks"
-                            android:textColor="#e4e1e1"
-                            android:paddingLeft="30dp" />
+                            android:textColor="#e4e1e1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -415,7 +420,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="30dp"
-                        android:id="@+id/prodCompaniesLine">
+                        android:id="@+id/prodCompaniesLine"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -546,9 +552,22 @@
                         android:layout_height="wrap_content"
                         android:text="View Seasons Details"
                         android:id="@+id/seasons_button"
-                        android:layout_gravity="center_horizontal" />
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="#ffffff"
+                        android:background="@drawable/mybutton"
+                        android:padding="10dp"
+                        />
 
                 </LinearLayout>
+
+                <Space
+                    android:layout_width="20px"
+                    android:layout_height="20px" />
+
+                <include
+                    layout="@layout/favourites"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

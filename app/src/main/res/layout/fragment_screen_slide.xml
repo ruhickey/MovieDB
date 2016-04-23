@@ -1,22 +1,26 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+
+    >
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="@drawable/blue" >
 
         <LinearLayout
 
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#9C000000"
             android:id="@+id/wholePage"
             android:fillViewport="true"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:background="#9C000000"
+            >
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -58,7 +62,9 @@
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:text="Swipe to see next season"
                             android:id="@+id/swipeExplain"
-                            android:singleLine="true" />
+                            android:singleLine="true"
+                            android:textStyle="italic"
+                            android:textIsSelectable="false" />
 
                         <Space
                             android:layout_width="match_parent"

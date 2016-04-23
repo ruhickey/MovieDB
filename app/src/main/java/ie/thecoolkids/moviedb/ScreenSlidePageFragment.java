@@ -1,6 +1,7 @@
 package ie.thecoolkids.moviedb;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -72,7 +73,9 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
             tvEpNum.setText(epNums.get(i));
             tvEpNum.setGravity(Gravity.CENTER_HORIZONTAL);
             tvEpDate.setText(epDates.get(i));
+            tvEpDate.setTextColor(Color.parseColor("#FFFFFF"));
             tvEpOverview.setText(epOverviews.get(i));
+            tvEpOverview.setTextColor(Color.parseColor("#FFFFFF"));
             episodeList.addView(tvEpNum);
             episodeList.addView(tvEpDate);
             episodeList.addView(tvEpOverview);

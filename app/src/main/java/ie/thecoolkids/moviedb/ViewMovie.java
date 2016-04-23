@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -220,10 +221,14 @@ public class ViewMovie extends BaseActivity implements IParser{
                 @Override
                 public void onClick(View v) {
                     if(db.addRemoveMovie(movie)){
+                        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success);
+                        mp.start();
                         Toast.makeText(ViewMovie.this, "Movie Added To Favourites", Toast.LENGTH_SHORT).show();
                         favButton.setImageResource(R.mipmap.fav_yes);
                     }
                     else{
+                        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.beep1);
+                        mp.start();
                         Toast.makeText(ViewMovie.this, "Movie Removed From Favourites", Toast.LENGTH_SHORT).show();
                         favButton.setImageResource(R.mipmap.fav_no);
                     }

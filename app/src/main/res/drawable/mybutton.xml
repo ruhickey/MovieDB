@@ -3,22 +3,22 @@
     <item android:state_pressed="true" >
         <shape android:shape="rectangle"  >
             <corners android:radius="3dip" />
-            <stroke android:width="1dip" android:color="#5e7974" />
-            <gradient android:angle="-90" android:startColor="#345953" android:endColor="#689a92"  />
+            <stroke android:width="1dip" android:color="#811523" />
+            <gradient android:angle="-90" android:startColor="#a1232d" android:endColor="#19517c"  />
         </shape>
     </item>
     <item android:state_focused="true">
         <shape android:shape="rectangle"  >
             <corners android:radius="3dip" />
-            <stroke android:width="1dip" android:color="#5e7974" />
-            <solid android:color="#58857e"/>
+            <stroke android:width="1dip" android:color="#5e6b79" />
+            <solid android:color="#3e64ab"/>
         </shape>
     </item>
     <item >
         <shape android:shape="rectangle"  >
             <corners android:radius="3dip" />
-            <stroke android:width="1dip" android:color="#5e7974" />
-            <gradient android:angle="-90" android:startColor="#8dbab3" android:endColor="#58857e" />
+            <stroke android:width="1dip" android:color="#042146" />
+            <gradient android:angle="-90" android:startColor="#2958a4" android:endColor="#0b356e" />
         </shape>
     </item>
 </selector>
