@@ -2,6 +2,7 @@ package ie.thecoolkids.moviedb;
 
 
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -73,6 +75,10 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         context = this;
+        Toast toast = Toast.makeText(this.getContext(), "Swipe to view next season", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 360);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.show();
 
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide, container, false);
         LinearLayout overviewBox = (LinearLayout) rootView.findViewById(R.id.overviewBox);
