@@ -52,9 +52,6 @@ public class CreditsListAdapter extends BaseAdapter {
         LinearLayout line3;
     }
 
-    /*
-     * We don't call this function, it automatically gets called.
-     */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();
@@ -95,7 +92,6 @@ public class CreditsListAdapter extends BaseAdapter {
                 holder.epCountOrDept.setText(roles.get(position).getEpisodeCount());
                 holder.line3.setVisibility(View.VISIBLE);
             }
-
         }
         if (roles.get(position).getDepartment() != "" && roles.get(position).getDepartment() != null){
             holder.epCountOrDeptHeading.setText("Department :");
@@ -115,28 +111,17 @@ public class CreditsListAdapter extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //NOT SURE IF THIS WORKS! untested
-
-                Log.d("MEDIA TYPE", roles.get(position).getMediaType());
-
-
+                Intent intent;
                 if(roles.get(position).getMediaType().equals("tv")){
-
-                    Log.d("MEDIA TYPE if", "tv!!!");
-
-                    Intent intent = new Intent(v.getContext(), ViewTVShow.class);
+                    intent = new Intent(v.getContext(), ViewTVShow.class);
                     intent.putExtra("passedID", roles.get(position).getId());
-                    v.getContext().startActivity(intent);
                 }
                 else {
-                    Log.d("MEDIA TYPE if", "movie!!!");
-                    Intent intent = new Intent(v.getContext(), ViewMovie.class);
+                    intent = new Intent(v.getContext(), ViewMovie.class);
                     intent.putExtra("passedID", roles.get(position).getId());
-
-                    Log.d("MOVIE ID", "" + roles.get(position).getId());
-                    v.getContext().startActivity(intent);
                 }
+                v.getContext().startActivity(intent);
+
             }
         });
 
