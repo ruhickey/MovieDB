@@ -45,6 +45,7 @@ public class Movie implements Serializable, TheMovieDB, IListItem {
     private boolean video;
     private float vote_average;
     private float vote_count;
+    private String video_key;
 
     Movie(){
     }
@@ -313,4 +314,11 @@ public class Movie implements Serializable, TheMovieDB, IListItem {
         return rowView;
     }
 
+    public String getVideoKey() {
+        return video_key;
+    }
+
+    public void setVideoKey(String video_key) {
+        this.video_key = video_key;
+    }
 }

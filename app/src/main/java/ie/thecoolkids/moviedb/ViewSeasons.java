@@ -22,7 +22,7 @@ public class ViewSeasons extends FragmentActivity {
     private static int NUM_PAGES;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
-    private int tvShowID, numSeasons;
+    private int numSeasons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

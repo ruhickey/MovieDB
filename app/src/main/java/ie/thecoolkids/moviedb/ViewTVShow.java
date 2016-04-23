@@ -202,9 +202,15 @@ public class ViewTVShow extends BaseActivity implements IParser{
 
         state = State.STATE2;
         Log.d("STATE","" +  state);
-        for(int i=0; i<tvShow.getNumberOfSeasons(); i++){
-            new ApiHelper(this).SetSeasonIDQuery(tvShow.getId(), i+1).execute();
-        }
+
+        //cap on seasons and episode numbers - may need to be added
+        //if(tvShow.getNumberOfSeasons() < 10 && tvShow.getNumberOfEpisodes() < 1000){
+            seasonButton.setVisibility(View.VISIBLE);
+            for(int i=0; i<tvShow.getNumberOfSeasons(); i++){
+                new ApiHelper(this).SetSeasonIDQuery(tvShow.getId(), i+1).execute();
+            }
+       // }
+
 
 
     }
@@ -229,17 +235,7 @@ public class ViewTVShow extends BaseActivity implements IParser{
                     }
                 }
         );
-        //todo: set background image here
-//        try {
-//            url1 = new URL(tvShow.getPoster());
-//            bitmap1 = BitmapFactory.decodeStream(url1.openConnection().getInputStream());
-//            Drawable dr = new BitmapDrawable(getResources(), bitmap1);
-//            mainPage.setBackground(dr);
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//            Log.w("ViewTvShow", "Exception creating image");
-//        }
+
     }
 
     private String createArrayString(List<String> items) {

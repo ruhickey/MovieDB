@@ -29,6 +29,9 @@ import java.util.List;
 
 public class ViewMovie extends BaseActivity implements IParser{
 
+    private enum State{
+        STATE1, STATE2
+    }
     private int id;
     private Movie movie;
     private RelativeLayout mainPage;
@@ -43,12 +46,18 @@ public class ViewMovie extends BaseActivity implements IParser{
     private int movieID;
     private ImageButton favButton, youtubeButton;
     private DBHelper db;
+    private State state;
+    private VideoInfo videoInfo;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_movie);
+
+        state = State.STATE1;
+        Log.d("STATE", "" + state);
 
         db = new DBHelper(this);
 
@@ -143,6 +152,12 @@ public class ViewMovie extends BaseActivity implements IParser{
         if(!movie.getPoster().equals(null)) {
             setImages();
         }
+
+        state = State.STATE2;
+        Log.d("STATE", "" + state);
+
+        new ApiHelper(this).SetMovieVideoQuery(movieID).execute();
+
     }
 
     // Changed this as it was crashing when loading from database with no internet connection
@@ -199,9 +214,21 @@ public class ViewMovie extends BaseActivity implements IParser{
 
     public void parseJson(String json) {
        try {
-           Gson gson = new Gson();
-           movie = gson.fromJson(json, Movie.class);
-           init(movie);
+           if(state == State.STATE1) {
+               Gson gson = new Gson();
+               movie = gson.fromJson(json, Movie.class);
+               init(movie);
+           }
+           else{
+               Gson gson = new Gson();
+               videoInfo = gson.fromJson(json, VideoInfo.class);
+               if(videoInfo.getResultsKeys().get(0) != null) {
+                   movie.setVideoKey(videoInfo.getResultsKeys().get(0));
+               }
+               else{
+                   movie.setVideoKey("unavailable");
+               }
+           }
        }
        catch(Exception ex){
            if(ex == null) {
@@ -243,9 +270,15 @@ public class ViewMovie extends BaseActivity implements IParser{
             youtubeButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), YoutubeActivity.class);
-                    intent.putExtra("passedID", "0WWzgGyAH6Y");
-                    v.getContext().startActivity(intent);
+                    if(movie.getVideoKey().equals("unavailable")){
+                        Toast.makeText(getApplicationContext(), "No video available", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Intent intent = new Intent(v.getContext(), YoutubeActivity.class);
+                        intent.putExtra("passedID", movie.getVideoKey());
+                        v.getContext().startActivity(intent);
+                    }
+
                 }
             });
         }

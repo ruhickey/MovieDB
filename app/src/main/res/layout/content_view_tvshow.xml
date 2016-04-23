@@ -556,7 +556,7 @@
                         android:textColor="#ffffff"
                         android:background="@drawable/mybutton"
                         android:padding="10dp"
-                        />
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
