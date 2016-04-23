@@ -1,8 +1,12 @@
 package ie.thecoolkids.moviedb;
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +89,7 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide, container, false);
         LinearLayout overviewBox = (LinearLayout) rootView.findViewById(R.id.overviewBox);
         LinearLayout episodeBox = (LinearLayout) rootView.findViewById(R.id.episodesBox);
-
+        final RelativeLayout mainPage = (RelativeLayout) rootView.findViewById(R.id.fragBack);
         TextView tvName = (TextView) rootView.findViewById(R.id.name);
         TextView tvDate = (TextView)rootView.findViewById(R.id.airdate);
         TextView tvSeasonNum = (TextView)rootView.findViewById(R.id.seasonNum);
@@ -96,9 +102,28 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
             overviewBox.setVisibility(View.VISIBLE);
         }
 
+        final Context context = this.getContext();
+
         Logger.Debug(this.imagePath);
         ImageView img = (ImageView) rootView.findViewById(R.id.poster);
         Picasso.with(this.getContext()).load(this.imagePath).placeholder(R.drawable.movies).fit().into(img);
+        Picasso.with(this.getContext()).load(this.imagePath).placeholder(R.drawable.moviereel).into(
+                new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        mainPage.setBackground(new BitmapDrawable(context.getResources(), bitmap));
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                        // Toast.makeText(context, "Failed To Load Background Image", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    }
+                }
+        );
 
         episodeList = (LinearLayout)rootView.findViewById(R.id.epList);
 
