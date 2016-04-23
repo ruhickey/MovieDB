@@ -93,7 +93,6 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
         Logger.Debug(this.imagePath);
         ImageView img = (ImageView) rootView.findViewById(R.id.poster);
         Picasso.with(this.getContext()).load(this.imagePath).placeholder(R.drawable.movies).fit().into(img);
-        //todo: add setting imgview
 
         episodeList = (LinearLayout)rootView.findViewById(R.id.epList);
 
