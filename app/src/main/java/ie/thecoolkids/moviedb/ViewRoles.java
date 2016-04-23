@@ -34,10 +34,12 @@ public class ViewRoles extends BaseActivity implements IParser {
         setContentView(R.layout.activity_view_roles);
         context = this;
 
+        Log.d("IN VIEW ROLLS", "");
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            personID = extras.getInt("passedPersonID");
+            personID = extras.getInt("passedID");
             personName = extras.getString("passedPersonName");
         }
 
