@@ -29,22 +29,34 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
         client = new OkHttpClient();
     }
 
-    /* This sets our API query URL to most popular. */
-    public ApiHelper SetPopularQuery(int page) {
-        this.query = "http://api.themoviedb.org/3/movie/popular?api_key=216feddaff308181c8dbc34ef3658b57&page=" + Integer.toString(page);
-        return this;
+    public Uri.Builder GetBaseURL() {
+        Uri.Builder builder = new Uri.Builder();
+
+        builder.scheme("http")
+                .authority("api.themoviedb.org")
+                .appendPath("3");
+
+        return builder;
     }
 
     /*
-     * This sets up our movie query URL.
-     * We pass it the String we want to search for
-     * and the page number that we want.
-     * This is called, followed by Execute.
-     * Ex: new ApiHelper(this).SetMovieQuery().execute();
-     * This would be called from MainActivity
-     */
-    public ApiHelper SetMovieQuery(String query, int page) {
-        Uri.Builder builder = GetBaseURL(page)
+    *  MOVIE QUERIES
+    *  GO HERE
+    * */
+    public ApiHelper SetPopularMovieQuery(int page) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("movie")
+                .appendPath("popular")
+                .appendQueryParameter("api_key", API_KEY)
+                .appendQueryParameter("page", Integer.toString(page));
+
+        this.query = builder.toString();
+        return this;
+    }
+
+    public ApiHelper SetMovieSearchQuery(String query, int page) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("search")
                 .appendPath("movie")
                 .appendQueryParameter("api_key", API_KEY)
                 .appendQueryParameter("query", query)
@@ -56,73 +68,45 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
     }
 
     public ApiHelper SetMovieIDQuery(int id) {
-        Uri.Builder builder = GetBaseMovieIdURL()
+        Uri.Builder builder = GetBaseURL()
                 .appendPath("movie")
                 .appendPath(String.valueOf(id))
                 .appendQueryParameter("api_key", API_KEY);
         this.query = builder.build().toString();
 
-        Log.d("QUERY", query);
         return this;
     }
 
-    public ApiHelper SetTvIDQuery(int id) {
-        Uri.Builder builder = GetBaseMovieIdURL()
-                .appendPath("tv")
+    public ApiHelper SetMovieVideoQuery(int id) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("movie")
                 .appendPath(String.valueOf(id))
+                .appendPath("videos")
                 .appendQueryParameter("api_key", API_KEY);
         this.query = builder.build().toString();
 
-        Log.d("QUERY", query);
         return this;
     }
 
-    public ApiHelper SetPersonIDQuery(int id) {
-        Uri.Builder builder = GetBaseMovieIdURL()
-                .appendPath("person")
-                .appendPath(String.valueOf(id))
-                .appendQueryParameter("api_key", API_KEY);
-        this.query = builder.build().toString();
-
-        Log.d("QUERY", query);
-        return this;
-    }
-
-    public ApiHelper SetPersonIDCreditsQuery(int id) {
-        Uri.Builder builder = GetBaseMovieIdURL()
-                .appendPath("person")
-                .appendPath(String.valueOf(id))
-                .appendPath("combined_credits")
-                .appendQueryParameter("api_key", API_KEY);
-        this.query = builder.build().toString();
-
-        Log.d("QUERY", query);
-        return this;
-    }
-
-    public ApiHelper SetSeasonIDQuery(int Tvshowid, int seasonNum) {
-        Uri.Builder builder = GetBaseMovieIdURL()
-                .appendPath("tv")
-                .appendPath(String.valueOf(Tvshowid))
-                .appendPath("season")
-                .appendPath(String.valueOf(seasonNum))
-                .appendQueryParameter("api_key", API_KEY);
-        this.query = builder.build().toString();
-
-        Log.d("QUERY", query);
-        return this;
-    }
 
     /*
-     * This sets up our TV query URL.
-     * We pass it the String we want to search for
-     * and the page number that we want.
-     * This is called, followed by Execute.
-     * Ex: new ApiHelper(this).SetTvQuery().execute();
-     * This would be called from MainActivity
-     */
-    public ApiHelper SetTvQuery(String query, int page) {
-        Uri.Builder builder = GetBaseURL(page)
+    *  TV SHOW QUERIES
+    *  GO HERE
+    * */
+    public ApiHelper SetPopularTvShowQuery(int page) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("tv")
+                .appendPath("popular")
+                .appendQueryParameter("api_key", API_KEY)
+                .appendQueryParameter("page", Integer.toString(page));
+
+        this.query = builder.toString();
+        return this;
+    }
+
+    public ApiHelper SetTvSearchQuery(String query, int page) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("search")
                 .appendPath("tv")
                 .appendQueryParameter("api_key", API_KEY)
                 .appendQueryParameter("query", query)
@@ -133,33 +117,75 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
         return this;
     }
 
-    public ApiHelper SetPopularTvShowQuery(int page) {
-        this.query = "http://api.themoviedb.org/3/tv/popular?api_key=216feddaff308181c8dbc34ef3658b57&page=" + Integer.toString(page);
+    public ApiHelper SetTvIDQuery(int id) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("tv")
+                .appendPath(String.valueOf(id))
+                .appendQueryParameter("api_key", API_KEY);
+        this.query = builder.build().toString();
+
+        return this;
+    }
+
+    public ApiHelper SetSeasonIDQuery(int id, int seasonNum) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("tv")
+                .appendPath(String.valueOf(id))
+                .appendPath("season")
+                .appendPath(String.valueOf(seasonNum))
+                .appendQueryParameter("api_key", API_KEY);
+        this.query = builder.build().toString();
+
+        return this;
+    }
+
+    public ApiHelper SetTvVideoQuery(int id) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("tv")
+                .appendPath(String.valueOf(id))
+                .appendPath("videos")
+                .appendQueryParameter("api_key", API_KEY);
+        this.query = builder.build().toString();
+
         return this;
     }
 
     /*
-     * This gets us the Base url of the API.
-     * TODO: I'm not sure if this is actually working properly.
-     * I've to test it during the week.
-     */
-    public Uri.Builder GetBaseURL(int page) {
-        Uri.Builder builder = new Uri.Builder();
+    * ACTOR QUERIES
+    * GO HERE
+    * */
+    public ApiHelper SetActorSearchQuery(String query, int page) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("search")
+                .appendPath("person")
+                .appendQueryParameter("api_key", API_KEY)
+                .appendQueryParameter("query", query)
+                .appendQueryParameter("page", Integer.toString(page));
 
-        builder.scheme("http")
-                .authority("api.themoviedb.org")
-                .appendPath("3")
-                .appendPath("search");
+        this.query = builder.build().toString();
 
-        return builder;
+        return this;
     }
 
-    public Uri.Builder GetBaseMovieIdURL() {
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http")
-                .authority("api.themoviedb.org")
-                .appendPath("3");
-        return builder;
+    public ApiHelper SetPersonIDQuery(int id) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("person")
+                .appendPath(String.valueOf(id))
+                .appendQueryParameter("api_key", API_KEY);
+        this.query = builder.build().toString();
+
+        return this;
+    }
+
+    public ApiHelper SetPersonIDCreditsQuery(int id) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("person")
+                .appendPath(String.valueOf(id))
+                .appendPath("combined_credits")
+                .appendQueryParameter("api_key", API_KEY);
+        this.query = builder.build().toString();
+
+        return this;
     }
 
     /*
