@@ -36,6 +36,7 @@ public class MainActivity extends BaseActivity implements IParser{
     private int page = 1;
     private ListView lvItems;
     private int moviePages, tvPages, actorPages;
+    private Ready ready;
 
     private final String DEBUG = "DEBUG";
 
@@ -55,6 +56,11 @@ public class MainActivity extends BaseActivity implements IParser{
         MOVIE,
         TV_SHOW,
         ACTOR
+    }
+
+    private enum Ready {
+        IDLE,
+        BUSY
     }
 
 
@@ -260,9 +266,9 @@ public class MainActivity extends BaseActivity implements IParser{
                         page++;
                     } else if (page < tvPages) {
                         page++;
-                    } else if (page < actorPages) {
-                        page++;
-                    }
+                    } // else if (page < actorPages) {
+                        // page++;
+                    // }
 
                     SetMovieQuery();
                 }
@@ -286,7 +292,7 @@ public class MainActivity extends BaseActivity implements IParser{
     }
 
     private void SetTvShowQuery() {
-        if((state == State.SEARCH) || (page < tvPages)) {
+        if((tvPages == 0) || (page < tvPages)) {
             qType = QType.TV_SHOW;
             String query = etQuery.getText().toString();
             if (query.isEmpty()) {
@@ -301,11 +307,11 @@ public class MainActivity extends BaseActivity implements IParser{
 
     private void SetActorQuery() {
         if((state == State.SEARCH) || (page < actorPages)) {
-            qType = QType.ACTOR;
-            String query = etQuery.getText().toString();
-            if (!query.isEmpty()) {
-                new ApiHelper(context).SetActorSearchQuery(query, page).execute();
-            }
+            // qType = QType.ACTOR;
+            // String query = etQuery.getText().toString();
+            // if (!query.isEmpty()) {
+                // new ApiHelper(context).SetActorSearchQuery(query, page).execute();
+            // }
         }
     }
 
@@ -330,6 +336,8 @@ public class MainActivity extends BaseActivity implements IParser{
         JSONArray movieArray;
         movieArray = obj.getJSONArray("results");
 
+        WaitForItems();
+        LockItems();
         if(state == State.SEARCH) {
             items.clear();
         }
@@ -344,6 +352,19 @@ public class MainActivity extends BaseActivity implements IParser{
         if(items != null) {
             SetItemList(items);
         }
+        UnlockItems();
+    }
+
+    private void WaitForItems() throws InterruptedException {
+        while(ready == Ready.BUSY) Thread.sleep(10);
+    }
+
+    private void LockItems() {
+        ready = Ready.BUSY;
+    }
+
+    private void UnlockItems() {
+        ready = Ready.IDLE;
     }
 
     private void ParseTvShows(Gson gson, JSONObject obj) throws Exception {
@@ -354,6 +375,8 @@ public class MainActivity extends BaseActivity implements IParser{
         }
         JSONArray tvArray = obj.getJSONArray("results");
 
+        WaitForItems();
+        LockItems();
         for (int i = 0; i < tvArray.length(); i++) {
             TvShow x = gson.fromJson(tvArray.get(i).toString(), TvShow.class);
             if(!x.getPoster().endsWith("null")) {
@@ -364,6 +387,7 @@ public class MainActivity extends BaseActivity implements IParser{
         if(items != null) {
             SetItemList(items);
         }
+        UnlockItems();
     }
 
     private void ParseActors(Gson gson, JSONObject obj) throws Exception {
@@ -375,6 +399,8 @@ public class MainActivity extends BaseActivity implements IParser{
 
         JSONArray tvArray = obj.getJSONArray("results");
 
+        WaitForItems();
+        LockItems();
         for (int i = 0; i < tvArray.length(); i++) {
             Person x = gson.fromJson(tvArray.get(i).toString(), Person.class);
             if(!x.getPersonPicture().endsWith("null")) {
@@ -385,6 +411,7 @@ public class MainActivity extends BaseActivity implements IParser{
         if(items != null) {
             SetItemList(items);
         }
+        UnlockItems();
     }
 
     /*
@@ -409,10 +436,13 @@ public class MainActivity extends BaseActivity implements IParser{
 
             } catch(Exception ex) {
                 Logger.Exception("parseJson() - " + ex.getMessage());
+                UnlockItems();
             }
 
             if(qType == QType.MOVIE) SetTvShowQuery();
-            if(qType == QType.TV_SHOW) SetActorQuery();
+            if(qType == QType.TV_SHOW) {
+                SetActorQuery();
+            }
         }
     }
 }
