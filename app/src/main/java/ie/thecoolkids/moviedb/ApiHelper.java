@@ -19,7 +19,7 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
      */
     public static final String API_KEY = "216feddaff308181c8dbc34ef3658b57";
     private Context context = null;
-    private String query = "";
+    public String query = "";
     private OkHttpClient client;
 
 
@@ -28,10 +28,6 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
         context = main;
         client = new OkHttpClient();
     }
-
-
-
-
 
     /* This sets our API query URL to most popular. */
     public ApiHelper SetPopularQuery(int page) {
@@ -132,8 +128,13 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
                 .appendQueryParameter("query", query)
                 .appendQueryParameter("page", Integer.toString(page));
 
-        query = builder.build().toString();
+        this.query = builder.build().toString();
 
+        return this;
+    }
+
+    public ApiHelper SetPopularTvShowQuery(int page) {
+        this.query = "http://api.themoviedb.org/3/tv/popular?api_key=216feddaff308181c8dbc34ef3658b57&page=" + Integer.toString(page);
         return this;
     }
 
@@ -148,10 +149,7 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
         builder.scheme("http")
                 .authority("api.themoviedb.org")
                 .appendPath("3")
-                .appendPath("search")
-                .appendPath("")
-                .appendQueryParameter("query", query)
-                .appendQueryParameter("page", Integer.toString(page));
+                .appendPath("search");
 
         return builder;
     }
@@ -169,7 +167,7 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
      * It gets called when we call .execute();
      */
     protected String doInBackground(String... urls){
-        String retval = null;
+        String retval = "";
 
         try {
             retval = MakeApiRequest(query);
@@ -185,6 +183,7 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
      * It returns the JSON response as a String.
      */
     String MakeApiRequest (String url) throws IOException {
+        Logger.Debug(url);
         Request request = new Request.Builder()
                 .url(url)
                 .build();

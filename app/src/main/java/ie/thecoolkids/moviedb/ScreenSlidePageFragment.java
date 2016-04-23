@@ -8,8 +8,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +90,9 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
             overviewBox.setVisibility(View.VISIBLE);
         }
 
-        //ImageView img = (ImageView) rootView.findViewById(R.id.poster);
+        Logger.Debug(this.imagePath);
+        ImageView img = (ImageView) rootView.findViewById(R.id.poster);
+        Picasso.with(this.getContext()).load(this.imagePath).placeholder(R.drawable.movies).fit().into(img);
         //todo: add setting imgview
 
         episodeList = (LinearLayout)rootView.findViewById(R.id.epList);

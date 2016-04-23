@@ -17,5 +17,4 @@
 
     <include layout="@layout/content_view_tvshow" />
 
-
 </android.support.design.widget.CoordinatorLayout>

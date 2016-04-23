@@ -21,21 +21,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class MainActivity extends BaseActivity implements IParser{
 
     private ImageButton btnSearch;
     private ImageButton btnSort;
     private EditText etQuery;
-    private List<Movie> movies;
-    private MovieListAdapter movieListAdapter;
+    private List<IListItem> items;
+    private ItemListAdapter movieListAdapter;
     private NetworkHelper netHelper;
     private MainActivity context;
     private SortBy sortBy = SortBy.rating;
     private State state;
+    private QType qType;
     private int page = 1;
     private ListView lvMovies;
-    private int movieCount;
+    private int movieCount, tvCount, moviePages, tvPages;
 
     private final String DEBUG = "DEBUG";
 
@@ -51,6 +51,12 @@ public class MainActivity extends BaseActivity implements IParser{
         UPDATE
     }
 
+    private enum QType {
+        MOVIE,
+        TV_SHOW,
+        ACTOR
+    }
+
 
     /*
     * This method gets called when we click the back button and leave the app.
@@ -61,7 +67,7 @@ public class MainActivity extends BaseActivity implements IParser{
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putSerializable("movies", movies.toArray());
+        savedInstanceState.putSerializable("movies", items.toArray());
     }
 
     /*
@@ -71,8 +77,8 @@ public class MainActivity extends BaseActivity implements IParser{
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        movies = new ArrayList<Movie>(Arrays.asList((Movie[]) savedInstanceState.getSerializable("movies")));
-        SetMovieList(movies);
+        items = new ArrayList<IListItem>(Arrays.asList((IListItem[]) savedInstanceState.getSerializable("movies")));
+        SetItemList(items);
     }
 
     /*
@@ -112,27 +118,15 @@ public class MainActivity extends BaseActivity implements IParser{
 
         /*
         * Create the new OnClickListener for the Search Button on the toolbar.
-        * This will retrieve the data from the API and then display it in the MovieListAdapter.
+        * This will retrieve the data from the API and then display it in the ItemListAdapter.
         */
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tvPages = 0;
                 SearchForMovie();
             }
         });
-
-        /*
-         * This is commented out for the time being because I'm not sure if I'll use it or not.
-         * It shows up a dialog on screen asking the user which way they want to show the results.
-         */
-        /*
-        btnSort.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowSortDialog();
-            }
-        });
-        */
     }
 
     /*
@@ -142,7 +136,12 @@ public class MainActivity extends BaseActivity implements IParser{
      * we don't need to retrieve any data from the method.
      */
     private void GetPopularMovies() {
-        new ApiHelper(this).SetPopularQuery(page).execute();
+        qType = QType.MOVIE;
+        try {
+            new ApiHelper(this).SetPopularQuery(page).execute();
+        } catch(Exception ex) {
+            Logger.Exception(ex.getMessage());
+        }
     }
 
     /*
@@ -210,25 +209,25 @@ public class MainActivity extends BaseActivity implements IParser{
 
     /* This should only get called once.
      * In the OnCreate method.
-     * We do not want to create a new MovieListAdapter every time we change the Movie List.
+     * We do not want to create a new ItemListAdapter every time we change the Movie List.
      * This would be very inefficient.
-     * Instead, we change the Movie List within the MovieListAdapter
+     * Instead, we change the Movie List within the ItemListAdapter
      * and call it's notifyDataSetChanged method.
      * This will allow us to update the content on screen without re-creating the class.
      */
     private void SetUpMovieListView() {
         /*
          * TODO: Maybe take this movies initialization out of here
-         * This method should only be used for initializing the MovieListAdapter.
+         * This method should only be used for initializing the ItemListAdapter.
          */
-        movies = new ArrayList<>();
+        items = new ArrayList<>();
         lvMovies = (ListView) findViewById(R.id.lvMovies);
-        movieListAdapter = new MovieListAdapter(context);
-        movieListAdapter.setMovies(movies);
+        movieListAdapter = new ItemListAdapter(context);
+        movieListAdapter.setMovies(items);
         lvMovies.setAdapter(movieListAdapter);
 
         /*
-         * This code checks to see how far down the MovieListAdapter we are.
+         * This code checks to see how far down the ItemListAdapter we are.
          * We need to know this so that we can get a certain amount of movies at a time.
          * For example, we show 20 movies, but when we reach the 20th,
          * we make another call to the API and ask for the next page and show them movies aswell.
@@ -270,15 +269,21 @@ public class MainActivity extends BaseActivity implements IParser{
             private void isScrollCompleted() {
                 if (((totalItem - currentFirstVisibleItem) == currentVisibleItemCount)
                         && (this.currentScrollState == SCROLL_STATE_IDLE)) {
-                    if (movies.size() < movieCount) {
+                    state = State.UPDATE;
+                    Logger.Debug("Page Old - " + page);
+
+                    Logger.Debug("MoviePages - " + moviePages);
+                    Logger.Debug("TvPages - " + tvPages);
+
+                    if(page < moviePages) {
+                        Logger.Debug("Updating Page");
                         page++;
-                        state = State.UPDATE;
-                        try {
-                            SetMovieQuery();
-                        } catch (Exception ex) {
-                            Logger.Debug(ex.getMessage());
-                        }
+                    } else if (page < tvPages){
+                        Logger.Debug("Updating Page");
+                        page++;
                     }
+                    Logger.Debug("Page New - " + page);
+                    SetMovieQuery();
                 }
             }
         });
@@ -291,36 +296,113 @@ public class MainActivity extends BaseActivity implements IParser{
      * Otherwise we search for the term they entered.
      */
     private void SetMovieQuery() {
-        String query = etQuery.getText().toString();
-        if(query.isEmpty()){
-            new ApiHelper(context).SetPopularQuery(page).execute();
+        if((page < moviePages) || (state == State.SEARCH)) {
+            Logger.Debug("Setting Movie Query");
+            qType = QType.MOVIE;
+            String query = etQuery.getText().toString();
+            if (query.isEmpty()) {
+                new ApiHelper(context).SetPopularQuery(page).execute();
+            } else {
+                new ApiHelper(context).SetMovieQuery(query, page).execute();
+            }
         } else {
-            new ApiHelper(context).SetMovieQuery(query, page).execute();
+            Logger.Debug("Setting TV Query");
+            SetTvShowQuery();
         }
     }
 
-    /*
-     * This isn't used anymore but should get the Top Rated IMDB movies.
-     * This will be added back in eventually.
-     */
-    private void GetBestMovies() {
-        page = 1;
-        state = State.SEARCH;
-        try {
-            SetMovieQuery();
-        } catch (Exception ex) {
-            Logger.Debug(ex.getMessage());
+    private void SetTvShowQuery() {
+        if((tvPages == 0) || (page < tvPages)) {
+            qType = QType.TV_SHOW;
+            String query = etQuery.getText().toString();
+            if (query.isEmpty()) {
+                new ApiHelper(context).SetPopularTvShowQuery(page).execute();
+            } else {
+                Logger.Debug("TV URL - " + new ApiHelper(context).SetTvQuery(query, page).query);
+                new ApiHelper(context).SetTvQuery(query, page).execute();
+            }
         }
     }
 
     /*
      * This is the method that gets called anytime we want to update
-     * our MovieListAdapter.
+     * our ItemListAdapter.
      * It sets the Adapters Movie List and then notifies it about the data change.
      */
-    public void SetMovieList(List<Movie> _movies) {
-        movieListAdapter.setMovies(_movies);
+    private void SetItemList(List<IListItem> _items) {
+        movieListAdapter.setMovies(_items);
         movieListAdapter.notifyDataSetChanged();
+    }
+
+
+    /* Method for parsing movies */
+    private void ParseMovies(Gson gson, JSONObject obj) throws Exception {
+        /*
+         * This gets us the amount of Movies that we can retrieve.
+         * We can then use this to decide whether or not we want
+         * to get another page worth of Movie Information.
+         */
+        moviePages = obj.getInt("total_pages");
+
+        /* This gets us the JSON movie objects */
+        JSONArray movieArray;
+        try {
+           movieArray = obj.getJSONArray("results");
+        }catch (Exception ex) {
+            Logger.Debug("No results");
+            return;
+        }
+
+        /*
+         * If we are searching we want a blank movie list.
+         * If we are updating, we don't want a blank list,
+         * the user should still be able to see page 1 as well as page 2.
+         */
+        if(state == State.SEARCH) {
+            items.clear();
+        }
+
+        /*
+         * Iterate through the JSON movie object array.
+         * Use Gson to convert the JSON movie object to an actual Movie Object.
+         * Then add it to our Movie List.
+         */
+        for (int i = 0; i < movieArray.length(); i++) {
+            Movie x = gson.fromJson(movieArray.get(i).toString(), Movie.class);
+            if (!x.getPoster().endsWith("null")) {
+                items.add(x);
+            }
+        }
+
+        /* Set the movie list and update the ItemListAdapter */
+        if(items != null) {
+            SetItemList(items);
+        }
+    }
+
+    private void ParseTvShows(Gson gson, JSONObject obj) throws Exception {
+        Logger.Debug("ParseTvShows()");
+
+        tvPages = obj.getInt("total_pages");
+
+        Logger.Debug("TotalPages - " + tvPages);
+
+        JSONArray tvArray = obj.getJSONArray("results");
+
+        for (int i = 0; i < tvArray.length(); i++) {
+            TvShow x = gson.fromJson(tvArray.get(i).toString(), TvShow.class);
+            if(!x.getPoster().endsWith("null")) {
+                items.add(x);
+            }
+        }
+
+        if(items != null) {
+            SetItemList(items);
+        }
+    }
+
+    private void ParseActors(Gson gson, JSONObject obj) throws Exception {
+
     }
 
     /*
@@ -339,58 +421,17 @@ public class MainActivity extends BaseActivity implements IParser{
                 /* Create the JSON Object from the JSON String */
                 JSONObject obj = new JSONObject(json);
 
-                /*
-                 * This gets us the amount of Movies that we can retrieve.
-                 * We can then use this to decide whether or not we want
-                 * to get another page worth of Movie Information.
-                 */
-                movieCount = obj.getInt("total_results");
-
-                /* This gets us the JSON movie objects */
-                JSONArray movieArray = obj.getJSONArray("results");
-
-                /*
-                 * If we are searching we want a blank movie list.
-                 * If we are updating, we don't want a blank list,
-                 * the user should still be able to see page 1 as well as page 2.
-                 */
-                if(state == State.SEARCH) {
-                    movies.clear();
+                switch (qType) {
+                    case MOVIE: ParseMovies(gson, obj); break;
+                    case TV_SHOW: ParseTvShows(gson, obj); break;
+                    case ACTOR: ParseActors(gson, obj); break;
                 }
 
-                /*
-                 * Iterate through the JSON movie object array.
-                 * Use Gson to convert the JSON movie object to an actual Movie Object.
-                 * Then add it to our Movie List.
-                 */
-                for (int i = 0; i < movieArray.length(); i++) {
-                    Movie x = gson.fromJson(movieArray.get(i).toString(), Movie.class);
-                    /*
-                     * We check to see if it has a cover and then add it if it does.
-                     * TODO: This code should be moved before the Gson.fromJson call because
-                     * I think it would make it more efficient.
-                     */
-                    if(!x.getPoster().endsWith("null")) {
-                        movies.add(x);
-                    }
-                }
-
-                /* Set the movie list and update the MovieListAdapter */
-                if(movies != null) {
-                    SetMovieList(movies);
-                }
             } catch(Exception ex) {
-                if(ex == null) {
-                    /*
-                     * I Log like this because it's easier to find the exceptions.
-                     */
-                    Log.d("EXCEPTION", "NULL");
-                } else if (ex.getMessage() == null){
-                    ex.printStackTrace();
-                } else {
-                    Log.d("EXCEPTION", ex.getMessage());
-                }
+                Logger.Exception("parseJson() - " + ex.getMessage());
             }
+
+            if(qType == QType.MOVIE) SetTvShowQuery();
         }
     }
 }
