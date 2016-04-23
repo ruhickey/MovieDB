@@ -70,6 +70,13 @@ public class CreditsListAdapter extends BaseAdapter {
         holder.line3 = (LinearLayout) rowView.findViewById(R.id.line3);
 
         Picasso.with(rolesview).load(roles.get(position).getPoster()).placeholder(R.drawable.movies).fit().into(holder.rolePoster);
+
+        if(roles.get(position).getMediaType().equals("tv")){
+            holder.mediaType.setText("TV");
+        }
+        else{
+            holder.mediaType.setText("Movie");
+        }
         holder.mediaType.setText(roles.get(position).getMediaType());
 
         if(roles.get(position).getName() != "" && roles.get(position).getName() != null){

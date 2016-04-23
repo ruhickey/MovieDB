@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:id="@+id/topLeft"
-                    android:minHeight="500px"
+                    android:minHeight="400px"
                     android:longClickable="false"
                     android:measureWithLargestChild="false">
 
@@ -90,6 +90,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/bottomSection"
                 android:layout_weight="1">
+
+                <Space
+                    android:layout_width="fill_parent"
+                    android:layout_height="50px" />
 
                 <LinearLayout
                     android:orientation="vertical"
