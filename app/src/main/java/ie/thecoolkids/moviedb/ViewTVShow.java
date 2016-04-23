@@ -77,7 +77,7 @@ public class ViewTVShow extends BaseActivity implements IParser{
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            tvshowID = extras.getInt("passedTVShowID");
+            tvshowID = extras.getInt("passedID");
         }
         new ApiHelper(this).SetTvIDQuery(tvshowID).execute();
     }

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class ViewMovie extends BaseActivity implements IParser{
     private int id;
     private Movie movie;
     private RelativeLayout mainPage;
+    private LinearLayout collectionLine;
     private ImageView poster;
     private TextView title, year, genres, rating, synopsis, genreHeading, tagline, release,
             status, runtime, languages, collection, revenue, budget, orig_title,
@@ -90,6 +92,7 @@ public class ViewMovie extends BaseActivity implements IParser{
         languagesHeading = (TextView) findViewById(R.id.languagesHeading);
         prod_companiesHeading = (TextView) findViewById(R.id.companiesHeading);
         prod_countriesHeading = (TextView) findViewById(R.id.countriesHeading);
+        collectionLine = (LinearLayout) findViewById(R.id.collectionLine);
 
         favButton = (ImageButton)findViewById(R.id.addFavButton);
         if(db.movieExists(movie.getId())){
@@ -112,6 +115,7 @@ public class ViewMovie extends BaseActivity implements IParser{
         orig_title.setText(movie.getOriginalTitle());
 
         if(movie.getCollection() != null) {
+            collectionLine.setVisibility(View.VISIBLE);
             collectionHeading.setText("Collection :");
             collection.setText(movie.getCollection().getName());
         }

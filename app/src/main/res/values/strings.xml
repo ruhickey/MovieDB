@@ -4,6 +4,7 @@
     <string name="title_activity_view_person">ViewPerson</string>
     <string name="title_activity_view_tvshow">ViewTVShow</string>
     <string name="title_activity_view_seasons">ViewSeasons</string>
+    <string name="title_activity_view_roles">ViewRoles</string>
     <string name="drawerClosed">Drawer Closed</string>
     <string name="drawerOpened">Drawer Opened</string>
     <string name="YOUTUBE_API_KEY">AIzaSyBbjEpaFDCyUblONMjJEp5-ByPWxPMwLFk</string>

@@ -2,11 +2,13 @@ package ie.thecoolkids.moviedb;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -47,6 +49,7 @@ public class CreditsListAdapter extends BaseAdapter {
         ImageView rolePoster;
         TextView nameOrTitle, mediaType, characterOrJobHeading, characterOrJob,
                 epCountOrDeptHeading, epCountOrDept, dateHeading, date;
+        LinearLayout line3;
     }
 
     /*
@@ -67,6 +70,7 @@ public class CreditsListAdapter extends BaseAdapter {
         holder.epCountOrDeptHeading = (TextView) rowView.findViewById(R.id.epCount_or_dept_heading);
         holder.date = (TextView) rowView.findViewById(R.id.date);
         holder.dateHeading = (TextView) rowView.findViewById(R.id.dateHeading);
+        holder.line3 = (LinearLayout) rowView.findViewById(R.id.line3);
 
         Picasso.with(rolesview).load(roles.get(position).getPoster()).placeholder(R.drawable.movies).fit().into(holder.rolePoster);
         holder.mediaType.setText(roles.get(position).getMediaType());
@@ -86,12 +90,17 @@ public class CreditsListAdapter extends BaseAdapter {
             holder.characterOrJob.setText(roles.get(position).getJob());
         }
         if(roles.get(position).getEpisodeCount() != "" && roles.get(position).getEpisodeCount() != null){
-            holder.epCountOrDeptHeading.setText("Episode Count :");
-            holder.epCountOrDept.setText(roles.get(position).getEpisodeCount());
+            if(Integer.parseInt(roles.get(position).getEpisodeCount())>0){
+                holder.epCountOrDeptHeading.setText("Episode Count :");
+                holder.epCountOrDept.setText(roles.get(position).getEpisodeCount());
+                holder.line3.setVisibility(View.VISIBLE);
+            }
+
         }
         if (roles.get(position).getDepartment() != "" && roles.get(position).getDepartment() != null){
             holder.epCountOrDeptHeading.setText("Department :");
             holder.epCountOrDept.setText(roles.get(position).getDepartment());
+            holder.line3.setVisibility(View.VISIBLE);
         }
         if(roles.get(position).getReleaseDate() != "" && roles.get(position).getReleaseDate() != null){
             holder.dateHeading.setText("Release Date :");
@@ -109,14 +118,23 @@ public class CreditsListAdapter extends BaseAdapter {
 
                 //NOT SURE IF THIS WORKS! untested
 
+                Log.d("MEDIA TYPE", roles.get(position).getMediaType());
+
+
                 if(roles.get(position).getMediaType().equals("tv")){
+
+                    Log.d("MEDIA TYPE if", "tv!!!");
+
                     Intent intent = new Intent(v.getContext(), ViewTVShow.class);
-                    intent.putExtra("passedTVShowID", roles.get(position).getId());
+                    intent.putExtra("passedID", roles.get(position).getId());
                     v.getContext().startActivity(intent);
                 }
-                else{
+                else {
+                    Log.d("MEDIA TYPE if", "movie!!!");
                     Intent intent = new Intent(v.getContext(), ViewMovie.class);
-                    intent.putExtra("passedMovieID", roles.get(position).getId());
+                    intent.putExtra("passedID", roles.get(position).getId());
+
+                    Log.d("MOVIE ID", "" + roles.get(position).getId());
                     v.getContext().startActivity(intent);
                 }
             }

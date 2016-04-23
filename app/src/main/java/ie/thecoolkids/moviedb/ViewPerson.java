@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class ViewPerson extends BaseActivity implements IParser {
     RelativeLayout mainPage;
     ImageView poster;
     TextView name, homepage, homepageHeading, placeOfBirth, otherNames, otherNamesHeading, birthday, deathday, deathdayHeader, biography;
+    LinearLayout deathdayLine, otherNamesLine, homepageLine;
     Button rolesButton;
     int personID;
     ViewPerson context;
@@ -44,8 +46,6 @@ public class ViewPerson extends BaseActivity implements IParser {
 
     private void init(){
 
-        Log.d("INIT", "");
-
         name = (TextView) findViewById(R.id.name);
         homepage = (TextView) findViewById(R.id.homepage);
         homepageHeading = (TextView) findViewById(R.id.homepageHeader);
@@ -59,6 +59,9 @@ public class ViewPerson extends BaseActivity implements IParser {
         poster = (ImageView) findViewById(R.id.poster);
         mainPage = (RelativeLayout) findViewById(R.id.mainpage);
         rolesButton = (Button) findViewById(R.id.rolesButton);
+        deathdayLine = (LinearLayout) findViewById(R.id.deathdayLine);
+        otherNamesLine = (LinearLayout) findViewById(R.id.otherNamesLine);
+        homepageLine = (LinearLayout) findViewById(R.id.homepageLine);
 
         name.setText(person.getName());
         placeOfBirth.setText(person.getPlaceOfBirth());
@@ -68,15 +71,18 @@ public class ViewPerson extends BaseActivity implements IParser {
         if(!person.getHomepage().equals("")){
             homepageHeading.setText("Homepage: ");
             homepage.setText(person.getHomepage());
+            homepageLine.setVisibility(View.VISIBLE);
         }
 
         if(!person.getDeathDay().equals("")){
             deathdayHeader.setText("Death Day:");
             deathday.setText("" + person.getDeathDay());
+            deathdayLine.setVisibility(View.VISIBLE);
         }
         if(person.getOtherNames().size()>0) {
             otherNamesHeading.setText("Also goes by:");
             otherNames.setText(createAlsoKnownAs(person.getOtherNames()));
+            otherNamesLine.setVisibility(View.VISIBLE);
         }
         if(!person.getPersonPicture().equals(null)) {
             setImages();

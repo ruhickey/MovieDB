@@ -98,6 +98,11 @@ public class MovieListAdapter extends BaseAdapter {
                 Intent intent = new Intent(v.getContext(), ViewMovie.class);
                 intent.putExtra("passedID", movies.get(position).getId());
                 v.getContext().startActivity(intent);
+                
+                //This section is just put in for testing while search bar isnt working .... to be deleted later
+//                Intent intent = new Intent(v.getContext(), ViewPerson.class);
+//                intent.putExtra("passedPersonID", 287);
+//                v.getContext().startActivity(intent);
             }
         });
 

@@ -39,20 +39,20 @@
         <activity
             android:name=".ViewTVShow"
             android:label="@string/title_activity_view_tvshow"
-            android:theme="@style/AppTheme.NoActionBar">
-        <activity
-            android:name=".ViewRoles"
-            android:label="ViewRoles"
             android:theme="@style/AppTheme.NoActionBar" />
 
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <!--
+       <intent-filter>
+           <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
+           <category android:name="android.intent.category.LAUNCHER" />
+       </intent-filter>
+       -->
+
+        <activity
+            android:name=".ViewRoles"
+            android:label="@string/title_activity_view_roles"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".ListViewActivity" />
         <activity

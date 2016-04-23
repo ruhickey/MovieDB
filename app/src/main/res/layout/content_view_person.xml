@@ -88,31 +88,6 @@
 
                     <LinearLayout
                         android:orientation="horizontal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="30dp"
-                        android:id="@+id/otherNamesLine"
-                        android:longClickable="false">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:id="@+id/otherNamesHeading"
-                            android:singleLine="true"
-                            android:textColor="#e4e1e1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:id="@+id/otherNames"
-                            android:textColor="#e4e1e1"
-                            android:paddingLeft="10dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/birthplaceLine"
@@ -167,10 +142,11 @@
 
                     <LinearLayout
                         android:orientation="horizontal"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/deathdayLine"
-                        android:paddingLeft="30dp" >
+                        android:paddingLeft="30dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -194,8 +170,35 @@
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingLeft="30dp"
+                        android:id="@+id/otherNamesLine"
+                        android:longClickable="false"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:id="@+id/otherNamesHeading"
+                            android:singleLine="false"
+                            android:textColor="#e4e1e1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:id="@+id/otherNames"
+                            android:textColor="#e4e1e1"
+                            android:paddingLeft="10dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:id="@+id/homepageLine"
-                        android:paddingLeft="30dp" >
+                        android:paddingLeft="30dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -274,39 +277,15 @@
                         android:text="Click here to view Roles"
                         android:id="@+id/rolesButton"
                         android:padding="10dp"
-                        android:background="#9d9999" />
+                        android:textColor="#ffffff"
+                        android:background="@drawable/mybutton" />
+
 
                 </LinearLayout>
 
                 <Space
                     android:layout_width="20px"
                     android:layout_height="20px" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/buttonRow"
-                    android:background="#9C000000"
-                    android:padding="10dp">
-
-                    <Space
-                        android:layout_width="20px"
-                        android:layout_height="20px"
-                        android:layout_weight="1" />
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/addFavButton"
-                        android:src="@drawable/favbutton"
-                        android:padding="0dp" />
-
-                    <Space
-                        android:layout_width="20px"
-                        android:layout_height="20px"
-                        android:layout_weight="1" />
-                </LinearLayout>
 
             </LinearLayout>
 
