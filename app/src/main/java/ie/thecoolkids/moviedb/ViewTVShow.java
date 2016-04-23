@@ -294,11 +294,12 @@ public class ViewTVShow extends BaseActivity implements IParser{
         seasonButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ViewSeasons.class);
-                intent.putExtra("numSeasons", 5);
+                intent.putExtra("numSeasons", tvShow.getNumberOfSeasons());
 
                 for (int i = 0; i < tvShow.getNumberOfSeasons(); i++) {
                     intent.putExtra("passedTVSeason" + i, new Gson().toJson(seasons.get(i)));
                 }
+
                 v.getContext().startActivity(intent);
             }
         });

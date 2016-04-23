@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
@@ -32,10 +33,8 @@ public class ViewSeasons extends FragmentActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             numSeasons = extras.getInt("numSeasons");
-            if (extras != null) {
-                for(int i=0; i < numSeasons; i++) {
-                    seasons.add(new Gson().fromJson(extras.getString("passedTVSeason"+i), Season.class));
-                }
+            for(int i=0; i < numSeasons; i++) {
+                seasons.add(new Gson().fromJson(extras.getString("passedTVSeason"+i), Season.class));
             }
         }
 
@@ -67,6 +66,7 @@ public class ViewSeasons extends FragmentActivity {
         public ScreenSlidePagerAdapter(FragmentManager fm, List<Season> seasons) {
             super(fm);
             this.seasons  = seasons;
+
         }
 
         @Override

@@ -60,4 +60,9 @@ public class Season implements Serializable {
     public int getSeasonNumber() {
         return season_number;
     }
+
+    public String seasonToString(){
+        return   "Air Date:" + air_date + "...Season Number:" + season_number;
+
+    }
 }

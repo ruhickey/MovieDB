@@ -95,14 +95,14 @@ public class MovieListAdapter extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ViewMovie.class);
-                intent.putExtra("passedID", movies.get(position).getId());
-                v.getContext().startActivity(intent);
+//                Intent intent = new Intent(v.getContext(), ViewMovie.class);
+//                intent.putExtra("passedID", movies.get(position).getId());
+//                v.getContext().startActivity(intent);
 
                 //This section is just put in for testing while search bar isnt working .... to be deleted later
-//                Intent intent = new Intent(v.getContext(), ViewPerson.class);
-//                intent.putExtra("passedID", 287);
-//                v.getContext().startActivity(intent);
+                Intent intent = new Intent(v.getContext(), ViewPerson.class);
+                intent.putExtra("passedID", 287);
+                v.getContext().startActivity(intent);
             }
         });
 
