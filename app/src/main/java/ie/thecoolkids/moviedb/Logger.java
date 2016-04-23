@@ -9,14 +9,26 @@ import android.util.Log;
  */
 public class Logger {
     public static void Debug(String msg) {
-        Log.d("DEBUG", msg);
+        if(msg != null) {
+            Log.d("DEBUG", msg);
+        } else {
+            Log.d("DEBUG", "null");
+        }
     }
 
     public static void Exception(String msg) {
-        Log.d("EXCEPTION", msg);
+        if(msg != null) {
+            Log.e("EXCEPTION", msg);
+        } else {
+            Log.e("EXCEPTION", "null");
+        }
     }
 
     public static void Warning(String msg) {
-        Log.d("WARNING", msg);
+        if(msg != null) {
+            Log.d("WARNING", msg);
+        } else {
+            Log.w("WARNING", "null");
+        }
     }
 }

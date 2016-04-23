@@ -39,10 +39,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         FrameLayout childView = (FrameLayout)baseLayout.findViewById(R.id.baseContent);
         getLayoutInflater().inflate(layoutResID, childView, true);
         super.setContentView(baseLayout);
-
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
         navView = (NavigationView)findViewById(R.id.navView);
-        toolbar.setVisibility(View.GONE);
         setupNavDrawer();
         db = new DBHelper(this);
 

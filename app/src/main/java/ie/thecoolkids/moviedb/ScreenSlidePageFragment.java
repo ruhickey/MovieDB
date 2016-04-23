@@ -7,8 +7,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +63,9 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
         ((TextView)rootView.findViewById(R.id.seasonNum)).setText(textSeasonNum);
         ((TextView)rootView.findViewById(R.id.overview)).setText(textOverView);
 
-        //ImageView img = (ImageView) rootView.findViewById(R.id.poster);
+        Logger.Debug(this.imagePath);
+        ImageView img = (ImageView) rootView.findViewById(R.id.poster);
+        Picasso.with(this.getContext()).load(this.imagePath).placeholder(R.drawable.movies).fit().into(img);
         //todo: add setting imgview
         //todo: add setting background image
 

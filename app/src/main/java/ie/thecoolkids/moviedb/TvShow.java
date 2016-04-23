@@ -1,13 +1,21 @@
 package ie.thecoolkids.moviedb;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TvShow implements Serializable, TheMovieDB {
+public class TvShow implements Serializable, TheMovieDB, IListItem {
 
     /* This is the URL from where we get the images. */
     private final String BASE_URL = "http://image.tmdb.org/t/p/w185";
@@ -264,11 +272,49 @@ public class TvShow implements Serializable, TheMovieDB {
         return vote_count;
     }
 
+    public View getRowView(Context context, LayoutInflater inflater) {
+        Holder holder = new Holder();
+        View rowView;
+        rowView = inflater.inflate(R.layout.movie_list, null);
 
+        /*
+         * TODO: I took this whole Holder stuff from an online tutorial,
+         * but it seems a bit redundant, so I might remove it soon.
+         * It does, show us exactly what we can use in the UI though,
+         * so I'm not sure yet.
+         * The following connects the Holder to the UI controls.
+         */
+        holder.imgPoster = (ImageView) rowView.findViewById(R.id.imgPoster);
+        holder.tvTitle = (TextView) rowView.findViewById(R.id.tvTitle);
+        holder.ratBar = (RatingBar) rowView.findViewById(R.id.ratBar);
 
+        /*
+         * This is where we give information to the UI.
+         */
+        holder.tvTitle.setText(this.getTitle());
+        holder.ratBar.setRating(this.getRating() / 2);
 
+        /*
+         * This is where we load in the image.
+         * Use Picasso's Placeholder to put a Stock image in the Movie Poster first.
+         */
+        Picasso.with(context).load(this.getPoster()).placeholder(R.drawable.movies).fit().into(holder.imgPoster);
 
+        /*
+         * This sets up the List Items OnClickListener Event.
+         * When a List Item gets clicked, it brings us to the Movie's Info Activity.
+         */
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ViewTVShow.class);
+                intent.putExtra("passedID", getId());
+                v.getContext().startActivity(intent);
+            }
+        });
 
-
+        /* Return the List Item */
+        return rowView;
+    }
 }
 
