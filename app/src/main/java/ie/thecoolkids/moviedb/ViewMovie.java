@@ -1,11 +1,14 @@
 package ie.thecoolkids.moviedb;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -172,7 +175,6 @@ public class ViewMovie extends BaseActivity implements IParser{
 
                     @Override
                     public void onBitmapFailed(Drawable errorDrawable) {
-                        Toast.makeText(getApplicationContext(), "Failed To Load Background Image", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -270,17 +272,28 @@ public class ViewMovie extends BaseActivity implements IParser{
             youtubeButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    if(movie.getVideoKey().equals("unavailable")){
-                        Toast.makeText(getApplicationContext(), "No video available", Toast.LENGTH_SHORT).show();
+                    if(networkAvailable()) {
+                        if (movie.getVideoKey().equals("unavailable")) {
+                            Toast.makeText(getApplicationContext(), "No video available", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent(v.getContext(), YoutubeActivity.class);
+                            intent.putExtra("passedID", movie.getVideoKey());
+                            v.getContext().startActivity(intent);
+                        }
                     }
                     else{
-                        Intent intent = new Intent(v.getContext(), YoutubeActivity.class);
-                        intent.putExtra("passedID", movie.getVideoKey());
-                        v.getContext().startActivity(intent);
+                        MediaPlayer.create(getApplicationContext(), R.raw.error1).start();
+                        Toast.makeText(ViewMovie.this, "Internet Connection Required\nCurrently Unavailable", Toast.LENGTH_SHORT).show();
                     }
 
                 }
             });
+        }
+
+        private boolean networkAvailable() {
+            ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         }
     }
 }

@@ -71,6 +71,7 @@ public class Movie implements Serializable, TheMovieDB, IListItem {
         setSpokenLanguages(c.getString(14));
         setProductionCompanies(c.getString(15));
         setProductionCountries(c.getString(16));
+        setVideoKey(c.getString(17));
     }
 
 

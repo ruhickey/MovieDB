@@ -1,5 +1,6 @@
 package ie.thecoolkids.moviedb;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -48,7 +49,7 @@ public class ViewTVShow extends BaseActivity implements IParser{
     private int tvshowID = 44217;
     private ArrayList<Season> seasons;
     State state;
-    private ImageButton favButton;
+    private ImageButton favButton, youtubeButton;
     private DBHelper db;
 
 
@@ -63,7 +64,7 @@ public class ViewTVShow extends BaseActivity implements IParser{
         Log.d("STATE", "" + state);
 
         // Working for database or online... Could we maybe keep it as passedID for everything?
-        /*Intent intent = getIntent();
+        Intent intent = getIntent();
         if(intent != null && intent.hasExtra("passedID")){
             tvshowID = intent.getIntExtra("passedID", 0);
             if(db.tvShowExists(tvshowID)){
@@ -74,16 +75,12 @@ public class ViewTVShow extends BaseActivity implements IParser{
                 new ApiHelper(this).SetTvIDQuery(tvshowID).execute();
             }
         }
-        else{
-            // Delete this when fully up and running
-            new ApiHelper(this).SetTvIDQuery(tvshowID).execute();
-        }*/
 
-        Bundle extras = getIntent().getExtras();
+        /*Bundle extras = getIntent().getExtras();
         if (extras != null) {
             tvshowID = extras.getInt("passedID");
         }
-        new ApiHelper(this).SetTvIDQuery(tvshowID).execute();
+        new ApiHelper(this).SetTvIDQuery(tvshowID).execute();*/
     }
 
     private void init(final TvShow tvShow){
@@ -129,6 +126,14 @@ public class ViewTVShow extends BaseActivity implements IParser{
             favButton.setImageResource(R.mipmap.fav_yes);
         }
         new Thread(new AddRemoveTvShow()).start();
+        youtubeButton = (ImageButton)findViewById(R.id.youtubeButton);
+        youtubeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MediaPlayer.create(getApplicationContext(), R.raw.error1).start();
+                Toast.makeText(ViewTVShow.this, "Video Content Unavailable", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         name.setText(tvShow.getTitle());
         firstAir.setText(tvShow.getFirstAirDate());
@@ -227,7 +232,6 @@ public class ViewTVShow extends BaseActivity implements IParser{
 
                     @Override
                     public void onBitmapFailed(Drawable errorDrawable) {
-                        Toast.makeText(getApplicationContext(), "Failed To Load Background Image", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -289,20 +293,30 @@ public class ViewTVShow extends BaseActivity implements IParser{
 
         seasonButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if(networkAvailable()) {
+                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.swipe);
+                    mp.start();
 
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.swipe);
-                mp.start();
+                    Intent intent = new Intent(v.getContext(), ViewSeasons.class);
+                    intent.putExtra("numSeasons", tvShow.getNumberOfSeasons());
 
-                Intent intent = new Intent(v.getContext(), ViewSeasons.class);
-                intent.putExtra("numSeasons", tvShow.getNumberOfSeasons());
-
-                for (int i = 0; i < tvShow.getNumberOfSeasons(); i++) {
-                    intent.putExtra("passedTVSeason" + i, new Gson().toJson(seasons.get(i)));
+                    for (int i = 0; i < tvShow.getNumberOfSeasons(); i++) {
+                        intent.putExtra("passedTVSeason" + i, new Gson().toJson(seasons.get(i)));
+                    }
+                    v.getContext().startActivity(intent);
                 }
-
-                v.getContext().startActivity(intent);
+                else{
+                    MediaPlayer.create(getApplicationContext(), R.raw.error1).start();
+                    Toast.makeText(ViewTVShow.this, "Internet Connection Required\nCurrently Unavailable", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    private boolean networkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     class AddRemoveTvShow implements Runnable{
@@ -327,5 +341,4 @@ public class ViewTVShow extends BaseActivity implements IParser{
             });
         }
     }
-
 }

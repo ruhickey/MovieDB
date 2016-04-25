@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 16;
+    private static final int DB_VERSION = 19;
     private static final String DB_NAME = "favourites.db", TABLE_MOVIES = "movies", TABLE_TVSHOWS = "tvshows";
     private static final String ID = "id", TITLE = "title", RELEASE = "releaseDate",
                                 RATING = "rating", SYNOPSIS = "synopsis", TAGLINE = "tagline",
@@ -18,7 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
                                 PRODUCTION_COMPANIES = "productionCompanies", PRODUCTION_COUNTRIES = "productionCountries",
                                 FIRST_AIR = "firstAir", LAST_AIR = "lastAir", NETWORKS = "networks",
                                 SEASONS = "seasons", EPISODES = "episodes", IN_PRODUCTION = "inProduction",
-                                CREATED_BY = "createdBy", TYPE = "type";
+                                CREATED_BY = "createdBy", TYPE = "type", VIDEO_KEY = "videoKey";
 
 
     public DBHelper(Context context){
@@ -37,7 +37,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         BUDGET + " INTEGER," + ORIGINAL_TITLE + " TEXT," +
                         GENRES + " TEXT," + POSTER + " TEXT," +
                         COLLECTION + " TEXT," + LANGUAGES + " TEXT," +
-                        PRODUCTION_COMPANIES + " TEXT," + PRODUCTION_COUNTRIES + " TEXT); "
+                        PRODUCTION_COMPANIES + " TEXT," + PRODUCTION_COUNTRIES + " TEXT," +
+                        VIDEO_KEY + " TEXT);"
         );
         db.execSQL(
                 "CREATE TABLE " + TABLE_TVSHOWS + " (" +
@@ -85,6 +86,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(LANGUAGES, asString(movie.getSpokenLanguages()));
         values.put(PRODUCTION_COMPANIES, asString(movie.getProductionCompanyNames()));
         values.put(PRODUCTION_COUNTRIES, asString(movie.getProductionCountries()));
+        values.put(VIDEO_KEY, movie.getVideoKey());
         if(this.getWritableDatabase().insert(TABLE_MOVIES, null, values) == -1){return false;}
         else{return true;}
     }

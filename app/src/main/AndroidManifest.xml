@@ -68,6 +68,12 @@
             android:enabled="true"
             android:exported="false" />
         <receiver android:name=".NotificationEventReceiver"/>
+        <provider
+            android:name="ie.thecoolkids.moviedb.MovieProvider"
+            android:authorities="ie.thecoolkids.moviedb.MovieProvider"
+            android:multiprocess="true"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

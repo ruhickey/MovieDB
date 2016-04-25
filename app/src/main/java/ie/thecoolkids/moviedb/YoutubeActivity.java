@@ -88,7 +88,7 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlaye
                     player.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
                         @Override
                         public void onFullscreen(boolean b) {
-                            if (!b) {
+                            if(!b){
                                 finish();
                             }
                         }

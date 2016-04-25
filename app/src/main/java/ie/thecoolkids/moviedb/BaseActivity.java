@@ -90,8 +90,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_tvshows_local:
                 new Thread(new CheckForLocalTvShows()).start();
                 return true;
-            case R.id.nav_settings:
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -141,5 +139,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         NotificationEventReceiver.setupAlarm(getApplicationContext());
+        MovieProvider movies = new MovieProvider();
     }
 }

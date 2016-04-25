@@ -33,14 +33,5 @@
                     android:title="Tv Shows" />
             </menu>
         </item>
-
-        <item android:title="Tools">
-            <menu>
-                <item
-                    android:id="@+id/nav_settings"
-                    android:icon="@drawable/ic_settings"
-                    android:title="Settings" />
-            </menu>
-        </item>
     </group>
 </menu>
