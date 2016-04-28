@@ -9,12 +9,21 @@
     tools:showIn="@layout/activity_main"
     android:background="@drawable/blue">
 
-    <ListView
-        android:id="@+id/lvMovies"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_height="match_parent"
+        android:background="#9C000000">
 
-    </ListView>
+        <ListView
+            android:id="@+id/lvMovies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:dividerHeight="1px"
+            android:divider="#e1dada"
+            android:drawSelectorOnTop="true">
+
+        </ListView>
+    </RelativeLayout>
 
 </RelativeLayout>
