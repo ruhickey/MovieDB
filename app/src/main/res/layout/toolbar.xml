@@ -21,7 +21,8 @@
             android:hint="Enter Search Term"
             android:singleLine="true"
             android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/btnSearch" />
+            android:layout_toEndOf="@+id/btnOpenNav"
+            android:layout_toStartOf="@+id/btnSearch"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -33,19 +34,19 @@
             android:paddingRight="20dp"
             android:clickable="true"
             android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/btnSort" />
+            android:layout_alignParentEnd="true"/>
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/sort"
             android:background="@null"
-            android:id="@+id/btnSort"
+            android:id="@+id/btnOpenNav"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:clickable="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentStart="true"/>
 
     </RelativeLayout>
 

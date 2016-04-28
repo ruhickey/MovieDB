@@ -29,7 +29,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private DBHelper db;
     private Handler handler;
     private ImageButton btnSearch;
-    private ImageButton btnSort;
+    private ImageButton btnOpenNav;
     private EditText etQuery;
 
 
@@ -47,7 +47,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
 
         btnSearch = (ImageButton)findViewById(R.id.btnSearch);
-        btnSort = (ImageButton)findViewById(R.id.btnSort);
+        btnOpenNav = (ImageButton)findViewById(R.id.btnOpenNav);
         etQuery = (EditText)findViewById(R.id.etQuery);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -57,6 +57,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("searchTerm", etQuery.getText().toString());
                 startActivity(intent);
+            }
+        });
+
+        btnOpenNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                baseLayout.openDrawer(GravityCompat.START);
             }
         });
 

@@ -92,7 +92,7 @@ public class Person implements Serializable, IListItem {
         return movies_list;
     }
 
-    public View getRowView(Context context, LayoutInflater inflater) {
+    public View getRowView(final Context context, LayoutInflater inflater) {
         Holder holder = new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.movie_list, null);
@@ -127,6 +127,7 @@ public class Person implements Serializable, IListItem {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((MainActivity) context).Kill = false;
                 Intent intent = new Intent(v.getContext(), ViewPerson.class);
                 intent.putExtra("passedID", getId());
                 v.getContext().startActivity(intent);

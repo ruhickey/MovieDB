@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -25,29 +26,20 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity implements IParser{
 
-    //private ImageButton btnSearch;
     private ImageButton btnSort;
-    //private EditText etQuery;
     private List<IListItem> items;
     private ItemListAdapter movieListAdapter;
-    private NetworkHelper netHelper;
     private MainActivity context;
-    private SortBy sortBy = SortBy.rating;
     private QType qType;
     private int page = 1;
     private ListView lvItems;
     private int moviePages, tvPages, actorPages;
     private State state;
     private String movieJSON = null, tvJSON = null, actorJSON = null, searchTerm = "";
+    private SearchBy searchBy = null;
+    public boolean Kill = true;
 
     private final String DEBUG = "DEBUG";
-
-    private enum SortBy {
-        asc,
-        desc,
-        rating,
-        year
-    }
 
     private enum QType {
         MOVIE,
@@ -58,6 +50,25 @@ public class MainActivity extends BaseActivity implements IParser{
     private enum State {
         IDLE,
         BUSY
+    }
+
+    private enum SearchBy {
+        RATING,
+        QUERY
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(Kill && !searchTerm.isEmpty()){
+            finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Kill = true;
     }
 
     @Override
@@ -84,43 +95,30 @@ public class MainActivity extends BaseActivity implements IParser{
 
         context = this;
 
-        /* Connect the Controls to the UI */
-        /*btnSearch = (ImageButton) toolbar.findViewById(R.id.btnSearch);
-        btnSort = (ImageButton) toolbar.findViewById(R.id.btnSort);
-        etQuery = (EditText) findViewById(R.id.etQuery);*/
-
         items = new ArrayList<>();
 
         Intent intent = getIntent();
         if(intent != null && intent.hasExtra("searchTerm")){
             searchTerm = intent.getStringExtra("searchTerm");
             if(searchTerm.equals("TopMovies")){
-                // Still don't know how to search exactly.... haha :P
+                Logger.Debug("Search Term - Movies");
+                searchBy = SearchBy.RATING;
+                qType = QType.MOVIE;
             }
-            else if(searchTerm.equals("TopTvShows")){
-
+            else if(searchTerm.equals("TopTvShows")) {
+                Logger.Debug("Search Term - Tv Shows");
+                searchBy = SearchBy.RATING;
+                qType = QType.TV_SHOW;
             }
         }
+
+        if(searchBy == null) searchBy = SearchBy.QUERY;
 
         /* Set up movie list shell */
         SetUpItemListView();
         ResetSearchStates();
         ResetPages();
         SearchForItems();
-
-        /*btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (state == State.IDLE) {
-                    items.clear();
-                    ResetSearchStates();
-                    ResetPages();
-                    SearchForItems();
-                } else {
-                    Toast.makeText(MainActivity.this, "Already Searching!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
     }
 
     private void ResetPages() {
@@ -131,7 +129,9 @@ public class MainActivity extends BaseActivity implements IParser{
     }
 
     private void ResetSearchStates() {
-        qType = QType.MOVIE;
+        if(searchBy == SearchBy.QUERY) {
+            qType = QType.MOVIE;
+        }
         state = State.BUSY;
     }
 
@@ -169,7 +169,7 @@ public class MainActivity extends BaseActivity implements IParser{
                 if (((totalItem - currentFirstVisibleItem) == currentVisibleItemCount)
                         && (this.currentScrollState == SCROLL_STATE_IDLE)) {
                     /* Update the page number and search again */
-                    if(state == State.IDLE) {
+                    if (state == State.IDLE) {
                         page++;
                         ResetSearchStates();
                         SearchForItems();
@@ -180,19 +180,41 @@ public class MainActivity extends BaseActivity implements IParser{
     }
 
     private void SearchForItems() {
-        Logger.Debug("Searching For Items");
-        String query = searchTerm;//etQuery.getText().toString();
-        if(!query.isEmpty()) {
-            switch(qType){
-                case MOVIE: SearchForMovie(query); break;
-                case TV_SHOW: SearchForTvShow(query); break;
-                case ACTOR: SearchForActor(query); break;
+        if(searchBy == SearchBy.QUERY) {
+            Logger.Debug("Searching For Items");
+            String query = searchTerm;
+            if (!query.isEmpty()) {
+                switch (qType) {
+                    case MOVIE:
+                        SearchForMovie(query);
+                        break;
+                    case TV_SHOW:
+                        SearchForTvShow(query);
+                        break;
+                    case ACTOR:
+                        SearchForActor(query);
+                        break;
+                }
+            } else {
+                switch (qType) {
+                    case MOVIE:
+                        SearchForPopularMovie();
+                        break;
+                    case TV_SHOW:
+                        SearchForPopularTvShow();
+                        break;
+                    case ACTOR:
+                        ParseAllData();
+                        break;
+                }
             }
         } else {
-            switch (qType) {
-                case MOVIE: SearchForPopularMovie(); break;
-                case TV_SHOW: SearchForPopularTvShow(); break;
-                case ACTOR: ParseAllData(); break;
+            if(qType == QType.MOVIE) {
+                Logger.Debug("Qtype - Movie");
+                SearchForRatedMovie();
+            } else {
+                Logger.Debug("Qtype - Tv Show");
+                SearchForRatedTvShow();
             }
         }
     }
@@ -217,6 +239,16 @@ public class MainActivity extends BaseActivity implements IParser{
         }
     }
 
+    private void SearchForRatedMovie(){
+        Logger.Debug("Search Movies");
+        movieJSON = null;
+        if(page <= moviePages) {
+            new ApiHelper(context).SetRatedMovieQuery(page).execute();
+        } else {
+            ParseAllData();
+        }
+    }
+
     private void SearchForTvShow(String query) {
         tvJSON = null;
         if(page <= tvPages) {
@@ -233,6 +265,16 @@ public class MainActivity extends BaseActivity implements IParser{
             new ApiHelper(context).SetPopularTvShowQuery(page).execute();
         } else {
             actorJSON = null;
+            ParseAllData();
+        }
+    }
+
+    private void SearchForRatedTvShow() {
+        Logger.Debug("Search Tv Shows");
+        tvJSON = null;
+        if (page <= tvPages) {
+            new ApiHelper(context).SetRatedTvQuery(page).execute();
+        } else {
             ParseAllData();
         }
     }
@@ -327,21 +369,34 @@ public class MainActivity extends BaseActivity implements IParser{
     }
 
     public void parseJson(String json) {
-        switch (qType) {
-            case MOVIE:
-                movieJSON = json;
-                qType = QType.TV_SHOW;
-                SearchForItems();
-                break;
-            case TV_SHOW:
-                tvJSON = json;
-                qType = QType.ACTOR;
-                SearchForItems();
-                break;
-            case ACTOR:
-                actorJSON = json;
-                ParseAllData();
-                break;
+        if(searchBy == SearchBy.QUERY) {
+            switch (qType) {
+                case MOVIE:
+                    movieJSON = json;
+                    qType = QType.TV_SHOW;
+                    SearchForItems();
+                    break;
+                case TV_SHOW:
+                    tvJSON = json;
+                    qType = QType.ACTOR;
+                    SearchForItems();
+                    break;
+                case ACTOR:
+                    actorJSON = json;
+                    ParseAllData();
+                    break;
+            }
+        } else {
+            switch(qType) {
+                case MOVIE:
+                    movieJSON = json;
+                    break;
+                case TV_SHOW:
+                    tvJSON = json;
+                    break;
+            }
+
+            ParseAllData();
         }
     }
 }

@@ -88,6 +88,18 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
         return this;
     }
 
+    public ApiHelper SetRatedMovieQuery(int page) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("discover")
+                .appendPath("movie")
+                .appendQueryParameter("sort_by", "vote_count.desc")
+                .appendQueryParameter("page", Integer.toString(page))
+                .appendQueryParameter("api_key", API_KEY);
+        this.query = builder.build().toString();
+
+        return this;
+    }
+
 
     /*
     *  TV SHOW QUERIES
@@ -112,6 +124,18 @@ public class ApiHelper extends AsyncTask<String, Void, String> {
                 .appendQueryParameter("query", query)
                 .appendQueryParameter("page", Integer.toString(page));
 
+        this.query = builder.build().toString();
+
+        return this;
+    }
+
+    public ApiHelper SetRatedTvQuery(int page) {
+        Uri.Builder builder = GetBaseURL()
+                .appendPath("discover")
+                .appendPath("tv")
+                .appendQueryParameter("sort_by", "vote_count.desc")
+                .appendQueryParameter("page", Integer.toString(page))
+                .appendQueryParameter("api_key", API_KEY);
         this.query = builder.build().toString();
 
         return this;
