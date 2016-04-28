@@ -59,7 +59,6 @@ public class ViewRoles extends BaseActivity implements IParser {
         creditsListAdapter = new CreditsListAdapter(context);
         creditsListAdapter.setRoles(roles);
         lvRoles.setAdapter(creditsListAdapter);
-
     }
 
     public void parseJson(String json) {

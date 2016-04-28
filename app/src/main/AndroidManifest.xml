@@ -54,10 +54,13 @@
             android:name=".ViewSeasons"
             android:label="@string/title_activity_view_seasons"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:screenOrientation="portrait"
-                  android:name=".BaseActivity" />
-        <activity android:screenOrientation="portrait"
-                  android:name=".ListViewActivity" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".BaseActivity" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".ListViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:screenOrientation="portrait"
             android:name=".YoutubeActivity"
@@ -70,10 +73,7 @@
         <receiver android:name=".NotificationEventReceiver"/>
         <provider
             android:name="ie.thecoolkids.moviedb.MovieProvider"
-            android:authorities="ie.thecoolkids.moviedb.MovieProvider"
-            android:multiprocess="true"
-            android:enabled="true"
-            android:exported="true"/>
+            android:authorities="ie.thecoolkids.moviedb.MovieProvider"/>
     </application>
 
 </manifest>

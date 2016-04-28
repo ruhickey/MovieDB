@@ -1,6 +1,7 @@
 package ie.thecoolkids.moviedb;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -24,9 +25,9 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity implements IParser{
 
-    private ImageButton btnSearch;
+    //private ImageButton btnSearch;
     private ImageButton btnSort;
-    private EditText etQuery;
+    //private EditText etQuery;
     private List<IListItem> items;
     private ItemListAdapter movieListAdapter;
     private NetworkHelper netHelper;
@@ -37,7 +38,7 @@ public class MainActivity extends BaseActivity implements IParser{
     private ListView lvItems;
     private int moviePages, tvPages, actorPages;
     private State state;
-    private String movieJSON = null, tvJSON = null, actorJSON = null;
+    private String movieJSON = null, tvJSON = null, actorJSON = null, searchTerm = "";
 
     private final String DEBUG = "DEBUG";
 
@@ -84,11 +85,22 @@ public class MainActivity extends BaseActivity implements IParser{
         context = this;
 
         /* Connect the Controls to the UI */
-        btnSearch = (ImageButton) toolbar.findViewById(R.id.btnSearch);
+        /*btnSearch = (ImageButton) toolbar.findViewById(R.id.btnSearch);
         btnSort = (ImageButton) toolbar.findViewById(R.id.btnSort);
-        etQuery = (EditText) findViewById(R.id.etQuery);
+        etQuery = (EditText) findViewById(R.id.etQuery);*/
 
         items = new ArrayList<>();
+
+        Intent intent = getIntent();
+        if(intent != null && intent.hasExtra("searchTerm")){
+            searchTerm = intent.getStringExtra("searchTerm");
+            if(searchTerm.equals("TopMovies")){
+                // Still don't know how to search exactly.... haha :P
+            }
+            else if(searchTerm.equals("TopTvShows")){
+
+            }
+        }
 
         /* Set up movie list shell */
         SetUpItemListView();
@@ -96,7 +108,7 @@ public class MainActivity extends BaseActivity implements IParser{
         ResetPages();
         SearchForItems();
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
+        /*btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (state == State.IDLE) {
@@ -108,7 +120,7 @@ public class MainActivity extends BaseActivity implements IParser{
                     Toast.makeText(MainActivity.this, "Already Searching!", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
     }
 
     private void ResetPages() {
@@ -169,7 +181,7 @@ public class MainActivity extends BaseActivity implements IParser{
 
     private void SearchForItems() {
         Logger.Debug("Searching For Items");
-        String query = etQuery.getText().toString();
+        String query = searchTerm;//etQuery.getText().toString();
         if(!query.isEmpty()) {
             switch(qType){
                 case MOVIE: SearchForMovie(query); break;

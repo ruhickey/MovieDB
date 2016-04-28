@@ -34,7 +34,6 @@ public class MovieProvider extends ContentProvider{
 
     @Override
     public boolean onCreate() {
-        Log.d("STATE", "ContentProvider onCreate");
         db = new DBHelper(getContext()).getWritableDatabase();
         return (db == null) ? false : true;
     }

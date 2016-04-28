@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,12 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private Toolbar toolbar;
@@ -30,6 +28,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private int selectedOption;
     private DBHelper db;
     private Handler handler;
+    private ImageButton btnSearch;
+    private ImageButton btnSort;
+    private EditText etQuery;
 
 
     @Override
@@ -38,10 +39,26 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         FrameLayout childView = (FrameLayout)baseLayout.findViewById(R.id.baseContent);
         getLayoutInflater().inflate(layoutResID, childView, true);
+
         super.setContentView(baseLayout);
         navView = (NavigationView)findViewById(R.id.navView);
         setupNavDrawer();
         db = new DBHelper(this);
+
+
+        btnSearch = (ImageButton)findViewById(R.id.btnSearch);
+        btnSort = (ImageButton)findViewById(R.id.btnSort);
+        etQuery = (EditText)findViewById(R.id.etQuery);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("searchTerm", etQuery.getText().toString());
+                startActivity(intent);
+            }
+        });
 
         handler = new Handler(){
             @Override
@@ -74,15 +91,18 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         switch(item.getItemId()){
             case R.id.nav_home:
-                Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
                 return true;
             case R.id.nav_movies:
-                Toast.makeText(getApplicationContext(), "Top Movies", Toast.LENGTH_SHORT).show();
+                intent.putExtra("searchTerm", "TopMovies");
+                startActivity(intent);
                 return true;
             case R.id.nav_tvshows:
-                Toast.makeText(getApplicationContext(), "Top Tv Shows", Toast.LENGTH_SHORT).show();
+                intent.putExtra("searchTerm", "TopTvShows");
+                startActivity(intent);
                 return true;
             case R.id.nav_movies_local:
                 new Thread(new CheckForLocalMovies()).start();
