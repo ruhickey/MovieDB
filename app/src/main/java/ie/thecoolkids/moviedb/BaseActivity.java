@@ -75,6 +75,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
+    @Override
+    public void onBackPressed() {
+        if (baseLayout.isDrawerOpen(GravityCompat.START)) {
+            baseLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void setupNavDrawer(){
         navView.setNavigationItemSelectedListener(this);
         drawerToggle = new ActionBarDrawerToggle(
