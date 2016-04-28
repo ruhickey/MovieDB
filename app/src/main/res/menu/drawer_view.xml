@@ -8,7 +8,7 @@
             android:title="Home"
             android:checked="true"/>
 
-        <item android:title="Top Rated">
+        <item android:title="Most Voted">
             <menu>
                 <item
                     android:id="@+id/nav_movies"
