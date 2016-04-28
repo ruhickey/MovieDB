@@ -73,7 +73,8 @@
         <receiver android:name=".NotificationEventReceiver"/>
         <provider
             android:name="ie.thecoolkids.moviedb.MovieProvider"
-            android:authorities="ie.thecoolkids.moviedb.MovieProvider"/>
+            android:authorities="ie.thecoolkids.moviedb.MovieProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>
