@@ -61,7 +61,7 @@ public class MainActivity extends BaseActivity implements IParser{
     protected void onStop() {
         super.onStop();
         if(Kill && !searchTerm.isEmpty()){
-            finish();
+            //finish();
         }
     }
 

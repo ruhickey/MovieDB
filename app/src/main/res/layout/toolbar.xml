@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:minHeight="?attr/actionBarSize"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    android:background="?attr/colorPrimaryDark">
+    android:background="#2e2d2d">
 
     <RelativeLayout
         android:layout_width="match_parent"
