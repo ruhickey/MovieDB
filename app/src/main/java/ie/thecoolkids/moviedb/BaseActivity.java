@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -195,6 +196,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         NotificationEventReceiver.setupAlarm(getApplicationContext());
-        MovieProvider movies = new MovieProvider();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 }
