@@ -197,9 +197,4 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         super.onSaveInstanceState(outState);
         NotificationEventReceiver.setupAlarm(getApplicationContext());
     }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
 }

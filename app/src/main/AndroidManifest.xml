@@ -62,14 +62,13 @@
             android:name=".ListViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".YoutubeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.Translucent" />
         <service
             android:name=".NotificationService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"/>
         <receiver android:name=".NotificationEventReceiver"/>
         <provider
             android:name="ie.thecoolkids.moviedb.MovieProvider"

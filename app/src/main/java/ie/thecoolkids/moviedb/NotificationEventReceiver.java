@@ -13,6 +13,7 @@ import java.util.Date;
  * WakefulBroadcastReceiver used to receive intents fired
  * from the AlarmManager for showing notifications
  * and from the notification itself if it is deleted.
+ * Passes the work onto a service.
  */
 public class NotificationEventReceiver extends WakefulBroadcastReceiver{
     private static final String START_NOTIFICATION_SERVICE = "START_NOTIFICATION_SERVICE";
